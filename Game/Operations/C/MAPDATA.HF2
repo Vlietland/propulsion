@@ -1,0 +1,195 @@
+/*=====================================================================*/
+/*                                                                     */
+/* PROGRAMMA NAAM:      Extra map module    (Mapdata.hf2)              */
+/* AUTEUR:              Resourser                                      */
+/* BESCHRIJVING:                                                       */
+/*   In deze module staan de hulpfuncties voor de module mapdata.hft   */
+/*                                                                     */
+/* INPUT PAR:              geen                                        */
+/* OUPUT PAR:              geen                                        */
+/* DATUM:                  5 april 1997                                */
+/*=====================================================================*/
+#include	"operat~1\c\mapdata.hf3"
+
+inline void Mapdata::updatemapblock(intvec mapcoor, char mapsoort)
+  {
+   if      ((mapsoort >= mapballbegin) && (mapsoort <= mapballend))
+     updatemapball(mapcoor, mapsoort);
+   else if ((mapsoort >= turretbegindown) && (mapsoort <= turretendright))
+     updateturret(mapcoor, mapsoort);
+   else if ((mapsoort >= turret2begin) && (mapsoort <= turret2end))
+     updateturret2(mapcoor, mapsoort);
+   else if ((mapsoort >= fueltankfull) && (mapsoort <= fueltankempty))
+     updatefueltank(mapcoor, mapsoort);
+   else if ((mapsoort >= energypodfull) && (mapsoort <= energypodempty))
+     updateenergypod(mapcoor, mapsoort);
+   else if  (mapsoort == cityend-1)
+     updatecity(mapcoor, mapsoort);
+   else if ((mapsoort >= buttonoutbegin) && (mapsoort <= buttoninend))
+     updatebutton(mapcoor, mapsoort);
+   else if ((mapsoort >= reactorbegin) && (mapsoort <= reactorend))
+     updatereactor(mapcoor, mapsoort);
+   else if ((mapsoort >= star1begin) && (mapsoort <= star2end))
+     updatestar(mapcoor, mapsoort);
+   if (mapsoort < empty)
+     checkexplosion(mapcoor);
+  }
+
+inline void Mapdata::updatemapball(intvec mapcoor, char mapsoort)
+  {
+   if      (mapdata[mapcoor.Sx][mapcoor.Sy].damage > maxdamage)
+     mapdata[mapcoor.Sx][mapcoor.Sy].soort += holderbegin - mapballbegin;
+  }
+
+inline void Mapdata::updateturret(intvec mapcoor, char mapsoort)
+  {
+   if       (mapdata[mapcoor.Sx][mapcoor.Sy].damage > maxdamage)
+     mapdata[mapcoor.Sx][mapcoor.Sy].soort = turretfuckedbegin + (mapsoort - turretbegindown) / (1+turretenddown-turretbegindown);
+
+   else if ((mapsoort >= turretbegindown) && (mapsoort <= turretendright))
+     {
+      int buildptr = (mapsoort - turretbegindown) % (1+turretenddown - turretbegindown);
+      if ((mapcoor.Sx > basismapcoor.Sx+1) && (mapcoor.Sx < basismapcoor.Sx+Xblokken -1) &&
+          (mapcoor.Sy > basismapcoor.Sy+1) && (mapcoor.Sy < basismapcoor.Sy+Yblokken -1))
+        {
+         if (buildptr < (turretenddown - turretbegindown))
+           {
+            mapdata[mapcoor.Sx][mapcoor.Sy].soort++;
+            setupdaterequest(mapcoor);
+           }
+        }
+      else
+        {
+         if (buildptr > 0)
+           {
+            mapdata[mapcoor.Sx][mapcoor.Sy].soort--;
+            setupdaterequest(mapcoor);
+           }
+        }
+     }
+  }
+
+inline void Mapdata::updateturret2(intvec mapcoor, char mapsoort)
+  {
+   if      (mapdata[mapcoor.Sx][mapcoor.Sy].damage > maxdamage)
+     mapdata[mapcoor.Sx][mapcoor.Sy].soort += turret2fuckedbegin - turret2begin;
+  }
+
+inline void Mapdata::updatebutton(intvec mapcoor, char mapsoort)
+  {
+   if ((mapsoort >= buttoninbegin) && (mapsoort <= buttoninend))
+     {
+      if (mapdata[mapcoor.Sx][mapcoor.Sy].Zextra-- == 0) // tijd afgelopen
+        {
+         mapdata[mapcoor.Sx  ][mapcoor.Sy].soort -= buttoninbegin - buttonoutbegin;
+         setupdaterequest(mapcoor);
+         closelaser(mapcoor);
+        }
+     }
+  }
+
+
+inline void Mapdata::updatefueltank(intvec mapcoor, char mapsoort)
+  {
+   if      (mapdata[mapcoor.Sx][mapcoor.Sy].damage > maxdamage)
+     mapdata[mapcoor.Sx][mapcoor.Sy].soort = fueltankfucked;
+  }
+
+
+inline void Mapdata::updateenergypod(intvec mapcoor, char mapsoort)
+  {
+   if      (mapdata[mapcoor.Sx][mapcoor.Sy].damage > maxdamage)
+     mapdata[mapcoor.Sx][mapcoor.Sy].soort = energypodfucked;
+  }
+
+
+inline void Mapdata::updatecity(intvec mapcoor, char mapsoort)
+  {
+   if      (mapdata[mapcoor.Sx][mapcoor.Sy].damage > maxdamage)
+     {
+      mapdata[mapcoor.Sx  ][mapcoor.Sy].soort = empty;
+      mapdata[mapcoor.Sx+1][mapcoor.Sy].soort = empty;
+     }
+
+   else if (mapdata[mapcoor.Sx][mapcoor.Sy].Xextra-- == 0)
+     {
+      mapdata[mapcoor.Sx][mapcoor.Sy].soort -= cityend - citybegin -1;
+      setupdaterequest(mapcoor);
+      mapcoor.Sx++;
+      setupdaterequest(mapcoor);
+      mapdata[mapcoor.Sx][mapcoor.Sy].soort -= cityend - citybegin -1;
+     }
+  }
+
+
+inline void Mapdata::updatereactor(intvec mapcoor, char mapsoort)
+  {
+   if    ((mapsoort >= reactorbegin) && (mapsoort <= reactorend))   // update reactor
+     {
+      if (reactorstatus.damage > reactorpowerdamage)
+        {
+         mapdata[mapcoor.Sx][mapcoor.Sy].soort = reactorend;
+         setupdaterequest(mapcoor);
+        }
+      else
+        {
+         mapsoort -= reactorbegin;
+         mapsoort  = (mapsoort +1) % (reactorend - reactorbegin);
+         mapsoort += reactorbegin;
+         mapdata[mapcoor.Sx][mapcoor.Sy].soort  = mapsoort;
+         setupdaterequest(mapcoor);
+        }
+     }
+  }
+
+inline void Mapdata::updatereactorstatus()
+  {
+   // deze routine is niet basimapposition afhankelijk (de reactor wordt altijd geupdated; onafhankelijk van de plaats op het scherm)
+   if (reactorstatus.damage > 0)
+     {
+      if (reactorstatus.damage < reactordamage)
+        reactorstatus.damage--;
+      else reactorstatus.blowtime++;
+     }
+  }
+
+
+inline void Mapdata::updatestar(intvec mapcoor, char mapsoort)
+  {
+   if ((mapsoort >= star1begin) && (mapsoort <= star2end))
+     {
+      if ((--mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].Yextra) == 0)
+        {
+         mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].Yextra = mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].Xextra; // teller zodat de ster minder snel knippert
+         int buildptr = (mapsoort - star1begin) % (1+star1end - star1begin);
+         if (mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].damage == brighter)
+           {
+            if (buildptr < (star1end - star1begin))
+              {
+               mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].soort++;
+               setupdaterequest(mapcoor);
+              }
+            else mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].Zextra = dimmer;
+           }
+         else
+           {
+            if (buildptr > 0)
+              {
+               mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].soort--;
+               setupdaterequest(mapcoor);
+              }
+            else mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].Zextra = brighter;
+           }
+        }
+     }
+  }
+
+
+inline void Mapdata::checkexplosion(intvec mapcoor)
+  {
+   if (mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].damage > workingdamage)
+     mapdata[checkmapcoor(mapcoor)][mapcoor.Sy].damage += mapexplosiondamage;
+  }
+
+
+

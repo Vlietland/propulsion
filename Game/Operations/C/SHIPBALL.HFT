@@ -1,0 +1,220 @@
+/*=====================================================================*/
+/*                                                                     */
+/* PROGRAMMA NAAM:	Beheert de userdata 	(userdata.cpp)	       */
+/* AUTEUR:              Resourser                                      */
+/* BESCHRIJVING:                                                       */
+/*   In deze file staat de hulpfuncties voor de implementatie          */
+/*   van de ship&balldata          				       */
+/*   let vooral op de functie Forcevectorcreate, de Y-as is            */
+/*   gespiegeld daarom is het verticale gedeelte van de vector         */
+/*   ook gespiegeld. Dit voorkomt allerlei moeilijke denkproblemen     */
+/*   (de Y-as is gespiegeld vanwege het eenvoudige bewerken van de map */
+/*								       */
+/* INPUT PAR:              geen                                        */
+/* OUPUT PAR:              geen                                        */
+/* DATUM:                  2 februari 1997                             */
+/*=====================================================================*/
+
+void     Shipballdata::updateshipstatus()
+  {
+   if (shipdamage <= workingshipdamage)
+     {
+      if (com.getshieldstatus() == active)
+        {
+         fuel -= shieldfueldec;
+         shieldmanager();
+        }
+      else if (connection == prepare) connection = deactive;
+
+      if (com.getthruststatus() == active)
+        fuel -=   thrustfueldec;
+
+      if      (com.getrotatestatus() != off)
+        {
+         if (com.getrotatestatus() == right)
+           angle = (angle - 1) & (aantalangles*rotatespeed -1);
+         else angle = (angle + 1) & (aantalangles*rotatespeed -1);
+         anglenr = angle / rotatespeed;
+        }
+
+      if (coors.ship.Sy >= rockdepth-1)
+        shipdamage += shipsurfhitinc * shipsurfacehits;
+     }
+   else shipdamage += explosiondaminc;
+  }
+
+void     Shipballdata::updateballstatus()
+  {
+   if (balldamage <= workingshipdamage)
+     {
+      if (ballsurfacehits != 0)
+        balldamage += ballsurfhitinc * ballsurfacehits;
+     }
+   else
+     {
+      balldamage += explosiondaminc;
+      if (balldamage > maxdamage)
+        connection = deactive;
+     }
+  }
+
+void     Shipballdata::checkhyperspacestatus()
+  {
+   if ((positions.ship.Y < spacedepth) && (shipdamage <= workingshipdamage))
+     hyperspacestatus++;
+  }
+
+void  Shipballdata::shieldmanager()
+  {
+   shieldcapture shield = map.checkshieldcapture();
+
+   if      (shield == ballcapt     ) connection  = prepare;
+   else if (shield == fueltankcapt)
+     {    if (fuel < fueltankmax) fuel += fuelcapture;}
+   else if (shield == energypodcapt)
+     {    if (shipdamage > energycapture) shipdamage -= energycapture; }
+   else
+     {
+      if ((connection == prepare) && (shield == ballbalanced))
+        {
+         connection       = active;
+         positions.ball   = map.getmapballposition();
+         XYvelocity.X    /= 2;
+         XYvelocity.Y    /= 2;
+        }
+     }
+  }
+
+
+vector  Shipballdata::forcevectorcreate(int shipanglenr)
+  {
+   vector Vthrustforce;
+   float  shipangle = ((float)shipanglenr / aantalangles) * P2I;          // tov de verticaal
+
+   Vthrustforce.X =  thrustforce * -sin(shipangle);
+   Vthrustforce.Y =  thrustforce * -cos(shipangle); // negatief want Y-as is omgekeerd
+
+   return(Vthrustforce);
+  }
+
+
+vector  Shipballdata::shipballXYversnelling(vector Vthrustforce)
+  {
+   vector versnelling;
+
+   versnelling.X = Vthrustforce.X / (2* mass);
+   versnelling.Y = Vthrustforce.Y / (2* mass);
+
+   return(versnelling);
+  }
+
+
+vector  Shipballdata::shipXYversnelling(vector Vthrustforce)
+  {
+   vector versnelling;
+
+   versnelling.X = Vthrustforce.X / mass;
+   versnelling.Y = Vthrustforce.Y / mass;
+
+   return(versnelling);
+  }
+
+
+float  Shipballdata::shipballrotateversnelling(vector Vthrustforce)
+  {
+   float versnelling;
+   float rotateforce;
+   vector factor;
+
+   factor.X = (positions.ship.X - positions.ball.X) / stanglength; // sin
+   factor.Y = (positions.ship.Y - positions.ball.Y) / stanglength; // cos
+
+   // positief is linksom
+   rotateforce = -Vthrustforce.X * factor.Y + Vthrustforce.Y * factor.X;
+   versnelling = rotateforce / (2* mass);
+
+   return(versnelling);
+  }
+
+
+vectors  Shipballdata::shipballXYmove(vector XYversnelling)
+  {
+   vectors deltaverplaatsing;
+
+   XYvelocity.X +=  XYversnelling.X * halfcyclustime;
+   XYvelocity.Y += (XYversnelling.Y + gravity) * halfcyclustime;
+
+   deltaverplaatsing.ball.X = deltaverplaatsing.ship.X = XYvelocity.X * cyclustime;
+   deltaverplaatsing.ball.Y = deltaverplaatsing.ship.Y = XYvelocity.Y * cyclustime;
+
+   return(deltaverplaatsing);
+  }
+
+
+vectors  Shipballdata::shipballrotatemove(float rotateversnelling)
+  {
+   float        deltaphi;
+   vector       halfposition;
+   vectors      deltaverplaatsing;
+
+   float	calcstanglength;
+   float	errorlength;
+   vector	Verror;
+
+
+   halfposition.X = (positions.ship.X - positions.ball.X) / 2;
+   halfposition.Y = (positions.ship.Y - positions.ball.Y) / 2;
+   Rvelocity += rotateversnelling * halfcyclustime;
+   deltaphi   = (2 * Rvelocity * cyclustime) / stanglength;
+
+   /* deze regels zijn voor het wegwerken van de afrondingsfouten */
+	calcstanglength = sqrt(halfposition.X * halfposition.X + halfposition.Y * halfposition.Y);
+	errorlength = calcstanglength - (stanglength / 2);
+	Verror.X    = errorlength * halfposition.X / calcstanglength;
+	Verror.Y    = errorlength * halfposition.Y / calcstanglength;
+
+   deltaverplaatsing.ship.X = halfposition.X * (cos(deltaphi) - 1) - halfposition.Y * sin(deltaphi) - Verror.X;
+   deltaverplaatsing.ship.Y = halfposition.Y * (cos(deltaphi) - 1) + halfposition.X * sin(deltaphi) - Verror.Y;
+
+   deltaverplaatsing.ball.X = -deltaverplaatsing.ship.X;
+   deltaverplaatsing.ball.Y = -deltaverplaatsing.ship.Y;
+
+   return(deltaverplaatsing);
+  }
+
+
+vectors  Shipballdata::shipXYmove(vector XYversnelling)
+  {
+   vectors deltaverplaatsing = {{0,0},{0,0}};
+
+   XYvelocity.X +=  XYversnelling.X * halfcyclustime;
+   XYvelocity.Y += (XYversnelling.Y + gravity) * halfcyclustime;
+
+   deltaverplaatsing.ship.X = XYvelocity.X * cyclustime;
+   deltaverplaatsing.ship.Y = XYvelocity.Y * cyclustime;
+
+   return(deltaverplaatsing);
+  }
+
+vectors  Shipballdata::add(vectors XYmove,vectors rotatemove,vectors positions)
+  {
+   positions.ship.X += XYmove.ship.X + rotatemove.ship.X;
+   positions.ship.Y += XYmove.ship.Y + rotatemove.ship.Y;
+   positions.ball.X += XYmove.ball.X + rotatemove.ball.X;
+   positions.ball.Y += XYmove.ball.Y + rotatemove.ball.Y;
+
+   return(positions);
+  }
+
+intvecs Shipballdata::postocoor()
+  {
+   intvecs newcoors;
+
+   newcoors.ship.Sx = positions.ship.X / bloklengte;
+   newcoors.ship.Sy = positions.ship.Y / blokhoogte;
+   newcoors.ball.Sx = positions.ball.X / bloklengte;
+   newcoors.ball.Sy = positions.ball.Y / blokhoogte;
+
+   return(newcoors);
+  }
+
