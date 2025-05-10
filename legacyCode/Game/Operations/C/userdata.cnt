@@ -1,0 +1,15 @@
+/*=====================================================================*/
+/*                                                                     */
+/* PROGRAMMA NAAM:	Beheert de userdata 	(userdata.cnt)	       */
+/* AUTEUR:              Resourser                                      */
+/* BESCHRIJVING:                                                       */
+/*								       */
+/* INPUT PAR:              geen                                        */
+/* OUPUT PAR:              geen                                        */
+/* DATUM:                  20 maart 1997                               */
+/*=====================================================================*/
+
+#if !defined( _userdata_cnt_)
+#define _userdata_cnt_
+
+#endif  _userdata_cnt_

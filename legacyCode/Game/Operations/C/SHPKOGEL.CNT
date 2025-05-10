@@ -1,0 +1,28 @@
+/*=====================================================================*/
+/*                                                                     */
+/* PROGRAMMA NAAM:	Constanten van de shipkogels    (shpkogel.cnt) */
+/* AUTEUR:              Resourser                                      */
+/* BESCHRIJVING:                                                       */
+/*   Deze cnt-file bevat de header voor de class shipkogeldata         */
+/*								       */
+/*                                                                     */
+/*								       */
+/* INPUT PAR:              geen                                        */
+/* OUPUT PAR:              geen                                        */
+/* DATUM:                  20 maart 1997                               */
+/*=====================================================================*/
+
+#if !defined(_shpkogel_cnt_)
+#define _shpkogel_cnt_
+
+const int             kogelvelocity    =  60; // snelheid van de kogels (m/s)
+//const int             Ykogeloffset  = 30; // offset tov van het middelpunt van het schip
+
+const int             kogelrand        = 100;  // rand tov randen van het scherm
+                                               // kogel moet nog niet gewist worden
+                                               // na het verdwijnen van het scherm
+const int             screenrand       = 3;    // kogel moet binnen de rand getekend
+                                               // worden
+const char            fireslowdown     = 0x07; // => 00000111 (alleen opvullen met enen)
+
+#endif  _shpkogel_cnt_

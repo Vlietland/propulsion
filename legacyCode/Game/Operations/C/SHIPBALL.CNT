@@ -1,0 +1,45 @@
+/*=====================================================================*/
+/*                                                                     */
+/* PROGRAMMA NAAM:	Beheert de userdata 	(shipball.cnt)	       */
+/* AUTEUR:              Resourser                                      */
+/* BESCHRIJVING:                                                       */
+/*   Deze cnt-file bevat de header voor de class shipballdata          */
+/*								       */
+/*                                                                     */
+/*								       */
+/* INPUT PAR:              geen                                        */
+/* OUPUT PAR:              geen                                        */
+/* DATUM:                  20 maart 1997                               */
+/*=====================================================================*/
+
+#if !defined( _shipball_cnt_)
+#define _shipball_cnt_
+
+const float    halfcyclustime    =    cyclustime / 2;
+
+const int      initangle         =    0;
+const int      initballdamage    =    0;
+const int      initshipdamage    =    0;
+const int      shieldfueldec     =    1;
+const int      thrustfueldec     =    1;
+const int      shipsurfhitinc    =    2;
+const int      ballsurfhitinc    =    2;
+const int      shipkogelhitinc   =    1;
+const int      ballkogelhitinc   =    1;
+const int      explosiondaminc   =  100;
+const int      rotatespeed       =    2;   // let op, alleen 2^X = rotatespeed
+
+const int      spacedepth        =  120;   // grens van veld halen (hyperspace)
+
+const int      ballnr            =  aantalangles;
+
+const int      fuelcapture       =   10;
+const int      energycapture     =    1;
+const int      fueltankmax       =10000;
+
+const int      thrustforce       =  750;   // newton
+const int      mass              =   10;   // kilogram
+const int      gravity           =   15;   // m/s^2
+
+
+#endif  _shipball_cnt_

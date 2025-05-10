@@ -1,0 +1,49 @@
+mapball     -> damage
+               updaterequest
+
+holder      ->
+               updaterequest
+
+turrets1    -> damage
+               updaterequest
+               firerate
+               firestatus
+               fireusage
+
+turrets2    -> damage
+               updaterequest
+               firerate
+               firestatus
+               fireusage
+
+fueltank    -> damage
+               updaterequest
+               amount
+
+energypod   -> damage
+               updaterequest
+               amount
+
+city        -> damage
+               updaterequest
+               shieldtime
+
+buttonout   -> damage
+               updaterequest
+               Xlasercoor
+               Ylasercoor
+
+reactor     ->
+               updaterequest
+
+star1/2     -> bright/dim
+               updaterequest
+               brightrate
+               brightstatus
+
+laser       ->
+               updaterequest
+               red/blue
+
+other       ->
+               updaterequest

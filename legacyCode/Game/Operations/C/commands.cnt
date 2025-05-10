@@ -1,0 +1,37 @@
+/*=====================================================================*/
+/*                                                                     */
+/* PROGRAMMA NAAM:	Beheert de shipcommandos    (commands.cnt)     */
+/* AUTEUR:              Resourser                                      */
+/* BESCHRIJVING:                                                       */
+/*   Deze cnt-file bevat de constanten voor de class commands          */
+/*   Hierin wordt het volgende bij gehouden			       */
+/*								       */
+/*								       */
+/* INPUT PAR:              geen                                        */
+/* OUPUT PAR:              geen                                        */
+/* DATUM:                  17 maart 1997                               */
+/*=====================================================================*/
+
+#if !defined( _commands_cnt_)
+#define _commands_cnt_
+
+#ifdef __cplusplus
+    #define __CPPARGS ...
+#else
+    #define __CPPARGS
+#endif
+
+const int keyboardint    = 0x09;
+
+const int poortA         = 0x60;
+const int poortB         = 0x61;
+
+const int rotateleftkey  = 44;      // 'z'      toets
+const int rotaterightkey = 45;	    // 'x'      toets
+const int thrustkey      = 54;      // 'shift'  toets
+const int firekey        = 28;      // 'return' toets
+const int shieldkey      = 57;      // 'spatie' toets
+const int escapekey	 =  1;      // 'escape' toets
+
+
+#endif  _commands_cnt_

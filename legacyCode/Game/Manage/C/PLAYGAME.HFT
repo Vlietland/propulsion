@@ -1,0 +1,17 @@
+/*=====================================================================*/
+/*                                                                     */
+/* PROGRAMMA NAAM:      Hulpfunctie van start of game   (gameman.hft)  */
+/* AUTEUR:              Resourser                                      */
+/* BESCHRIJVING:                                                       */
+/*   In deze module staan de hulpfuncties voor de playgame module      */
+/*                                                                     */
+/* INPUT PAR:              geen                                        */
+/* OUPUT PAR:              geen                                        */
+/* DATUM:                  2 februari 1997                             */
+/*=====================================================================*/
+
+void Playgameman::drawgame()
+  {
+   
+  }
+
