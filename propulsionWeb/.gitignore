@@ -1,6 +1,6 @@
 
 # Node.js dependencies
-/propulsionWeb/node_modules/
+node_modules/
 
 # Build output
 dist/
