@@ -7,6 +7,7 @@ export const SHIP_IMAGE = new ex.ImageSource('/images/ship.png');
 // Constants for ship behavior
 const SHIP_WIDTH = 50; // Ship width
 const SHIP_HEIGHT = 50; // Ship height
+const SHIP_SCALE = 0.1; // Scaling factor for the ship
 const ROTATION_SPEED = 2; // Rotation speed in radians per second
 const ENGINE_THRUST = 200; // Thrust power
 const GUN_POWER = 300; // Speed of projectiles
@@ -21,6 +22,9 @@ export class Ship extends ex.Actor {
             height: SHIP_HEIGHT, // Set the ship height
         });
         this.graphics.use(SHIP_IMAGE.toSprite()); // Assign the image to the ship
+
+        // Apply scaling to the ship
+        this.scale = new ex.Vector(SHIP_SCALE, SHIP_SCALE);
     }
 
     onInitialize(engine: ex.Engine) {
@@ -61,8 +65,9 @@ export class Ship extends ex.Actor {
             color: ex.Color.Red,
         });
 
-        // Set projectile velocity based on ship's rotation
-        projectile.vel = ex.Vector.fromAngle(this.rotation).scale(GUN_POWER);
+        // Correct the projectile's direction based on the ship's rotation
+        const firingAngle = this.rotation - 1.57; // Use the ship's rotation directly
+        projectile.vel = ex.Vector.fromAngle(firingAngle).scale(GUN_POWER);
 
         // Add projectile to the game
         engine.add(projectile);

@@ -20,6 +20,18 @@ game.add(ship);
 // Create a loader and add the ship image
 const loader = new ex.Loader([SHIP_IMAGE]);
 
+// Automatically click the "Play Game" button using MutationObserver
+const observer = new MutationObserver(() => {
+    const playButton = document.querySelector('#excalibur-play') as HTMLButtonElement; // Updated selector
+    if (playButton) {
+        playButton.click();
+        console.log('Play Game button clicked automatically.');
+        observer.disconnect(); // Stop observing once the button is clicked
+    }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
+
 // Start the game with the loader
 game.start(loader).then(() => {
     console.log('All assets successfully loaded.');
