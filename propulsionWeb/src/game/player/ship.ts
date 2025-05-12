@@ -25,24 +25,25 @@ export class Ship extends ex.Actor {
         this.graphics.use(SHIP_IMAGE.toSprite());
         this.scale = new ex.Vector(SHIP_SCALE, SHIP_SCALE);
         this.body.collisionType = ex.CollisionType.Active;
-        this.energyBall = new EnergyBall();
+        this.energyBall = new EnergyBall(this);
     }
 
     onInitialize(engine: ex.Engine) {
         engine.add(this.energyBall);
 
-        this.on('preupdate', () => {
+        this.on('preupdate', (evt) => {
+            const delta = evt.delta; // Time since last frame
             const rotationDirection = this.inputService.getRotationDirection();
             const isThrusting = this.inputService.isThrusting();
             const isShooting = this.inputService.isShooting();
             const isUsingTractorBeam = this.inputService.isUsingTractorBeam();
 
-            this.rotation += rotationDirection * ROTATION_SPEED * engine.clock.elapsed() / 1000;
+            this.rotation += rotationDirection * ROTATION_SPEED * delta / 1000;
 
             if (isThrusting) {
                 const thrustAngle = this.rotation - Math.PI / 2;
                 const thrustVector = ex.Vector.fromAngle(thrustAngle).scale(ENGINE_THRUST);
-                this.vel = this.vel.add(thrustVector.scale(engine.clock.elapsed() / 1000));
+                this.vel = this.vel.add(thrustVector.scale(delta / 1000));
             }
 
             if (isShooting) {
@@ -53,7 +54,6 @@ export class Ship extends ex.Actor {
                 this.useTractorBeam(engine);
             }
 
-            this.energyBall.updatePosition(this);
         });
     }
 
