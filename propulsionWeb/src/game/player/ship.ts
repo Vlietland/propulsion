@@ -1,5 +1,6 @@
 import * as ex from 'excalibur';
 import { InputService } from '@src/game/input/inputService';
+import { EnergyBall } from '@src/game/player/energyBall';
 
 export const SHIP_IMAGE = new ex.ImageSource('/images/ship.png');
 
@@ -12,6 +13,8 @@ const GUN_POWER = 300;
 const TRACTOR_BEAM_REACH = 150;
 
 export class Ship extends ex.Actor {
+    private energyBall: EnergyBall;
+
     constructor(x: number, y: number, private inputService: InputService) {
         super({
             x,
@@ -21,15 +24,15 @@ export class Ship extends ex.Actor {
         });
         this.graphics.use(SHIP_IMAGE.toSprite());
         this.scale = new ex.Vector(SHIP_SCALE, SHIP_SCALE);
-
-        // Enable physics for the ship
         this.body.collisionType = ex.CollisionType.Active;
+        this.energyBall = new EnergyBall();
     }
 
     onInitialize(engine: ex.Engine) {
-        this.on('preupdate', (evt) => {
+        engine.add(this.energyBall);
+
+        this.on('preupdate', () => {
             const rotationDirection = this.inputService.getRotationDirection();
-            console.log('Rotation Direction:', rotationDirection);
             const isThrusting = this.inputService.isThrusting();
             const isShooting = this.inputService.isShooting();
             const isUsingTractorBeam = this.inputService.isUsingTractorBeam();
@@ -49,6 +52,8 @@ export class Ship extends ex.Actor {
             if (isUsingTractorBeam) {
                 this.useTractorBeam(engine);
             }
+
+            this.energyBall.updatePosition(this);
         });
     }
 

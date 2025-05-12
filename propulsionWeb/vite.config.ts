@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   resolve: {
     alias: {
-      '@src': '/propulsionWeb/src'
+      '@src': '/src'
     }
   }
 });

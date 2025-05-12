@@ -1,7 +1,8 @@
 import * as ex from 'excalibur';
-import { Ship, SHIP_IMAGE } from './game/player/ship';
-import { InputService } from './game/input/inputService';
-import { GameCanvas } from './ui/gameCanvas';
+import { Ship, SHIP_IMAGE } from '@src/game/player/ship';
+import { InputService } from '@src/game/input/inputService';
+import { GameCanvas } from '@src/ui/gameCanvas';
+import { ENERGY_BALL_IMAGE } from '@src/game/player/energyBall';
 
 const gameCanvas = new GameCanvas();
 const game = gameCanvas.createEngine();
@@ -13,7 +14,7 @@ const inputService = new InputService(game);
 const ship = new Ship(400, 300, inputService);
 game.add(ship);
 
-const loader = new ex.Loader([SHIP_IMAGE]);
+const loader = new ex.Loader([SHIP_IMAGE, ENERGY_BALL_IMAGE]);
 
 const observer = new MutationObserver(() => {
     const playButton = document.querySelector('#excalibur-play') as HTMLButtonElement;
