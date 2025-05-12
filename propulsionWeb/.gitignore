@@ -1,4 +1,3 @@
-
 # Node.js dependencies
 node_modules/
 
@@ -20,9 +19,6 @@ yarn-error.log*
 .vscode/
 .idea/
 *.swp
-
-# TypeScript
-*.tsbuildinfo
 
 # Miscellaneous
 .DS_Store
