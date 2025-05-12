@@ -1,30 +1,29 @@
 import * as ex from 'excalibur';
 import { InputService } from '@src/game/input/inputService';
 
-// Define the ship image
 export const SHIP_IMAGE = new ex.ImageSource('/images/ship.png');
 
-// Constants for ship behavior
-const SHIP_WIDTH = 50; // Ship width
-const SHIP_HEIGHT = 50; // Ship height
-const SHIP_SCALE = 0.1; // Scaling factor for the ship
-const ROTATION_SPEED = 2; // Rotation speed in radians per second
-const ENGINE_THRUST = 200; // Thrust power
-const GUN_POWER = 300; // Speed of projectiles
-const TRACTOR_BEAM_REACH = 150; // Distance for tractor beam
+const SHIP_WIDTH = 50;
+const SHIP_HEIGHT = 50;
+const SHIP_SCALE = 0.1;
+const ROTATION_SPEED = 2;
+const ENGINE_THRUST = 200;
+const GUN_POWER = 300;
+const TRACTOR_BEAM_REACH = 150;
 
 export class Ship extends ex.Actor {
     constructor(x: number, y: number, private inputService: InputService) {
         super({
             x,
             y,
-            width: SHIP_WIDTH, // Set the ship width
-            height: SHIP_HEIGHT, // Set the ship height
+            width: SHIP_WIDTH,
+            height: SHIP_HEIGHT,
         });
-        this.graphics.use(SHIP_IMAGE.toSprite()); // Assign the image to the ship
-
-        // Apply scaling to the ship
+        this.graphics.use(SHIP_IMAGE.toSprite());
         this.scale = new ex.Vector(SHIP_SCALE, SHIP_SCALE);
+
+        // Enable physics for the ship
+        this.body.collisionType = ex.CollisionType.Active;
     }
 
     onInitialize(engine: ex.Engine) {
@@ -35,21 +34,18 @@ export class Ship extends ex.Actor {
             const isShooting = this.inputService.isShooting();
             const isUsingTractorBeam = this.inputService.isUsingTractorBeam();
 
-            // Apply rotation
             this.rotation += rotationDirection * ROTATION_SPEED * engine.clock.elapsed() / 1000;
 
-            // Apply thrust
             if (isThrusting) {
-                const thrustVector = ex.Vector.fromAngle(this.rotation).scale(ENGINE_THRUST);
+                const thrustAngle = this.rotation - Math.PI / 2;
+                const thrustVector = ex.Vector.fromAngle(thrustAngle).scale(ENGINE_THRUST);
                 this.vel = this.vel.add(thrustVector.scale(engine.clock.elapsed() / 1000));
             }
 
-            // Fire weapon
             if (isShooting) {
                 this.fireWeapon(engine);
             }
 
-            // Use tractor beam
             if (isUsingTractorBeam) {
                 this.useTractorBeam(engine);
             }
@@ -65,23 +61,19 @@ export class Ship extends ex.Actor {
             color: ex.Color.Red,
         });
 
-        // Correct the projectile's direction based on the ship's rotation
-        const firingAngle = this.rotation - 1.57; // Use the ship's rotation directly
+        const firingAngle = this.rotation - Math.PI / 2;
         projectile.vel = ex.Vector.fromAngle(firingAngle).scale(GUN_POWER);
 
-        // Add projectile to the game
         engine.add(projectile);
     }
 
     private useTractorBeam(engine: ex.Engine) {
-        // Find nearby objects within tractor beam reach
         const nearbyActors = engine.currentScene.actors.filter((actor) => {
             return actor !== this && actor.pos.distance(this.pos) <= TRACTOR_BEAM_REACH;
         });
 
-        // Apply tractor beam effect (e.g., pull objects closer)
         nearbyActors.forEach((actor) => {
-            const pullVector = this.pos.sub(actor.pos).normalize().scale(50); // Pull strength
+            const pullVector = this.pos.sub(actor.pos).normalize().scale(50);
             actor.vel = actor.vel.add(pullVector);
         });
     }

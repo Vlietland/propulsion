@@ -21,7 +21,7 @@ export class InputService {
 
     isThrusting(): boolean {
         const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Input.Keys.Space);
+        return keyboard.isHeld(Input.Keys.ShiftLeft) || keyboard.isHeld(Input.Keys.ShiftRight);
     }
 
     isShooting(): boolean {
@@ -31,6 +31,6 @@ export class InputService {
 
     isUsingTractorBeam(): boolean {
         const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Input.Keys.ShiftLeft) || keyboard.isHeld(Input.Keys.ShiftRight);
+        return keyboard.isHeld(Input.Keys.Space);
     }
 }
