@@ -1,16 +1,18 @@
 // propulsionWeb/src/game/player/energyBall.ts
 import * as ex from 'excalibur';
+import { Ship } from './ship';
 
 export const ENERGY_BALL_IMAGE = new ex.ImageSource('/images/energyBall.png');
 const BALL_SCALE = 0.1;
+const BALL_WEIGHT = 20000;
 const PENDULUM_LENGTH = 150;
 
 export class EnergyBall extends ex.Actor {
-    private ship: ex.Actor;
+    private ship: Ship;
     private angle: number;
     private angularVel: number;
 
-    constructor(ship: ex.Actor) {
+    constructor(ship: Ship) {
         super({width: 20, height: 20});
         this.graphics.use(ENERGY_BALL_IMAGE.toSprite());
         this.scale = new ex.Vector(BALL_SCALE, BALL_SCALE);

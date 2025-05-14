@@ -1,4 +1,4 @@
-import { Input, Engine } from 'excalibur';
+import { Engine, Keys } from 'excalibur'; // Import only Engine and Keys
 
 export class InputService {
     private engine: Engine;
@@ -10,9 +10,9 @@ export class InputService {
     getRotationDirection(): number {
         const keyboard = this.engine.input.keyboard;
 
-        if (keyboard.isHeld(Input.Keys.Z)) {
+        if (keyboard.isHeld(Keys.Z)) {
             return -1;
-        } else if (keyboard.isHeld(Input.Keys.X)) {
+        } else if (keyboard.isHeld(Keys.X)) {
             return 1;
         }
 
@@ -21,16 +21,16 @@ export class InputService {
 
     isThrusting(): boolean {
         const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Input.Keys.ShiftLeft) || keyboard.isHeld(Input.Keys.ShiftRight);
+        return keyboard.isHeld(Keys.ShiftLeft) || keyboard.isHeld(Keys.ShiftRight);
     }
 
     isShooting(): boolean {
         const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Input.Keys.Enter);
+        return keyboard.isHeld(Keys.Enter);
     }
 
     isUsingTractorBeam(): boolean {
         const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Input.Keys.Space);
+        return keyboard.isHeld(Keys.Space);
     }
 }
