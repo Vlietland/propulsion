@@ -1,0 +1,57 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/excalibur.json",
+    "expandedProjectPaths": [
+        ".",
+        "propulsionWeb"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/excalibur.json": {
+            "scale": 0.2563020833333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1919.609835399309,
+                "y": 1281.6907132696606
+            }
+        },
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "excalibur.json": {
+            "scale": 0.2563020833333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1919.6098353993093,
+                "y": 1277.7890672627518
+            }
+        },
+        "tiles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/tiles",
+    "map.lastUsedFormat": "json",
+    "map.tileHeight": 128,
+    "map.tileWidth": 128,
+    "openFiles": [
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/excalibur.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx"
+    ],
+    "project": "excalibur.tiled-project",
+    "recentFiles": [
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/excalibur.json",
+        "tiles.tsx",
+        "excalibur.json"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}
