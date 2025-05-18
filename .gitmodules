@@ -1,0 +1,3 @@
+[submodule "propulsionWeb/external/excalibur-tiled"]
+	path = propulsionWeb/external/excalibur-tiled
+	url = https://github.com/excaliburjs/excalibur-tiled.git

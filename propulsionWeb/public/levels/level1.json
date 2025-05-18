@@ -39,7 +39,7 @@
          "name":"objects",
          "objects":[
                 {
-                 "gid":7,
+                 "gid":4,
                  "height":128,
                  "id":2,
                  "name":"reactor",
@@ -63,7 +63,7 @@
                  "y":1664
                 }, 
                 {
-                 "gid":8,
+                 "gid":5,
                  "height":128,
                  "id":10,
                  "name":"ship",

@@ -5,8 +5,8 @@
     },
     "activeFile": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx",
     "expandedProjectPaths": [
-        ".",
-        "propulsionWeb"
+        "propulsionWeb",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -27,11 +27,11 @@
             "scaleInDock": 1
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json": {
-            "scale": 0.24009765624999999,
-            "selectedLayer": 0,
+            "scale": 0.3714,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1920.0520621491908,
-                "y": 1280.7288700886684
+                "x": 1217.0166935918146,
+                "y": 1110.6623586429725
             }
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/public/images/tiles.tsx": {
@@ -57,12 +57,13 @@
     "map.tileHeight": 128,
     "map.tileWidth": 128,
     "openFiles": [
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx"
     ],
     "project": "excalibur.tiled-project",
     "recentFiles": [
-        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/excalibur.json",
         "tiles.tsx",
         "excalibur.json"

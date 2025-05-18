@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-plugin-tsconfig-paths';
+import { defineConfig } from 'vite'
+import tsconfigPaths from 'vite-plugin-tsconfig-paths'
 
 export default defineConfig({
   base: '/', // Use '/' for local development
@@ -8,5 +8,5 @@ export default defineConfig({
     alias: {
       '@src': '/src'
     }
-  }
-});
+  },
+})

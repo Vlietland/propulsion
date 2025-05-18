@@ -11,9 +11,13 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["src/*"],
+      "@excalibur-tiled/*": ["external/excalibur-tiled/src/*"]
     }
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "external/excalibur-tiled/src"
+  ],
   "exclude": ["node_modules", "dist"]
 }

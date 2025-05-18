@@ -1,38 +1,17 @@
 import { Scene, Engine, Actor } from 'excalibur'
+import { MapRenderer } from '@src/engine/mapRenderer';
 
 export class SceneManager {
-  constructor(private engine: Engine) {}
+  private mapRenderer: MapRenderer;
 
-  async registerScenes() {
-    const level1Data = await this.loadLevelData('propulsionWeb/public/levels/level1.json');
-    console.log('Loaded level1Data:', level1Data); // Log the map data for debugging
-    const level1Scene = new Scene();
-
-    if (level1Data.layers) {
-      level1Data.layers.forEach((layer: any) => {
-        if (layer.type === 'objectgroup') {
-          layer.objects.forEach((objectData: any) => {
-            const actor = new Actor({
-              x: objectData.x,
-              y: objectData.y,
-              width: objectData.width,
-              height: objectData.height,
-            });
-            level1Scene.add(actor);
-          });
-        }
-      });
-    }
-
-    this.engine.add('level1', level1Scene);
-    this.engine.goToScene('level1');
+  constructor(private engine: Engine) {
+    this.mapRenderer = new MapRenderer();
   }
 
-  private async loadLevelData(fileName: string): Promise<any> {
-    const response = await fetch(`/assets/${fileName}`);
-    if (!response.ok) {
-      throw new Error(`Failed to load ${fileName}`);
-    }
-    return response.json();
+  async registerScenes() {
+    const level1Scene = new Scene();
+    await this.mapRenderer.loadAndRenderMap(level1Scene, 'level1.json');
+    this.engine.add('level1', level1Scene);
+    this.engine.goToScene('level1');
   }
 }

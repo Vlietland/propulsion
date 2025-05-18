@@ -9,6 +9,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@excaliburjs/plugin-tiled": "github:excaliburjs/excalibur-tiled",
     "excalibur": "^0.30.3",
     "planck-js": "^1.3.0"
   },
