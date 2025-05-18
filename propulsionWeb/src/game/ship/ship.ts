@@ -1,4 +1,4 @@
-import { InputService } from '@src/game/controller/keyboard';
+import { InputService } from '@src/game/ship/shipController';
 export const SHIP_IMAGE = new ex.ImageSource('/images/ship.png');
 
 const ROTATION_SPEED = 2;

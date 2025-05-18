@@ -1,5 +1,5 @@
 
-import { Ship } from './ship';
+import { Ship } from '../ship/ship';
 
 export const BALL_IMAGE = new ex.ImageSource('/images/energyBall.png');
 
