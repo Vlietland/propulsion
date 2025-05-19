@@ -1,6 +1,6 @@
 import { Engine } from 'excalibur'
-import { ENGINE_CONFIG } from '@src/engine/engineConfig'
-import { SceneManager } from '@src/engine/sceneManager'
+import { ENGINE_CONFIG } from '@src/game/engine/engineConfig'
+import { SceneManager } from '@src/game/engine/sceneManager'
 
 export class EngineBootstrap {
   public engine: Engine

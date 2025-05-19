@@ -1,4 +1,4 @@
-import { EngineBootstrap } from '@src/engine/engineBootstrap'
+import { EngineBootstrap } from '@src/game/engine/engineBootstrap'
 
 const game = new EngineBootstrap()
 game.start()

@@ -9,10 +9,12 @@
 - Do not include comments in the code by default.
 - Provide only the necessary code changes or additions.
 - Use clear and consistent formatting for all responses.
-- Write condensed code with limited whitelines.
+- Write condensed code.
+- Propose long term solutions.
+- Take care of the separation of concerns in classes.
 
 ## File Structure
-- Assume the root directory is `/home/jan/Documents/home/2.Projects/propulsion`.
+- Assume the root directory is `/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb`.
 - Follow the existing project structure when creating or modifying files.
 
 ## Communication
