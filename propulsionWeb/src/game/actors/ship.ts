@@ -2,8 +2,9 @@ import { Camera, Actor, Vector, CollisionType, Engine, ImageSource } from 'excal
 import { ShipController } from '@src/game/controller/shipController';
 
 export const IMAGE = new ImageSource('/images/tiles/ship.png');
+await IMAGE.load();
 
-const ROTATION_SPEED = 2;
+const ROTATION_SPEED = 0.003;
 const ENGINE_THRUST = 0.03;
 const GUN_POWER = 300;
 const TRACTOR_BEAM_REACH = 150;
@@ -14,7 +15,6 @@ export class ShipActor extends Actor {
   private tractorBeamOn = false;
   private readonly mass = 1;
   private camera?: Camera;
-  private shipPos: Vector;
 
   constructor(options: {
     pos: Vector;
@@ -25,7 +25,8 @@ export class ShipActor extends Actor {
       height: IMAGE.height,
       collisionType: CollisionType.Active
     });
-    this.shipPos = options.pos
+    this.pos = options.pos
+    this.rotation = -Math.PI / 2;
   }
   
   static get IMAGE(): ImageSource {
@@ -44,10 +45,8 @@ export class ShipActor extends Actor {
       );
       this.vel = this.vel.add(thrust.scale(delta));
     }
-    this.shipPos = this.shipPos.add(this.vel)
-    if (this.camera) this.camera.pos = this.shipPos;
-    this.pos = this.shipPos;
-    console.log(super.pos)        
+    this.pos = this.pos.add(this.vel)
+    if (this.camera) this.camera.pos = this.pos;
 
     if (this.shipController) {
       const rotationDirection = this.shipController.getRotationDirection();

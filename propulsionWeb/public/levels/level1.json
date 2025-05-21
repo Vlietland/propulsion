@@ -69,7 +69,7 @@
                  "name":"ship",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1152,
                  "y":384
