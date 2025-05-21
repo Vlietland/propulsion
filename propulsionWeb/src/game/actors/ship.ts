@@ -1,50 +1,67 @@
-import { Actor, Vector, CollisionType, Engine, ImageSource} from 'excalibur';
-import { InputService } from '@src/game/ship/shipController';
-export const SHIP_IMAGE = new ImageSource('/images/ship.png');
+import { Camera, Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur';
+import { ShipController } from '@src/game/controller/shipController';
+
+export const IMAGE = new ImageSource('/images/tiles/ship.png');
 
 const ROTATION_SPEED = 2;
-const ENGINE_THRUST = 200;
+const ENGINE_THRUST = 0.03;
 const GUN_POWER = 300;
 const TRACTOR_BEAM_REACH = 150;
 const TOW_LENGTH = 150;
 
 export class ShipActor extends Actor {
-  private inputService: InputService | null;
-  private tractorBeamOn: boolean = false;
+  private shipController: ShipController | null = null;
+  private tractorBeamOn = false;
   private readonly mass = 1;
+  private camera?: Camera;
+  private shipPos: Vector;
 
   constructor(options: {
     pos: Vector;
-    width: number;
-    height: number;
-    collisionType: CollisionType;
   }) {
-    super(options);
-    this.inputService = null;
+    super({
+      pos: options.pos,
+      width: IMAGE.width,
+      height: IMAGE.height,
+      collisionType: CollisionType.Active
+    });
+    this.shipPos = options.pos
+  }
+  
+  static get IMAGE(): ImageSource {
+    return IMAGE;
   }
 
-  setInputService(inputService: InputService) {
-    this.inputService = inputService;
+  setshipController(shipController: ShipController) {
+    this.shipController = shipController;
   }
 
   onPreUpdate(engine: Engine, delta: number) {
-    if (this.inputService && this.inputService.isThrusting()) {
+    if (this.shipController && this.shipController.isThrusting()) {
       const thrust = new Vector(
         Math.cos(this.rotation) * ENGINE_THRUST,
         Math.sin(this.rotation) * ENGINE_THRUST
       );
       this.vel = this.vel.add(thrust.scale(delta));
     }
+    this.shipPos = this.shipPos.add(this.vel)
+    if (this.camera) this.camera.pos = this.shipPos;
+    this.pos = this.shipPos;
+    console.log(super.pos)        
 
-    if (this.inputService) {
-      const rotationDirection = this.inputService.getRotationDirection();
+    if (this.shipController) {
+      const rotationDirection = this.shipController.getRotationDirection();
       this.rotation += rotationDirection * ROTATION_SPEED * delta;
-      this.tractorBeamOn = this.inputService.isUsingTractorBeam();
+      this.tractorBeamOn = this.shipController.isUsingTractorBeam();
     }
   }
 
   getMass(): number {
     return this.mass;
+  }
+
+  setCamera(camera: Camera) {
+    this.camera = camera;
   }
 
   isTractorBeamActive(): boolean {

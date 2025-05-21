@@ -1,6 +1,6 @@
-import { Engine, Keys } from 'excalibur'; // Import only Engine and Keys
+import { Engine, Keys } from 'excalibur';
 
-export class InputService {
+export class ShipController {
     private engine: Engine;
 
     constructor(engine: Engine) {
@@ -21,6 +21,7 @@ export class InputService {
 
     isThrusting(): boolean {
         const keyboard = this.engine.input.keyboard;
+        //console.log('brrrrrrrrrrrrrrrrrrr')
         return keyboard.isHeld(Keys.ShiftLeft) || keyboard.isHeld(Keys.ShiftRight);
     }
 

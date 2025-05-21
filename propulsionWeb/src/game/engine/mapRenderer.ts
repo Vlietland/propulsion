@@ -9,6 +9,6 @@ export class MapRenderer {
     await map.load();
     
     map.addToScene(scene);
-    return map.data; // Return the loaded map data
+    return map;
   }
 }

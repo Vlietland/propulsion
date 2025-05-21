@@ -1,78 +1,90 @@
-import { Actor, CollisionType, Vector, Sprite, Scene } from 'excalibur';
+import { Actor, CollisionType, Vector, Scene, Engine } from 'excalibur';
 import { ShipActor } from '@src/game/actors/ship';
 import { BallActor } from '@src/game/actors/ball';
 import { TurretActor } from '@src/game/actors/turret';
 import { ReactorActor } from '@src/game/actors/reactor';
 
 export class ActorFactory {
-  constructor(private map: any, private sprites: Record<string, Sprite>) {}
+  private shipActor: ShipActor | null = null;
+  constructor(private map: any) {}
 
-  createActors(scene: Scene): void {
-    const objectLayers = this.map.getObjectLayers();
+  async createActors(scene: Scene): Promise<void> {
+    if (!this.map || !this.map.layers) {
+      throw new Error('Invalid map data: "layers" property is missing or undefined.');
+    }
+
+    const objectLayers = this.map.layers.filter((layer: any) => 
+      (layer.type === 'objectgroup' || layer.type === undefined) && layer.name?.toLowerCase() === 'objects'
+    );
+
     for (const layer of objectLayers) {
       for (const object of layer.objects) {
-        const actor = this.createActorFromObject(object);
-        if (actor) {
-          scene.add(actor);
-        }
+        const actor = await this.createActorFromObject(object);
+        if (actor) scene.add(actor);
+        if (actor instanceof ShipActor) {
+          actor.setCamera(scene.camera);
+          this.shipActor = actor;
+         }     
       }
     }
   }
 
-  private createActorFromObject(object: any): Actor | null {
-    const sprite = this.sprites[object.name];
-    if (!sprite) return null;
-
-    let actor: Actor;
-
+  private async createActorFromObject(object: any): Promise<Actor | null> {
+    let actor: Actor;    
     switch (object.name) {
       case 'ship':
         actor = new ShipActor({
           pos: new Vector(object.x, object.y),
-          width: object.width,
-          height: object.height,
-          collisionType: CollisionType.Active,
         });
+        ShipActor.IMAGE.ready.catch((err) => {
+          console.error('Failed to load image:', err);
+        });
+        const sprite = ShipActor.IMAGE.toSprite();
+        console.log('Sprite:', sprite);
+        actor.graphics.use(sprite);
         break;
-
+  
       case 'ball':
         actor = new BallActor({
           pos: new Vector(object.x, object.y),
           width: object.width,
           height: object.height,
-          collisionType: CollisionType.Passive,
+          collisionType: CollisionType.Passive
         });
         break;
-
+  
       case 'turret':
         actor = new TurretActor({
           pos: new Vector(object.x, object.y),
           width: object.width,
           height: object.height,
-          collisionType: CollisionType.Fixed,
+          collisionType: CollisionType.Fixed
         });
         break;
-
+  
       case 'reactor':
         actor = new ReactorActor({
           pos: new Vector(object.x, object.y),
           width: object.width,
           height: object.height,
-          collisionType: CollisionType.Fixed,
+          collisionType: CollisionType.Fixed
         });
         break;
-
+  
       default:
         actor = new Actor({
           pos: new Vector(object.x, object.y),
           width: object.width,
           height: object.height,
-          collisionType: CollisionType.Fixed,
+          collisionType: CollisionType.Fixed
         });
         break;
     }
-
-    actor.graphics.use(sprite);
+  
     return actor;
-  }
+  }  
+
+  getShipActor(): ShipActor | null {
+    return this.shipActor;
+  }  
 }
