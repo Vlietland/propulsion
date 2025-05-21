@@ -21,7 +21,6 @@ export class ShipController {
 
     isThrusting(): boolean {
         const keyboard = this.engine.input.keyboard;
-        //console.log('brrrrrrrrrrrrrrrrrrr')
         return keyboard.isHeld(Keys.ShiftLeft) || keyboard.isHeld(Keys.ShiftRight);
     }
 

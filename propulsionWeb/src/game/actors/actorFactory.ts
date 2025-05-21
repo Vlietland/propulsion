@@ -33,15 +33,7 @@ export class ActorFactory {
     let actor: Actor;    
     switch (object.name) {
       case 'ship':
-        actor = new ShipActor({
-          pos: new Vector(object.x, object.y),
-        });
-        ShipActor.IMAGE.ready.catch((err) => {
-          console.error('Failed to load image:', err);
-        });
-        const sprite = ShipActor.IMAGE.toSprite();
-        console.log('Sprite:', sprite);
-        actor.graphics.use(sprite);
+        actor = new ShipActor(new Vector(object.x, object.y));
         break;
   
       case 'ball':
