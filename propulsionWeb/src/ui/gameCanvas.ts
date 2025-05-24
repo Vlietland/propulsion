@@ -1,19 +1,19 @@
-import * as ex from 'excalibur';
+import * as ex from 'excalibur'
 
 export class GameCanvas {
-    private canvasId: string;
+    private canvasId: string
 
     constructor(canvasId: string = 'gameCanvas') {
-        this.canvasId = canvasId;
-        this.initializeCanvas();
+        this.canvasId = canvasId
+        this.initializeCanvas()
     }
 
     private initializeCanvas(): void {
-        const existingCanvas = document.getElementById(this.canvasId);
+        const existingCanvas = document.getElementById(this.canvasId)
         if (!existingCanvas) {
-            const canvas = document.createElement('canvas');
-            canvas.id = this.canvasId;
-            document.body.appendChild(canvas);
+            const canvas = document.createElement('canvas')
+            canvas.id = this.canvasId
+            document.body.appendChild(canvas)
         }
     }
 
@@ -24,6 +24,6 @@ export class GameCanvas {
             height: 600,
             displayMode: ex.DisplayMode.FitScreen,
             backgroundColor: ex.Color.Black,
-        });
+        })
     }
 }

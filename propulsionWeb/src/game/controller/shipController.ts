@@ -1,36 +1,36 @@
-import { Engine, Keys } from 'excalibur';
+import { Engine, Keys } from 'excalibur'
 
 export class ShipController {
-    private engine: Engine;
+    private engine: Engine
 
     constructor(engine: Engine) {
-        this.engine = engine;
+        this.engine = engine
     }
 
     getRotationDirection(): number {
-        const keyboard = this.engine.input.keyboard;
+        const keyboard = this.engine.input.keyboard
 
         if (keyboard.isHeld(Keys.Z)) {
-            return -1;
+            return -1
         } else if (keyboard.isHeld(Keys.X)) {
-            return 1;
+            return 1
         }
 
-        return 0;
+        return 0
     }
 
     isThrusting(): boolean {
-        const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Keys.ShiftLeft) || keyboard.isHeld(Keys.ShiftRight);
+        const keyboard = this.engine.input.keyboard
+        return keyboard.isHeld(Keys.ShiftLeft) || keyboard.isHeld(Keys.ShiftRight)
     }
 
     isShooting(): boolean {
-        const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Keys.Enter);
+        const keyboard = this.engine.input.keyboard
+        return keyboard.isHeld(Keys.Enter)
     }
 
     isUsingTractorBeam(): boolean {
-        const keyboard = this.engine.input.keyboard;
-        return keyboard.isHeld(Keys.Space);
+        const keyboard = this.engine.input.keyboard
+        return keyboard.isHeld(Keys.Space)
     }
 }
