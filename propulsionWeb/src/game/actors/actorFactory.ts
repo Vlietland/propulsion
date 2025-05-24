@@ -1,6 +1,6 @@
 import { Actor, CollisionType, Vector, Scene, Engine } from 'excalibur';
-import { ShipActor } from '@src/game/actors/ship';
-import { BallActor } from '@src/game/actors/ball';
+import { ShipActor } from '@src/game/actors/ship/shipActor';
+import { BallActor } from '@src/game/actors/ballActor';
 import { TurretActor } from '@src/game/actors/turret';
 import { ReactorActor } from '@src/game/actors/reactor';
 
