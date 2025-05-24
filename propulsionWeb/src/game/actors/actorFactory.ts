@@ -30,17 +30,11 @@ export class ActorFactory {
     let actor: Actor;    
     switch (object.name) {
       case 'ship':
-        actor = new ShipActor(new Vector(object.x, object.y));
-        break;
-  
+        actor = new ShipActor(new Vector(object.x, object.y))
+        break
       case 'ball':
-        actor = new BallActor({
-          pos: new Vector(object.x, object.y),
-          width: object.width,
-          height: object.height,
-          collisionType: CollisionType.Passive
-        });
-        break;
+        actor = new BallActor(new Vector(object.x, object.y), 100)
+        break
   
       case 'turret':
         actor = new TurretActor({

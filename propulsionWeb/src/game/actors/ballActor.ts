@@ -1,6 +1,6 @@
 
 import { Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur';
-export const BALL = new ImageSource('/images/energyBall.png');
+export const BALL = new ImageSource('/images/tiles/ball.png');
 await BALL.load()
 
 export class BallActor extends Actor {

@@ -9,10 +9,9 @@ await SHIP.load()
 await SHIP_THRUST.load()
 
 const ROTATION_SPEED = 3
-const THRUST_FORCE = 500
+const THRUST_FORCE = 5000
 const SHIP_MASS = 50
 const GUN_POWER = 300
-const TRACTOR_BEAM_REACH = 150
 const TOW_LENGTH = 150
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 5
@@ -47,7 +46,7 @@ export class ShipActor extends Actor {
         }
         const {velocity, displacement} = this.physics.updateLinearMotion(accelerationVector, this.objectVelocity, cycleTime)
         this.objectVelocity = velocity
-        this.pos.add(displacement)      
+        this.pos = this.pos.add(displacement)      
       }
       else { //connected
         if (this.shipController && this.shipController.isThrusting()) {
@@ -69,8 +68,6 @@ export class ShipActor extends Actor {
       this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION      
     }
     else this.graphics.use(SHIP.toSprite())
-    
-    this.pos = this.pos.add(this.vel)
   }
 
   setCamera(camera: Camera) {
