@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@excaliburjs/plugin-tiled": "github:excaliburjs/excalibur-tiled"
+  }
+}

@@ -8,8 +8,9 @@ const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
 await SHIP.load()
 await SHIP_THRUST.load()
 
-const ROTATION_SPEED = 0.003
+const ROTATION_SPEED = 3
 const THRUST_FORCE = 500
+const SHIP_MASS = 50
 const GUN_POWER = 300
 const TRACTOR_BEAM_REACH = 150
 const TOW_LENGTH = 150
@@ -17,58 +18,48 @@ const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 5
 
 export class ShipActor extends Actor {
-  private shipController: ShipController | null = null
-  private tractorBeamOn = false
+  private physics?: Physics
   private camera?: Camera
-  private fuelLevel = FUEL_FULL
-  private shipVelRotation = 0
+  private shipController?: ShipController
+  private objectAngularVelocity = 0
+  private objectVelocity = new Vector(0,0)
   private ballConnected = false
-  private physics: Physics
-  private tractorBeam: TractorBeam
+  private tractorBeamOn = false
+  private tractorBeam?: TractorBeam
+  private fuelLevel = FUEL_FULL
 
   constructor(pos: Vector) {
     super({pos: pos, width: SHIP.width, height: SHIP.height, collisionType: CollisionType.Active})
     this.pos = pos
     this.rotation = -Math.PI / 2
     this.graphics.use(SHIP.toSprite())
-
   }
   
-  setshipController(shipController: ShipController) {
-    this.shipController = shipController
-  }
-
   onPreUpdate(engine: Engine, delta: number) {
-    if (this.ballConnected) {
-      if (this.shipController && this.shipController.isThrusting()) {
-        vector Vthrustforce = forcevectorcreate(this.rotation);
-        XYmove     = shipballXYmove     (shipballXYversnelling     (Vthrustforce));
-        rotatemove = shipballrotatemove (shipballrotateversnelling (Vthrustforce));
+    const cycleTime = delta / 1000;
+    let accelerationVector = new Vector(0, 0);    
+    
+    if (this.physics) {
+      if (!this.ballConnected) {
+        if (this.shipController && this.shipController.isThrusting()) {
+          const forceVector = this.physics.force(this.rotation, THRUST_FORCE)
+          accelerationVector = this.physics.lineairAcceleration(forceVector, SHIP_MASS)
+        }
+        const {velocity, displacement} = this.physics.updateLinearMotion(accelerationVector, this.objectVelocity, cycleTime)
+        this.objectVelocity = velocity
+        this.pos.add(displacement)      
       }
-      else {
-        vector Vthrustforce = {0,0};
-        XYmove     = shipballXYmove     (Vthrustforce);
-        rotatemove = shipballrotatemove (0);
-      }
-    }
-    else { //not connected
-      if (this.shipController && this.shipController.isThrusting()) {
-        XYmove = shipXYmove    (shipXYversnelling (forcevectorcreate(anglenr)));
-
-        //const thrust = new Vector(Math.cos(this.rotation) * ENGINE_THRUST, Math.sin(this.rotation) * ENGINE_THRUST)
-        //this.vel = this.vel.add(thrust.scale(delta))
-      }
-      else {
-        vector Vthrustforce = {0,0};
-        XYmove = shipXYmove (Vthrustforce);
+      else { //connected
+        if (this.shipController && this.shipController.isThrusting()) {
+          const forceVector = this.physics.force(this.rotation, THRUST_FORCE)
+          const acceleration = this.physics.lineairAcceleration(forceVector, cycleTime)
+        }
       }
     }
-    positions = add       (XYmove,rotatemove,positions);
-
 
     if (this.shipController) {
       const rotationDirection = this.shipController.getRotationDirection()
-      this.rotation += rotationDirection * ROTATION_SPEED * delta
+      this.rotation += rotationDirection * ROTATION_SPEED * cycleTime
       this.tractorBeamOn = this.shipController.isUsingTractorBeam()
     }
 
@@ -86,20 +77,20 @@ export class ShipActor extends Actor {
     this.camera = camera
   }
 
+  setPhysics(physics: Physics) {
+    this.physics = physics;
+  }
+
+  setshipController(shipController: ShipController) {
+    this.shipController = shipController
+  }
+
   increaseFuel(fuel: number) {
     this.fuelLevel = this.fuelLevel + fuel
   }
 
-  isTractorBeamActive(): boolean {
-    return this.tractorBeamOn
-  }
-
   setBallConnected(connected: boolean) {
     this.ballConnected = connected
-  }
-
-  getPosition(): Vector {
-    return this.pos
   }
 
   explode() {

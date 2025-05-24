@@ -1,13 +1,13 @@
 import { Vector } from 'excalibur';
 import { Ball } from '@src/game/actors/ballActor';
-import { FuelTank } from '@src/game/actors/fuelTank';
+import { FuelTank } from '@src/game/actors/fuelTankActor';
 import { ShipActor } from '@src/game/actors/ship/shipActor'
 
 const TRACTOR_WIDTH = 30;
 const TRACTOR_LENGTH = 150;
 const TRACTOR_POWER = 20;
 
-class TractorBeam {
+export class TractorBeam {
     private fuelTanks: FuelTank[] = []
     private ball: Ball | null = null
     private shipActor: ShipActor

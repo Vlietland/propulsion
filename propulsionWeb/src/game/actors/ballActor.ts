@@ -1,24 +1,19 @@
 
 import { Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur';
-export const BALL_IMAGE = new ImageSource('/images/energyBall.png');
+export const BALL = new ImageSource('/images/energyBall.png');
+await BALL.load()
 
 export class BallActor extends Actor {
-  private readonly mass = 1;
+  private mass = 0;
 
-  constructor(options: {
-    pos: Vector;
-    width: number;
-    height: number;
-    collisionType: CollisionType;
-  }) {
-    super(options);
+  constructor(pos: Vector, mass: number) {
+    super({pos: pos, width: BALL.width, height: BALL.height, collisionType: CollisionType.Passive})
+    this.pos = pos
+    this.mass = mass
+    this.graphics.use(BALL.toSprite())
   }
 
-    update(engine: Engine, delta: number) {
-
-    }
-
-    getMass(): number {
-        return this.mass;
-    }
+  getMass(): number {
+      return this.mass;
+  }
 }

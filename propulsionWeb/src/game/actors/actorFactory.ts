@@ -1,8 +1,8 @@
 import { Actor, CollisionType, Vector, Scene, Engine } from 'excalibur';
 import { ShipActor } from '@src/game/actors/ship/shipActor';
 import { BallActor } from '@src/game/actors/ballActor';
-import { TurretActor } from '@src/game/actors/turret';
-import { ReactorActor } from '@src/game/actors/reactor';
+import { TurretActor } from '@src/game/actors/turretActor';
+import { ReactorActor } from '@src/game/actors/reactorActor';
 
 export class ActorFactory {
   private shipActor: ShipActor | null = null;
@@ -21,10 +21,7 @@ export class ActorFactory {
       for (const object of layer.objects) {
         const actor = await this.createActorFromObject(object);
         if (actor) scene.add(actor);
-        if (actor instanceof ShipActor) {
-          actor.setCamera(scene.camera);
-          this.shipActor = actor;
-         }     
+        if (actor instanceof ShipActor) this.shipActor = actor;
       }
     }
   }
