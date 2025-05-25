@@ -1,4 +1,5 @@
 import { Camera, Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
+import { ShipKinematics } from '@src/game/actors/ship/shipKinematics'
 import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
 import { Physics } from '@src/game/physics/physics'
@@ -20,6 +21,7 @@ const FUEL_CONSUMPTION = 5
 export class ShipActor extends Actor {
     private physics?: Physics
     private camera?: Camera
+    private shipKinematics?: ShipKinematics
     private shipController?: ShipController
     private objectAngle = 0
     private objectAngularVelocity = 0
@@ -49,15 +51,9 @@ export class ShipActor extends Actor {
             forceVector = this.physics.force(this.rotation, THRUST_FORCE)
         }
 
-        if (this.physics) {
+        if (this.physics && this.shipKinematics) {
             if (!this.ballActor) {
-                const acceleration = this.physics.lineairAcceleration(forceVector, SHIP_MASS, 0)
-                const { velocity, displacement } = this.physics.updateLinearMotion(
-                    acceleration,
-                    this.objectVelocity,
-                    cycleTime
-                )
-                this.objectVelocity = velocity
+                const displacement = this.shipKinematics.updateShipKinematics(this, forceVector, cycleTime)
                 this.pos = this.pos.add(displacement)
             } else { //connected
                 const acceleration = this.physics.lineairAcceleration(forceVector, SHIP_MASS, this.ballActor.getMass())
@@ -115,6 +111,7 @@ export class ShipActor extends Actor {
 
     setPhysics(physics: Physics) {
         this.physics = physics
+        this.shipKinematics = new ShipKinematics(this.physics)        
     }
 
     setshipController(shipController: ShipController) {
@@ -139,6 +136,10 @@ export class ShipActor extends Actor {
 
     increaseFuel(fuel: number) {
         this.fuelLevel = this.fuelLevel + fuel
+    }
+
+    getMass() : number {
+        return SHIP_MASS
     }
 
     explode() {

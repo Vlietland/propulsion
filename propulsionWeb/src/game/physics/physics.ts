@@ -1,6 +1,6 @@
 import { Vector } from 'excalibur'
 
-const ARCADE_FACTOR = 75
+const ARCADE_FACTOR = 50
 
 export class Physics {
     private gravity: number
