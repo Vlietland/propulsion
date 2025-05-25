@@ -11,9 +11,9 @@ await SHIP_THRUST.load()
 
 const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000
-const SHIP_MASS = 50
+const SHIP_MASS = 100
 const GUN_POWER = 300
-const TRACTOR_REACH = 150
+const TRACTOR_REACH = 250
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 5
 
@@ -33,7 +33,7 @@ export class ShipActor extends Actor {
             pos: pos,
             width: SHIP.width,
             height: SHIP.height,
-            collisionType: CollisionType.Active,
+            collisionType: CollisionType.Passive,
         })
         this.tractorBeam = new TractorBeam(this, TRACTOR_REACH)
         this.pos = pos
@@ -43,7 +43,6 @@ export class ShipActor extends Actor {
 
     onPreUpdate(engine: Engine, delta: number) {
         const cycleTime = delta / 350
-        let accelerationVector = new Vector(0, 0)
         let forceVector = new Vector(0, 0)
 
         if (this.physics && this.shipController && this.shipController.isThrusting()) {
@@ -52,7 +51,7 @@ export class ShipActor extends Actor {
 
         if (this.physics) {
             if (!this.ballActor) {
-                const acceleration = this.physics.lineairAcceleration(forceVector, SHIP_MASS)
+                const acceleration = this.physics.lineairAcceleration(forceVector, SHIP_MASS, 0)
                 const { velocity, displacement } = this.physics.updateLinearMotion(
                     acceleration,
                     this.objectVelocity,
@@ -60,13 +59,8 @@ export class ShipActor extends Actor {
                 )
                 this.objectVelocity = velocity
                 this.pos = this.pos.add(displacement)
-            } else {
-                //connected
-                const forceVector = this.physics.force(this.rotation, THRUST_FORCE)
-                const acceleration = this.physics.lineairAcceleration(
-                    forceVector,
-                    SHIP_MASS + this.ballActor.getMass()
-                )
+            } else { //connected
+                const acceleration = this.physics.lineairAcceleration(forceVector, SHIP_MASS, this.ballActor.getMass())
                 const { velocity, displacement } = this.physics.updateLinearMotion(
                     acceleration,
                     this.objectVelocity,
@@ -83,7 +77,7 @@ export class ShipActor extends Actor {
                 const { angle, angularVelocity, shipDelta, ballDelta } =
                     this.physics.updateRotationalMotion(
                         angularAcceleration,
-                        this.angularVelocity,
+                        this.objectAngularVelocity,
                         SHIP_MASS,
                         this.ballActor.getMass(),
                         this.objectAngle,
@@ -92,8 +86,12 @@ export class ShipActor extends Actor {
                     )
                 this.objectAngle = angle
                 this.objectAngularVelocity = angularVelocity
-                this.pos = this.pos.add(displacement).add(shipDelta)
-                this.ballActor.addPos(ballDelta)
+
+                this.pos = this.pos.add(displacement).add(shipDelta);
+                this.ballActor?.addPos(displacement.clone().add(ballDelta));
+
+                //this.pos = this.pos.add(shipDelta);
+                //this.ballActor?.addPos(ballDelta);
             }
         }
 
@@ -101,8 +99,6 @@ export class ShipActor extends Actor {
             const rotationDirection = this.shipController.getRotationDirection()
             this.rotation += rotationDirection * ROTATION_SPEED * cycleTime
         }
-
-        if (this.camera) this.camera.pos = this.pos
 
         if (this.shipController && this.shipController.isThrusting()) {
             this.graphics.use(SHIP_THRUST.toSprite())
@@ -112,6 +108,8 @@ export class ShipActor extends Actor {
         if (this.shipController && this.shipController.isUsingTractorBeam()) {
             this.tractorBeam?.attractObjects(this.pos)
         }
+
+        if (this.camera) this.camera.pos = this.pos        
     }
 
     setCamera(camera: Camera) {
@@ -132,6 +130,14 @@ export class ShipActor extends Actor {
             this.pos.y - ballActor.getPos().y,
             this.pos.x - ballActor.getPos().x
         )
+    }
+
+    getTractorBeam() : TractorBeam | undefined{
+        return this.tractorBeam
+    }
+
+    isBallConnected(): boolean {
+        return this.ballActor !== undefined && this.ballActor !== null;
     }
 
     increaseFuel(fuel: number) {

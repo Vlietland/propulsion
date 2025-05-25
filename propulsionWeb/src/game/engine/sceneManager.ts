@@ -25,6 +25,7 @@ export class SceneManager {
             shipActor.setPhysics(physics)
             shipActor.setshipController(new ShipController(this.engine))
             shipActor.setCamera(scene.camera)
+            scene.camera.zoom = 0.5
         }
 
         this.engine.add('level1', scene)

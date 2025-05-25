@@ -20,10 +20,22 @@ export class ActorFactory {
         )
 
         for (const layer of objectLayers) {
+            const shipObject = layer.objects.find((object: any) => object.name === 'ship')
+            if (shipObject) {
+                const shipActor = await this.createActorFromObject(shipObject)
+                if (shipActor instanceof ShipActor) {
+                    this.shipActor = shipActor
+                    scene.add(shipActor)
+                }
+            }
+        }
+    
+        for (const layer of objectLayers) {
             for (const object of layer.objects) {
-                const actor = await this.createActorFromObject(object)
-                if (actor) scene.add(actor)
-                if (actor instanceof ShipActor) this.shipActor = actor
+                if (object.name !== 'ship') {
+                    const actor = await this.createActorFromObject(object)
+                    if (actor) scene.add(actor)
+                }
             }
         }
     }
@@ -35,8 +47,10 @@ export class ActorFactory {
                 actor = new ShipActor(new Vector(object.x, object.y))
                 break
             case 'ball':
-                actor = new BallActor(new Vector(object.x, object.y), 100)
-                break
+                const ballActor = new BallActor(new Vector(object.x, object.y), 50);                   
+                this.shipActor?.getTractorBeam()?.setBall(ballActor);
+                actor = ballActor;
+                break;
 
             case 'turret':
                 actor = new TurretActor({

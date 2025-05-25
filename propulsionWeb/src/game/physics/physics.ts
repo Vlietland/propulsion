@@ -12,20 +12,30 @@ export class Physics {
     }
 
     //a = F / m
-    lineairAcceleration(force: Vector, mass: number): Vector {
-        return new Vector(force.x / mass, force.y / mass)
+    //lineairAcceleration(force: Vector, mass: number): Vector {
+    //    return new Vector(force.x / mass, force.y / mass)
+    //}
+
+    lineairAcceleration(
+        thrustForce: Vector,
+        shipMass: number,
+        ballMass: number
+    ): Vector {
+        const gravityForceShip = new Vector(0, shipMass * this.gravity)
+        const gravityForceBall = new Vector(0, ballMass * this.gravity)
+        const netForce = thrustForce.add(gravityForceShip).add(gravityForceBall)
+        const totalMass = shipMass + ballMass
+        return netForce.scale(1 / totalMass)
     }
+
     //s = (v0 + 0.5at)t
     updateLinearMotion(
         acceleration: Vector,
         velocity: Vector,
         cycleTime: number
     ): { velocity: Vector; displacement: Vector } {
-        const newVelocity = velocity.clone()
-        newVelocity.x += 0.5 * acceleration.x * cycleTime
-        newVelocity.y += 0.5 * (acceleration.y + this.gravity) * cycleTime
-
-        const displacement = new Vector(newVelocity.x * cycleTime, newVelocity.y * cycleTime)
+        const newVelocity = velocity.add(acceleration.scale(cycleTime))        
+        const displacement = velocity.scale(cycleTime).add(acceleration.scale(0.5 * cycleTime * cycleTime))        
         return { velocity: newVelocity, displacement: displacement }
     }
 
@@ -38,10 +48,10 @@ export class Physics {
         ballPos: Vector
     ): number {
         const distance = shipPos.distance(ballPos)
-        const direction = shipPos.sub(ballPos).normalize()
-        const torqueValue = force.cross(direction)
-        const momentOfInertia = (shipMass * ballMass * distance * distance) / (shipMass + ballMass)
-        return momentOfInertia === 0 ? 0 : torqueValue / momentOfInertia
+        const direction = ballPos.sub(shipPos).normalize()
+        const torqueValue = - force.cross(direction)
+        const momentOfInertia = (shipMass * ballMass * distance * distance / 80) / (shipMass + ballMass)
+        return momentOfInertia === 0 ? 0 : torqueValue / momentOfInertia        
     }
 
     updateRotationalMotion(
@@ -62,19 +72,19 @@ export class Physics {
         const ballDistFromCM = (shipMass * towLength) / totalMass // Calculate distances from center of mass
         const shipDistFromCM = (ballMass * towLength) / totalMass
 
-        const newAngularVelocity = angularVelocity + 0.5 * angularAcceleration * cycleTime // Update angular velocity (ω = ω₀ + α·t)
+        const newAngularVelocity = angularVelocity + angularAcceleration * cycleTime // Update angular velocity (ω = ω₀ + α·t)
         const deltaAngle = newAngularVelocity * cycleTime // Update angle (θ = θ₀ + ω·t)
         const newAngle = angle + deltaAngle
 
         const shipDelta = new Vector( // Ship delta: circular arc traced by ship around CM
-            shipDistFromCM * (Math.sin(newAngle) - Math.sin(angle)),
-            shipDistFromCM * (Math.cos(angle) - Math.cos(newAngle))
+            shipDistFromCM * (Math.cos(angle) - Math.cos(newAngle)),
+            shipDistFromCM * (Math.sin(newAngle) - Math.sin(angle))
         )
+        const ballDelta = new Vector(
+            ballDistFromCM * (Math.cos(newAngle) - Math.cos(angle)), 
+            ballDistFromCM * (Math.sin(angle) - Math.sin(newAngle))
+        );
 
-        const ballDelta = new Vector( // Ball delta: circular arc traced by ball around CM
-            ballDistFromCM * (Math.sin(angle) - Math.sin(newAngle)),
-            ballDistFromCM * (Math.cos(newAngle) - Math.cos(angle))
-        )
         return {
             angle: newAngle,
             angularVelocity: newAngularVelocity,
