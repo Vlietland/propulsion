@@ -1,5 +1,7 @@
 import { Vector } from 'excalibur'
 
+const ARCADE_FACTOR = 75
+
 export class Physics {
     private gravity: number
 
@@ -10,11 +12,6 @@ export class Physics {
     force(shipRotation: number, thrustForce: number) {
         return Vector.fromAngle(shipRotation).scale(thrustForce)
     }
-
-    //a = F / m
-    //lineairAcceleration(force: Vector, mass: number): Vector {
-    //    return new Vector(force.x / mass, force.y / mass)
-    //}
 
     lineairAcceleration(
         thrustForce: Vector,
@@ -50,7 +47,7 @@ export class Physics {
         const distance = shipPos.distance(ballPos)
         const direction = ballPos.sub(shipPos).normalize()
         const torqueValue = - force.cross(direction)
-        const momentOfInertia = (shipMass * ballMass * distance * distance / 80) / (shipMass + ballMass)
+        const momentOfInertia = (shipMass * ballMass * distance * distance / ARCADE_FACTOR) / (shipMass + ballMass)
         return momentOfInertia === 0 ? 0 : torqueValue / momentOfInertia        
     }
 

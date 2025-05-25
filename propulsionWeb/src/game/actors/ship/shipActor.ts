@@ -13,7 +13,7 @@ const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000
 const SHIP_MASS = 100
 const GUN_POWER = 300
-const TRACTOR_REACH = 250
+const TRACTOR_REACH = 220
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 5
 
@@ -89,9 +89,6 @@ export class ShipActor extends Actor {
 
                 this.pos = this.pos.add(displacement).add(shipDelta);
                 this.ballActor?.addPos(displacement.clone().add(ballDelta));
-
-                //this.pos = this.pos.add(shipDelta);
-                //this.ballActor?.addPos(ballDelta);
             }
         }
 
