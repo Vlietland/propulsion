@@ -51,7 +51,6 @@ export class Physics {
         return momentOfInertia === 0 ? 0 : torqueValue / momentOfInertia        
     }
 
-    // Added logging to debug the center of mass and deltas.
     updateAngularMotion(
         angularAcceleration: number,
         angularVelocity: number,

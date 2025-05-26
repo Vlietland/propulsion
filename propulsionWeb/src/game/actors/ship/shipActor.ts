@@ -15,7 +15,7 @@ const THRUST_FORCE = 5000
 const SHIP_MASS = 100
 const GUN_POWER = 300
 const FUEL_FULL = 3300
-const FUEL_CONSUMPTION = 5
+const FUEL_CONSUMPTION = 10
 
 export class ShipActor extends Actor {
     private physics?: Physics
@@ -40,37 +40,31 @@ export class ShipActor extends Actor {
     }
 
     onPreUpdate(engine: Engine, delta: number) {
+        if (!this.shipController || !this.physics || !this.kinematics) return
         const cycleTime = delta / 350
         let forceVector = new Vector(0, 0)
 
-        if (this.physics && this.shipController && this.shipController.isThrusting()) {
-            forceVector = this.physics.force(this.rotation, THRUST_FORCE)
-        }
-
-        if (this.physics && this.kinematics) {
-            if (!this.isBallConnected()) {
-                const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
-                this.pos = this.pos.add(displacement)
-            } else { //connected
-                const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
-                //this.pos = this.pos.add(shipDelta);
-                //this.ballActor?.addPos(ballDelta.clone());
-                this.pos = this.pos.add(displacement).add(shipDelta);
-                this.ballActor?.addPos(displacement.clone().add(ballDelta));
-            }
-        }
-
-        if (this.shipController) {
-            const rotationDirection = this.shipController.getRotationDirection()
-            this.rotation += rotationDirection * ROTATION_SPEED * cycleTime
-        }
-
-        if (this.shipController && this.shipController.isThrusting()) {
-            this.graphics.use(SHIP_THRUST.toSprite())
+        if (this.shipController.isThrusting() && this.fuelLevel > 0) {
+            forceVector = this.physics.force(this.rotation, THRUST_FORCE)            
             this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION
+            this.graphics.use(SHIP_THRUST.toSprite())
         } else this.graphics.use(SHIP.toSprite())
 
-        if (this.shipController && this.shipController.isUsingTractorBeam()) {
+        if (!this.isBallConnected()) {
+            const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
+            this.pos = this.pos.add(displacement)
+        } else { //connected
+            const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
+            //this.pos = this.pos.add(shipDelta);
+            //this.ballActor?.addPos(ballDelta.clone());
+            this.pos = this.pos.add(displacement).add(shipDelta);
+            this.ballActor?.addPos(displacement.clone().add(ballDelta));
+        }
+
+        const rotationDirection = this.shipController.getRotationDirection()
+        this.rotation += rotationDirection * ROTATION_SPEED * cycleTime
+
+        if (this.shipController.isUsingTractorBeam()) {
             this.tractorBeam?.attractObjects(this.pos)
         }
 

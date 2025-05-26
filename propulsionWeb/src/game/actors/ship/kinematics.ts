@@ -1,6 +1,5 @@
 import { Vector } from 'excalibur'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
-import { BallActor } from '@src/game/actors/ballActor'
 import { Physics } from '@src/game/physics/physics'
 
 export class Kinematics {
@@ -62,15 +61,7 @@ export class Kinematics {
         return { displacement, shipDelta, ballDelta }
     }
 
-    setObjectAngle(objectAngle: number) {
-        this.objectAngle = objectAngle
-    }
-
-    setTowLength(towLength: number) {
-        this.towLength = towLength
-    }
-
-    resetObjectVelocity() {
-        this.objectVelocity = Vector.Zero
-    }
+    setObjectAngle(objectAngle: number) { this.objectAngle = objectAngle }
+    setTowLength(towLength: number) { this.towLength = towLength }
+    resetObjectVelocity() { this.objectVelocity = Vector.Zero }
 }

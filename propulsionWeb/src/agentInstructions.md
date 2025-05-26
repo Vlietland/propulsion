@@ -12,6 +12,7 @@
 - Write condensed code.
 - Propose long term solutions.
 - Take care of the separation of concerns in classes.
+- no semicolons.
 
 ## File Structure
 - Assume the root directory is `/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb`.

@@ -3,7 +3,7 @@ import { MapRenderer } from '@src/game/engine/mapRenderer'
 import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
-import { HUD } from '@src/game/engine/hud'
+import { HUD } from '@src/game/ui/hud'
 
 export class SceneManager {
     private mapRenderer: MapRenderer
