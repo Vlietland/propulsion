@@ -5,6 +5,7 @@ import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
 
+const CAMERA_ZOOM = 0.8
 
 export class SceneManager {
     private mapRenderer: MapRenderer
@@ -21,8 +22,9 @@ export class SceneManager {
             this.hud = undefined
         }
         const scene = new Scene()
-        scene.camera.zoom = 0.8
+        scene.camera.zoom = CAMERA_ZOOM
         this.hud = new HUD()
+        this.hud.updateLives(this.availableShips);
         scene.add(this.hud)
 
         const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json');
@@ -43,6 +45,9 @@ export class SceneManager {
 
     handleShipLoss() {
         this.availableShips -= 1
+        if (this.hud) {
+            this.hud.updateLives(this.availableShips); // Update lives on HUD when a ship is lost
+        }
         if (this.availableShips > 0) {
             this.resetScene()
         } else {

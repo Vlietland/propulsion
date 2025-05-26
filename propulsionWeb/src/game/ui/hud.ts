@@ -6,67 +6,58 @@ export class HUD extends ScreenElement {
     private hudElement: HTMLElement
     private fuelBarElement: HTMLElement
     private statusElement: HTMLElement
+    private livesElement: HTMLElement
     
     constructor() {
-        super()
-        const container = document.getElementById('game-container')
-        this.hudElement = document.createElement('div')
-        this.hudElement.className = 'game-hud'
-        if (container) {
-            container.appendChild(this.hudElement)
-        } else {
-            document.body.appendChild(this.hudElement)
-        }
+        super();
+        const container = document.getElementById('game-container');
+        this.hudElement = document.createElement('div');
+        this.hudElement.className = 'game-hud';
+        (container || document.body).appendChild(this.hudElement);
 
-        this.fuelBarElement = document.createElement('div')
-        this.fuelBarElement.className = 'fuel-bar'
-        const fuelBarContainer = document.createElement('div')
-        fuelBarContainer.className = 'fuel-bar-container'
-        fuelBarContainer.appendChild(this.fuelBarElement)
+        this.fuelBarElement = document.createElement('div');
+        this.fuelBarElement.className = 'fuel-bar';
+        const fuelBarContainer = document.createElement('div');
+        fuelBarContainer.className = 'fuel-bar-container';
+        fuelBarContainer.appendChild(this.fuelBarElement);
 
-        const fuelLabel = document.createElement('div')
-        fuelLabel.className = 'fuel-label'
-        fuelLabel.textContent = 'FUEL'
+        this.hudElement.appendChild(this.createLabel('FUEL'));
+        this.hudElement.appendChild(fuelBarContainer);
+        this.statusElement = this.createLabel('TRACTOR READY');
+        this.hudElement.appendChild(this.statusElement);
+        this.livesElement = this.createLabel('LIVES: 3');
+        this.hudElement.appendChild(this.livesElement);
+    }
 
-        this.statusElement = document.createElement('div')
-        this.statusElement.className = 'status-element'
-
-        this.hudElement.appendChild(fuelLabel)
-        this.hudElement.appendChild(fuelBarContainer)
-        this.hudElement.appendChild(this.statusElement)
+    private createLabel(text: string): HTMLElement {
+        const label = document.createElement('div');
+        label.className = 'label-text';
+        label.textContent = text;
+        return label;
     }
     
     setShip(ship: ShipActor): void { this.ship = ship }
     initialize(world: World, scene: Scene<unknown>): void {}
     
     update(engine: Engine<any>, elapsed: number): void {
-        if (!this.ship) return
-        const fuelLevel = this.ship.getFuelLevel()
-        const maxFuel = this.ship.getMaxFuel()
-        const fuelPercentage = Math.max(0, Math.min(100, (fuelLevel / maxFuel) * 100))
-
-        this.fuelBarElement.style.width = fuelPercentage + '%'
-
+        if (!this.ship) return;
+        const fuelPercentage = Math.max(0, Math.min(100, (this.ship.getFuelLevel() / this.ship.getMaxFuel()) * 100));
+        this.fuelBarElement.style.width = fuelPercentage + '%';
+        this.fuelBarElement.className = 'fuel-bar';
         if (fuelPercentage < 20) {
-            this.fuelBarElement.classList.remove('warning')            
-            this.fuelBarElement.classList.add('critical')            
+            this.fuelBarElement.classList.add('critical');
         } else if (fuelPercentage < 40) {
-            this.fuelBarElement.classList.remove('critical')
-            this.fuelBarElement.classList.add('warning')
-        } else {
-            this.fuelBarElement.classList.remove('critical', 'warning')
+            this.fuelBarElement.classList.add('warning');
         }
 
-        if (this.ship.isBallConnected()) {
-            this.statusElement.textContent = 'TOWING ACTIVE'
-            this.statusElement.classList.add('towing')
-        } else {
-            this.statusElement.textContent = 'TRACTOR READY'
-            this.statusElement.classList.remove('towing')
-        }
+        this.statusElement.textContent = this.ship.isBallConnected() ? 'TOWING ACTIVE' : 'TRACTOR READY';
+    }
+
+    updateLives(lives: number): void {
+        this.livesElement.textContent = `LIVES: ${lives}`;
     }
 
     dispose(): void {
-        if (this.hudElement && this.hudElement.parentNode) this.hudElement.parentNode.removeChild(this.hudElement)
+        this.hudElement.remove();
     }
 }
