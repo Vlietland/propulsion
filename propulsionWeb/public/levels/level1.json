@@ -55,6 +55,12 @@
                  "height":128,
                  "id":8,
                  "name":"ball",
+                 "properties":[
+                        {
+                         "name":"mass",
+                         "type":"string",
+                         "value":"50"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":false,
@@ -67,6 +73,12 @@
                  "height":128,
                  "id":10,
                  "name":"ship",
+                 "properties":[
+                        {
+                         "name":"mass",
+                         "type":"string",
+                         "value":"100"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":false,
@@ -83,6 +95,12 @@
  "nextlayerid":3,
  "nextobjectid":12,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"gravity",
+         "type":"string",
+         "value":"10"
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
  "tileheight":128,

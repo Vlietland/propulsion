@@ -42,45 +42,46 @@ export class ActorFactory {
 
     private async createActorFromObject(object: any): Promise<Actor | null> {
         let actor: Actor
+        let mass = 0
+
         switch (object.name) {
             case 'ship':
-                actor = new ShipActor(new Vector(object.x, object.y))
-                break
+                mass = Number(object.properties.get('mass'))
+                actor = new ShipActor(new Vector(object.x, object.y), mass);
+                break;
             case 'ball':
-                const ballActor = new BallActor(new Vector(object.x, object.y), 50);                   
+                mass = Number(object.properties.get('mass'))                
+                const ballActor = new BallActor(new Vector(object.x, object.y), mass);
                 this.shipActor?.getTractorBeam()?.setBall(ballActor);
                 actor = ballActor;
                 break;
-
             case 'turret':
                 actor = new TurretActor({
                     pos: new Vector(object.x, object.y),
                     width: object.width,
                     height: object.height,
                     collisionType: CollisionType.Fixed,
-                })
-                break
-
+                });
+                break;
             case 'reactor':
                 actor = new ReactorActor({
                     pos: new Vector(object.x, object.y),
                     width: object.width,
                     height: object.height,
                     collisionType: CollisionType.Fixed,
-                })
-                break
-
+                });
+                break;
             default:
                 actor = new Actor({
                     pos: new Vector(object.x, object.y),
                     width: object.width,
                     height: object.height,
                     collisionType: CollisionType.Fixed,
-                })
-                break
+                });
+                break;
         }
 
-        return actor
+        return actor;
     }
 
     getShipActor(): ShipActor | null {

@@ -12,7 +12,6 @@ await SHIP_THRUST.load()
 
 const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000
-const SHIP_MASS = 100
 const GUN_POWER = 300
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 10
@@ -25,8 +24,9 @@ export class ShipActor extends Actor {
     private ballActor?: BallActor
     private tractorBeam?: TractorBeam
     private fuelLevel = FUEL_FULL
+    private shipMass = 100
 
-    constructor(pos: Vector) {
+    constructor(pos: Vector, shipMass: number) {
         super({
             pos: pos,
             width: SHIP.width,
@@ -35,6 +35,7 @@ export class ShipActor extends Actor {
         })
         this.tractorBeam = new TractorBeam(this)
         this.pos = pos
+        this.shipMass = shipMass
         this.rotation = -Math.PI / 2
         this.graphics.use(SHIP.toSprite())
     }
@@ -91,7 +92,7 @@ export class ShipActor extends Actor {
     setCamera(camera: Camera) {this.camera = camera }
     setshipController(shipController: ShipController) {this.shipController = shipController }
     getTractorBeam() : TractorBeam | undefined{ return this.tractorBeam }
-    getMass() : number { return SHIP_MASS }
+    getMass() : number { return this.shipMass }
     getBall() {return this.ballActor }
     isBallConnected(): boolean { return this.ballActor !== undefined && this.ballActor !== null; }
     getFuelLevel(): number { return this.fuelLevel }

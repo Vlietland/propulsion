@@ -5,9 +5,11 @@ import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
 
+
 export class SceneManager {
     private mapRenderer: MapRenderer
     private hud?: HUD
+    private availableShips: number = 3
 
     constructor(private engine: Engine) {
         this.mapRenderer = new MapRenderer()
@@ -19,21 +21,44 @@ export class SceneManager {
             this.hud = undefined
         }
         const scene = new Scene()
-        const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json')
+        scene.camera.zoom = 0.8
+        this.hud = new HUD()
+        scene.add(this.hud)
+
+        const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json');
+
         const actorFactory = new ActorFactory(map)
-        const physics = new Physics(10)
+        const physics = new Physics(map.map.properties[0].value)
         await actorFactory.createActors(scene)
         const shipActor = actorFactory.getShipActor()
         if (shipActor) {
             shipActor.setPhysics(physics)
             shipActor.setshipController(new ShipController(this.engine))
             shipActor.setCamera(scene.camera)
-            scene.camera.zoom = 0.8
-            this.hud = new HUD()
             this.hud.setShip(shipActor)
-            scene.add(this.hud)
         }
         this.engine.add('level1', scene)
         this.engine.goToScene('level1')
+    }
+
+    handleShipLoss() {
+        this.availableShips -= 1
+        if (this.availableShips > 0) {
+            this.resetScene()
+        } else {
+            console.log('Game Over!')
+            this.showGameOverScreen()
+        }
+    }
+
+    resetScene() {
+        this.engine.goToScene('level1')
+    }
+
+    showGameOverScreen() {
+        const gameOverScene = new Scene()
+        // Add Game Over UI elements here
+        this.engine.add('gameOver', gameOverScene)
+        this.engine.goToScene('gameOver')
     }
 }
