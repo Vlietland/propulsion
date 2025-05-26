@@ -6,7 +6,7 @@ export class FuelTankActor extends Actor {
     private FUEL_FULL = 1000
     private fuelLevel = this.FUEL_FULL
 
-    constructor(pos: Vector, mass: number) {
+    constructor(pos: Vector) {
         super({
             pos: pos,
             width: FUEL_TANK.width,
