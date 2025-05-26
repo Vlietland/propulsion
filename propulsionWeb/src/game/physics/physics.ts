@@ -46,11 +46,12 @@ export class Physics {
     ): number {
         const distance = shipPos.distance(ballPos)
         const direction = ballPos.sub(shipPos).normalize()
-        const torqueValue = - force.cross(direction)
+        const torqueValue = force.cross(direction)
         const momentOfInertia = (shipMass * ballMass * distance * distance / ARCADE_FACTOR) / (shipMass + ballMass)
         return momentOfInertia === 0 ? 0 : torqueValue / momentOfInertia        
     }
 
+    // Added logging to debug the center of mass and deltas.
     updateAngularMotion(
         angularAcceleration: number,
         angularVelocity: number,
@@ -73,20 +74,37 @@ export class Physics {
         const deltaAngle = newAngularVelocity * cycleTime // Update angle (θ = θ₀ + ω·t)
         const newAngle = angle + deltaAngle
 
-        const shipDelta = new Vector( // Ship delta: circular arc traced by ship around CM
-            shipDistFromCM * (Math.cos(angle) - Math.cos(newAngle)),
-            shipDistFromCM * (Math.sin(newAngle) - Math.sin(angle))
+        const shipPos = new Vector(
+            shipDistFromCM * Math.cos(newAngle),
+            shipDistFromCM * Math.sin(newAngle)
         )
-        const ballDelta = new Vector(
-            ballDistFromCM * (Math.cos(newAngle) - Math.cos(angle)), 
-            ballDistFromCM * (Math.sin(angle) - Math.sin(newAngle))
-        );
+        const ballPos = new Vector(
+            -ballDistFromCM * Math.cos(newAngle),
+            -ballDistFromCM * Math.sin(newAngle)
+        )
+
+        const shipDelta = shipPos.sub(new Vector(
+            shipDistFromCM * Math.cos(angle),
+            shipDistFromCM * Math.sin(angle)
+        ))
+        const ballDelta = ballPos.sub(new Vector(
+            -ballDistFromCM * Math.cos(angle),
+            -ballDistFromCM * Math.sin(angle)
+        ))
+
+        const shipToBallDistance = shipPos.distance(ballPos)
+
+        console.log('Deltas:', {
+            shipDelta,
+            ballDelta,
+        })
+        console.log('Ship to Ball Distance:', shipToBallDistance)
 
         return {
             angle: newAngle,
             angularVelocity: newAngularVelocity,
             shipDelta,
-            ballDelta,
+            ballDelta
         }
     }
 }

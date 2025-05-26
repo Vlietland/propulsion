@@ -12,7 +12,7 @@ export class EngineBootstrap {
     }
 
     async start() {
-        await this.sceneManager.registerScenes()
+        await this.sceneManager.registerScene()
         await this.engine.start()
     }
 }

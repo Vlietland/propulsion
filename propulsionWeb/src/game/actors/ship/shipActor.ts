@@ -53,6 +53,8 @@ export class ShipActor extends Actor {
                 this.pos = this.pos.add(displacement)
             } else { //connected
                 const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
+                //this.pos = this.pos.add(shipDelta);
+                //this.ballActor?.addPos(ballDelta.clone());
                 this.pos = this.pos.add(displacement).add(shipDelta);
                 this.ballActor?.addPos(displacement.clone().add(ballDelta));
             }
@@ -82,7 +84,6 @@ export class ShipActor extends Actor {
     }
 
     attachBall(ballActor: BallActor) {
-        this.ballActor = ballActor
         const objectAngle = Math.atan2(
             this.pos.y - ballActor.getPos().y,
             this.pos.x - ballActor.getPos().x
@@ -90,6 +91,7 @@ export class ShipActor extends Actor {
         this.kinematics?.setObjectAngle(objectAngle)
         this.kinematics?.setTowLength(this.pos.distance(ballActor.pos))
         this.kinematics?.resetObjectVelocity()
+        this.ballActor = ballActor        
     }
 
     setCamera(camera: Camera) {this.camera = camera }
@@ -98,6 +100,8 @@ export class ShipActor extends Actor {
     getMass() : number { return SHIP_MASS }
     getBall() {return this.ballActor }
     isBallConnected(): boolean { return this.ballActor !== undefined && this.ballActor !== null; }
+    getFuelLevel(): number { return this.fuelLevel }
+    getMaxFuel(): number { return FUEL_FULL }
     increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }
 
     explode() {
