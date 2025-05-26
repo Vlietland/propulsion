@@ -46,32 +46,31 @@ export class ActorFactory {
     private async createActorFromObject(object: any): Promise<Actor | null> {
         let actor: Actor
         let mass = 0
-        console.log(`Creating actor: ${object.name}`)
         switch (object.name) {
             case 'ship':
                 mass = Number(object.properties.get('mass'))
-                actor = new ShipActor(new Vector(object.x, object.y), mass);
+                actor = new ShipActor(object, mass);
                 break;
             case 'ball':
                 mass = Number(object.properties.get('mass'))                
-                const ballActor = new BallActor(new Vector(object.x, object.y), mass);
+                const ballActor = new BallActor(object, mass);
                 this.shipActor?.getTractorBeam()?.setBall(ballActor);
                 actor = ballActor;
                 break;
             case 'reactor':
-                actor = new ReactorActor(new Vector(object.x, object.y));
+                actor = new ReactorActor(object);
                 break;
             case 'fueltank':
-                actor = new FuelTankActor(new Vector(object.x, object.y));
+                actor = new FuelTankActor(object);
                 break;
             case 'turret':
-                actor = new TurretActor(new Vector(object.x, object.y));
+                actor = new TurretActor(object);
                 break;
             case 'laser':
-                actor = new LaserActor(new Vector(object.x, object.y));
+                actor = new LaserActor(object);
                 break;
             case 'transformer':
-                actor = new TransformerActor(new Vector(object.x, object.y));
+                actor = new TransformerActor(object);
                 break;
             default:
                 actor = new Actor({

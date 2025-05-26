@@ -1,21 +1,17 @@
+import { TiledObject } from '@excalibur-tiled/index'
 import { Actor, CollisionType, Vector, ImageSource } from 'excalibur';
 import { LaserBeamActor } from '@src/game/actors/laserBeamActor';
+import { BaseActor } from './baseActor';
 
 export const LASER = new ImageSource('/images/tiles/laser.png');
 await LASER.load();
 
-export class LaserActor extends Actor {
+export class LaserActor extends BaseActor {
     private activeLaserBeam: LaserBeamActor | null = null;
     private laserBeams: LaserBeamActor[] = [];
 
-    constructor(pos: Vector) {
-        super({
-            pos: pos,
-            width: LASER.image.width, // Dynamically derived from the image
-            height: LASER.image.height, // Dynamically derived from the image
-            collisionType: CollisionType.Passive,
-        });
-        this.graphics.use(LASER.toSprite());
+    constructor(object: TiledObject) {
+        super(object, LASER, CollisionType.Passive);
     }
 
     fireLaserBeam(target: Vector): LaserBeamActor {

@@ -1,20 +1,16 @@
+import { TiledObject } from '@excalibur-tiled/index'
 import { Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
+import { BaseActor } from './baseActor';
+
 export const FUEL_TANK = new ImageSource('/images/tiles/fuelTank.png')
 await FUEL_TANK.load()
 
-export class FuelTankActor extends Actor {
-    private FUEL_FULL = 1000
-    private fuelLevel = this.FUEL_FULL
+export class FuelTankActor extends BaseActor {
+    private FUEL_FULL = 1000;
+    private fuelLevel = this.FUEL_FULL;
 
-    constructor(pos: Vector) {
-        super({
-            pos: pos,
-            width: FUEL_TANK.width,
-            height: FUEL_TANK.height,
-            collisionType: CollisionType.Passive,
-        })
-        this.pos = pos
-        this.graphics.use(FUEL_TANK.toSprite())
+    constructor(object: TiledObject) {
+        super(object, FUEL_TANK, CollisionType.Passive);
     }
 
     getPos(): Vector {

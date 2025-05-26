@@ -1,20 +1,16 @@
+import { TiledObject } from '@excalibur-tiled/index'
 import { Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
+import { BaseActor } from './baseActor';
+
 export const BALL = new ImageSource('/images/tiles/ball.png')
 await BALL.load()
 
-export class BallActor extends Actor {
-    private mass
+export class BallActor extends BaseActor {
+    private mass = 100;
 
-    constructor(pos: Vector, mass: number) {
-        super({
-            pos: pos,
-            width: BALL.width,
-            height: BALL.height,
-            collisionType: CollisionType.Passive,
-        })
-        this.pos = pos
-        this.mass = mass
-        this.graphics.use(BALL.toSprite())
+    constructor(object: TiledObject, mass: number) {
+        super(object, BALL, CollisionType.Passive);
+        this.mass = mass;
     }
 
     getMass(): number {

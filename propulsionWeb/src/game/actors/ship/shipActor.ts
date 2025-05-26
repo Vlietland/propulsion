@@ -1,3 +1,4 @@
+import { TiledObject } from '@excalibur-tiled/index'
 import { Camera, Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
 import { Kinematics } from '@src/game/actors/ship/kinematics'
 import { ShipController } from '@src/game/controller/shipController'
@@ -26,17 +27,18 @@ export class ShipActor extends Actor {
     private fuelLevel = FUEL_FULL
     private shipMass = 100
 
-    constructor(pos: Vector, shipMass: number) {
+    constructor(object: TiledObject, shipMass: number) {
+        if (!object || object.x === undefined || object.y === undefined) return
         super({
-            pos: pos,
+            pos: new Vector(object.x, object.y),
             width: SHIP.width,
             height: SHIP.height,
             collisionType: CollisionType.Passive,
         })
         this.tractorBeam = new TractorBeam(this)
-        this.pos = pos
+        this.pos = super.pos
         this.shipMass = shipMass
-        this.rotation = -Math.PI / 2
+        this.rotation = (object.rotation ?? 0) -Math.PI / 2
         this.graphics.use(SHIP.toSprite())
     }
 

@@ -92,13 +92,7 @@ export class Physics {
         ))
 
         const shipToBallDistance = shipPos.distance(ballPos)
-
-        console.log('Deltas:', {
-            shipDelta,
-            ballDelta,
-        })
-        console.log('Ship to Ball Distance:', shipToBallDistance)
-
+        
         return {
             angle: newAngle,
             angularVelocity: newAngularVelocity,
