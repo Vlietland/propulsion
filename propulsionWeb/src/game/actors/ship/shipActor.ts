@@ -1,5 +1,5 @@
 import { Camera, Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
-import { ShipKinematics } from '@src/game/actors/ship/shipKinematics'
+import { Kinematics } from '@src/game/actors/ship/kinematics'
 import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
 import { Physics } from '@src/game/physics/physics'
@@ -14,18 +14,14 @@ const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000
 const SHIP_MASS = 100
 const GUN_POWER = 300
-const TRACTOR_REACH = 220
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 5
 
 export class ShipActor extends Actor {
     private physics?: Physics
     private camera?: Camera
-    private shipKinematics?: ShipKinematics
+    private kinematics?: Kinematics
     private shipController?: ShipController
-    private objectAngle = 0
-    private objectAngularVelocity = 0
-    private objectVelocity = new Vector(0, 0)
     private ballActor?: BallActor
     private tractorBeam?: TractorBeam
     private fuelLevel = FUEL_FULL
@@ -37,7 +33,7 @@ export class ShipActor extends Actor {
             height: SHIP.height,
             collisionType: CollisionType.Passive,
         })
-        this.tractorBeam = new TractorBeam(this, TRACTOR_REACH)
+        this.tractorBeam = new TractorBeam(this)
         this.pos = pos
         this.rotation = -Math.PI / 2
         this.graphics.use(SHIP.toSprite())
@@ -51,38 +47,12 @@ export class ShipActor extends Actor {
             forceVector = this.physics.force(this.rotation, THRUST_FORCE)
         }
 
-        if (this.physics && this.shipKinematics) {
-            if (!this.ballActor) {
-                const displacement = this.shipKinematics.updateShipKinematics(this, forceVector, cycleTime)
+        if (this.physics && this.kinematics) {
+            if (!this.isBallConnected()) {
+                const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
                 this.pos = this.pos.add(displacement)
             } else { //connected
-                const acceleration = this.physics.lineairAcceleration(forceVector, SHIP_MASS, this.ballActor.getMass())
-                const { velocity, displacement } = this.physics.updateLinearMotion(
-                    acceleration,
-                    this.objectVelocity,
-                    cycleTime
-                )
-                this.objectVelocity = velocity
-                const angularAcceleration = this.physics.angularAcceleration(
-                    forceVector,
-                    SHIP_MASS,
-                    this.ballActor.getMass(),
-                    this.pos,
-                    this.ballActor?.getPos()
-                )
-                const { angle, angularVelocity, shipDelta, ballDelta } =
-                    this.physics.updateRotationalMotion(
-                        angularAcceleration,
-                        this.objectAngularVelocity,
-                        SHIP_MASS,
-                        this.ballActor.getMass(),
-                        this.objectAngle,
-                        cycleTime,
-                        TRACTOR_REACH
-                    )
-                this.objectAngle = angle
-                this.objectAngularVelocity = angularVelocity
-
+                const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
                 this.pos = this.pos.add(displacement).add(shipDelta);
                 this.ballActor?.addPos(displacement.clone().add(ballDelta));
             }
@@ -105,42 +75,30 @@ export class ShipActor extends Actor {
         if (this.camera) this.camera.pos = this.pos        
     }
 
-    setCamera(camera: Camera) {
-        this.camera = camera
-    }
-
     setPhysics(physics: Physics) {
+        if (!this.tractorBeam) return
         this.physics = physics
-        this.shipKinematics = new ShipKinematics(this.physics)        
+        this.kinematics = new Kinematics(this, this.physics)        
     }
 
-    setshipController(shipController: ShipController) {
-        this.shipController = shipController
-    }
-
-    setBall(ballActor: BallActor) {
+    attachBall(ballActor: BallActor) {
         this.ballActor = ballActor
-        this.objectAngle = Math.atan2(
+        const objectAngle = Math.atan2(
             this.pos.y - ballActor.getPos().y,
             this.pos.x - ballActor.getPos().x
         )
+        this.kinematics?.setObjectAngle(objectAngle)
+        this.kinematics?.setTowLength(this.pos.distance(ballActor.pos))
+        this.kinematics?.resetObjectVelocity()
     }
 
-    getTractorBeam() : TractorBeam | undefined{
-        return this.tractorBeam
-    }
-
-    isBallConnected(): boolean {
-        return this.ballActor !== undefined && this.ballActor !== null;
-    }
-
-    increaseFuel(fuel: number) {
-        this.fuelLevel = this.fuelLevel + fuel
-    }
-
-    getMass() : number {
-        return SHIP_MASS
-    }
+    setCamera(camera: Camera) {this.camera = camera }
+    setshipController(shipController: ShipController) {this.shipController = shipController }
+    getTractorBeam() : TractorBeam | undefined{ return this.tractorBeam }
+    getMass() : number { return SHIP_MASS }
+    getBall() {return this.ballActor }
+    isBallConnected(): boolean { return this.ballActor !== undefined && this.ballActor !== null; }
+    increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }
 
     explode() {
         console.log('Ship exploded!')

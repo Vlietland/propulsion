@@ -3,18 +3,17 @@ import { BallActor } from '@src/game/actors/ballActor'
 import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
 
-const TRACTOR_WIDTH = 50
+const TRACTOR_WIDTH = 100
 const TRACTOR_POWER = 20
+const TRACTOR_REACH = 220
 
 export class TractorBeam {
     private fuelTanks: FuelTankActor[] = []
     private ballActor?: BallActor
     private shipActor: ShipActor
-    private tractorReach
 
-    constructor(shipActor: ShipActor, tractorReach: number) {
+    constructor(shipActor: ShipActor) {
         this.shipActor = shipActor
-        this.tractorReach = tractorReach
     }
 
     addFuelTank(fuelTankActor: FuelTankActor): void {
@@ -43,13 +42,15 @@ export class TractorBeam {
             objectPos.x >= shipPos.x - TRACTOR_WIDTH / 2 &&
             objectPos.x <= shipPos.x + TRACTOR_WIDTH / 2
         const isWithinLength =
-            objectPos.y >= shipPos.y && objectPos.y <= shipPos.y + this.tractorReach
+            objectPos.y >= shipPos.y && objectPos.y <= shipPos.y + TRACTOR_REACH
         return isWithinWidth && isWithinLength
     }
 
     private attract(ballActor: BallActor) {
-        if (this.shipActor.pos.distance(ballActor.pos) + 10 >= this.tractorReach) {
-            this.shipActor.setBall(ballActor)
+        if (this.shipActor.pos.distance(ballActor.pos) + 10 >= TRACTOR_REACH) {
+            this.shipActor.attachBall(ballActor)
         }
     }
+
+    getReach() { return TRACTOR_REACH }
 }

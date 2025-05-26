@@ -51,7 +51,7 @@ export class Physics {
         return momentOfInertia === 0 ? 0 : torqueValue / momentOfInertia        
     }
 
-    updateRotationalMotion(
+    updateAngularMotion(
         angularAcceleration: number,
         angularVelocity: number,
         shipMass: number,
