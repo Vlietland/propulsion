@@ -15,7 +15,7 @@
             2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 0, 11, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
@@ -39,19 +39,7 @@
          "name":"objects",
          "objects":[
                 {
-                 "gid":4,
-                 "height":128,
-                 "id":2,
-                 "name":"reactor",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":128,
-                 "x":1280,
-                 "y":768
-                }, 
-                {
-                 "gid":1,
+                 "gid":2,
                  "height":128,
                  "id":8,
                  "name":"ball",
@@ -69,7 +57,7 @@
                  "y":1600
                 }, 
                 {
-                 "gid":5,
+                 "gid":3,
                  "height":128,
                  "id":10,
                  "name":"ship",
@@ -85,7 +73,93 @@
                  "width":128,
                  "x":1088,
                  "y":440
+                }, 
+                {
+                 "gid":4,
+                 "height":128,
+                 "id":12,
+                 "name":"reactor",
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":128,
+                 "x":1152,
+                 "y":768
+                }, 
+                {
+                 "gid":7,
+                 "height":128,
+                 "id":14,
+                 "name":"turret",
+                 "rotation":-90,
+                 "type":"",
+                 "visible":false,
+                 "width":128,
+                 "x":1920,
+                 "y":896
+                }, 
+                {
+                 "gid":7,
+                 "height":128,
+                 "id":15,
+                 "name":"turret",
+                 "rotation":90,
+                 "type":"",
+                 "visible":false,
+                 "width":128,
+                 "x":1536,
+                 "y":768
+                }, 
+                {
+                 "gid":1073741832,
+                 "height":128,
+                 "id":16,
+                 "name":"laser",
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":128,
+                 "x":1408,
+                 "y":1152
+                }, 
+                {
+                 "gid":9,
+                 "height":128,
+                 "id":17,
+                 "name":"fueltank",
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":128,
+                 "x":1279.75,
+                 "y":1664
+                }, 
+                {
+                 "gid":10,
+                 "height":128,
+                 "id":18,
+                 "name":"transformer",
+                 "rotation":-90,
+                 "type":"",
+                 "visible":false,
+                 "width":128,
+                 "x":1920,
+                 "y":1408
+                }, 
+                {
+                 "gid":10,
+                 "height":128,
+                 "id":19,
+                 "name":"transformer",
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":128,
+                 "x":1408,
+                 "y":768
                 }],
+         "offsetx":-0.5,
+         "offsety":0,
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -93,7 +167,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":12,
+ "nextobjectid":23,
  "orientation":"orthogonal",
  "properties":[
         {

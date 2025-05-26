@@ -3,6 +3,8 @@ import { ShipActor } from '@src/game/actors/ship/shipActor'
 import { BallActor } from '@src/game/actors/ballActor'
 import { TurretActor } from '@src/game/actors/turretActor'
 import { ReactorActor } from '@src/game/actors/reactorActor'
+import { LaserActor } from '@src/game/actors/laserActor'
+import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 
 export class ActorFactory {
     private shipActor: ShipActor | null = null
@@ -43,7 +45,7 @@ export class ActorFactory {
     private async createActorFromObject(object: any): Promise<Actor | null> {
         let actor: Actor
         let mass = 0
-
+        console.log(`Creating actor: ${object.name}`)
         switch (object.name) {
             case 'ship':
                 mass = Number(object.properties.get('mass'))
@@ -55,21 +57,17 @@ export class ActorFactory {
                 this.shipActor?.getTractorBeam()?.setBall(ballActor);
                 actor = ballActor;
                 break;
-            case 'turret':
-                actor = new TurretActor({
-                    pos: new Vector(object.x, object.y),
-                    width: object.width,
-                    height: object.height,
-                    collisionType: CollisionType.Fixed,
-                });
-                break;
             case 'reactor':
-                actor = new ReactorActor({
-                    pos: new Vector(object.x, object.y),
-                    width: object.width,
-                    height: object.height,
-                    collisionType: CollisionType.Fixed,
-                });
+                actor = new ReactorActor(new Vector(object.x, object.y));
+                break;
+            case 'fueltank':
+                actor = new FuelTankActor(new Vector(object.x, object.y));
+                break;
+            case 'turret':
+                actor = new TurretActor(new Vector(object.x, object.y));
+                break;
+            case 'laser':
+                actor = new LaserActor(new Vector(object.x, object.y));
                 break;
             default:
                 actor = new Actor({
