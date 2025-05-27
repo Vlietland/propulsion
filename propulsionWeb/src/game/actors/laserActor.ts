@@ -9,9 +9,13 @@ await LASER.load();
 export class LaserActor extends BaseActor {
     private activeLaserBeam: LaserBeamActor | null = null;
     private laserBeams: LaserBeamActor[] = [];
+    private laserRotation : number = 0
 
     constructor(object: TiledObject) {
         super(object, LASER, CollisionType.Passive);
+        let rotationVector = new Vector(Math.cos(this.rotation), Math.sin(this.rotation));
+        if (this.flip) rotationVector = new Vector(rotationVector.x, -rotationVector.y);
+        console.log('Rotation Vector:', rotationVector);
     }
 
     fireLaserBeam(target: Vector): LaserBeamActor {
@@ -25,13 +29,13 @@ export class LaserActor extends BaseActor {
 
     stopLaserBeam(): void {
         for (const beam of this.laserBeams) {
-            beam.kill(); // Make each laser beam invisible
+            beam.kill();
         }
     }
 
     startLaserBeam(): void {
         for (const beam of this.laserBeams) {
-            beam.revive(); // Make each laser beam visible again
+            beam.revive();
         }
     }
 }

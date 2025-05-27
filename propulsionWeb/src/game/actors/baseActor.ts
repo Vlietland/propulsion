@@ -2,6 +2,7 @@ import { Actor, Vector, CollisionType, ImageSource } from 'excalibur';
 import { TiledObject } from '@excalibur-tiled/index';
 
 export class BaseActor extends Actor {
+    protected flip : boolean = false
     constructor(object: TiledObject, image: ImageSource, collisionType: CollisionType = CollisionType.Passive) {
         if (!object || object.x === undefined || object.y === undefined || object.rotation === undefined || object.gid === undefined) {
             throw new Error("Invalid TiledObject provided to BaseActor: x, y, rotation, or gid is undefined");
@@ -16,7 +17,11 @@ export class BaseActor extends Actor {
             collisionType: collisionType,
         });
         this.rotation = object.rotation * (Math.PI / 180);
-        if ((object.gid & 0x40000000) !== 0) this.scale.y = -this.scale.y;
+        if ((object.gid & 0x40000000) !== 0)
+            {
+                this.flip = true            
+                this.scale.y = -this.scale.y;
+            }
         this.graphics.use(image.toSprite());
     }
 }
