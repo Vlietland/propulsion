@@ -4,6 +4,7 @@ import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
+import { CollisionManager } from '@src/game/physics/collisionManager'
 
 const CAMERA_ZOOM = 0.8
 
@@ -32,6 +33,10 @@ export class SceneManager {
         const actorFactory = new ActorFactory(map)
         const physics = new Physics(map.map.properties[0].value)
         await actorFactory.createActors(scene)
+        
+        const collisionManager = CollisionManager.instance
+        collisionManager.initialize(this.engine)
+        
         const shipActor = actorFactory.getShipActor()
         if (shipActor) {
             shipActor.setPhysics(physics)

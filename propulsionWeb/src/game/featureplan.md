@@ -9,13 +9,13 @@ Read the agentinstructions.md !!!!
 ### 1. Collision Manager
 
 #### 1.1. Core Architecture
-- Create a centralized `CollisionManager` class to handle all collision logic
-- Implement a singleton pattern for global access
-- Separate collision detection from collision response logic
-- Provide a clean API for other components to query collision information
+x Create a centralized `CollisionManager` class to handle all collision logic
+x Implement a singleton pattern for global access
+x Separate collision detection from collision response logic
+x Provide a clean API for other components to query collision information
 
 #### 1.2. Initialization Flow
-- Initialize the manager after map and actors are loaded
+x Initialize the manager after map and actors are loaded
 - Process tile map data to create optimized colliders
 - Register all actors with the collision system
 - Configure collision group relationships
