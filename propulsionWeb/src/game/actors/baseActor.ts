@@ -7,7 +7,6 @@ export class BaseActor extends Actor {
     protected collisionPoints: Vector[] = []
     private COLLISION_DEBUG = true
     private originalPolygonPoints: Vector[] = []
-    private isColliderStable = false
 
     constructor(object: TiledObject, image: ImageSource, collisionType: CollisionType = CollisionType.Passive) {
         if (!object || object.x === undefined || object.y === undefined || object.rotation === undefined || object.gid === undefined) {
@@ -24,19 +23,14 @@ export class BaseActor extends Actor {
         })
         this.rotation = object.rotation * (Math.PI / 180)
         this.generateCollisionPoints(image, 24)
-        
-        // Handle flipping BEFORE setting up the collider
         if ((object.gid & 0x40000000) !== 0) {
             this.flip = true
-            // Apply flip transformation to collision points directly
             this.collisionPoints = this.collisionPoints.map(p =>
                 new Vector(p.x, image.height - p.y)
             )
         }
-        
         this.setupStableCollider(image)
         this.graphics.use(image.toSprite())
-        
         if (this.COLLISION_DEBUG) this.collisionDraw(image)
     }
     
@@ -47,7 +41,6 @@ export class BaseActor extends Actor {
             )
             const polygon = Shape.Polygon(this.originalPolygonPoints, Vector.Zero, true)
             this.collider.set(polygon)
-            this.isColliderStable = true
             if (this.flip) {
                 this.graphics.flipVertical = true
             }
