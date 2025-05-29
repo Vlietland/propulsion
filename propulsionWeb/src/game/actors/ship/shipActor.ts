@@ -1,5 +1,5 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { Camera, Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
+import { Camera, Actor, Vector, CollisionType, Engine, ImageSource, Color } from 'excalibur'
 import { Kinematics } from '@src/game/actors/ship/kinematics'
 import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
@@ -41,7 +41,12 @@ export class ShipActor extends Actor {
         this.pos = super.pos
         this.shipMass = shipMass
         this.rotation = (object.rotation ?? 0) - Math.PI / 2
-        this.collisionPoints = CollisionPoints.getCollisionPoints(SHIP)
+        this.collisionPoints = CollisionPoints.getCollisionPoints(SHIP, 64)
+        this.graphics.onPostDraw = (ctx) => {
+            for (const p of this.collisionPoints) {
+                ctx.drawCircle(new Vector(p.x - this.width / 2, p.y - this.height / 2), 2, Color.Red)
+            }
+        }
         console.log('Ship collision points:', this.collisionPoints)
     }
 
@@ -53,8 +58,8 @@ export class ShipActor extends Actor {
         if (this.shipController.isThrusting() && this.fuelLevel > 0) {
             forceVector = this.physics.force(this.rotation, THRUST_FORCE)            
             this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION
-            this.graphics.use(SHIP_THRUST.toSprite())
-        } else this.graphics.use(SHIP.toSprite())
+            //this.graphics.use(SHIP_THRUST.toSprite())
+        } else //this.graphics.use(SHIP.toSprite())
 
         if (!this.isBallConnected()) {
             const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
@@ -75,20 +80,6 @@ export class ShipActor extends Actor {
         }
 
         if (this.camera) this.camera.pos = this.pos        
-    }
-
-    onPostDraw(ctx: CanvasRenderingContext2D) {
-        ctx.save()
-        ctx.translate(this.pos.x, this.pos.y)
-        ctx.rotate(this.rotation)
-        ctx.fillStyle = 'red'
-        for (const p of this.collisionPoints) {
-            ctx.beginPath()
-            ctx.arc(p.x - this.width / 2, p.y - this.height / 2, 2, 0, Math.PI * 2)
-            ctx.fill()
-        }
-        ctx.restore()
-        console.log('test')
     }
 
     setPhysics(physics: Physics) {
