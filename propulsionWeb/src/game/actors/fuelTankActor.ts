@@ -1,6 +1,6 @@
 import { TiledObject } from '@excalibur-tiled/index'
 import { Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
-import { BaseActor } from './baseActor';
+import { BaseActor } from '@src/game/actors/baseActor';
 
 export const FUEL_TANK = new ImageSource('/images/tiles/fuelTank.png')
 await FUEL_TANK.load()

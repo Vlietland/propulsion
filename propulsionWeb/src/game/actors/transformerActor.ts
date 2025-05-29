@@ -1,6 +1,6 @@
 import { TiledObject } from '@excalibur-tiled/index'
 import { Actor, CollisionType, Vector, ImageSource } from 'excalibur';
-import { BaseActor } from './baseActor';
+import { BaseActor } from '@src/game/actors/baseActor';
 
 export const TRANSFORMER = new ImageSource('/images/tiles/transformer.png');
 await TRANSFORMER.load();

@@ -1,6 +1,6 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { Actor, Vector, CollisionType, Engine, ImageSource } from 'excalibur'
-import { BaseActor } from './baseActor';
+import { Vector, CollisionType, Engine, ImageSource } from 'excalibur'
+import { BaseActor } from '@src/game/actors/baseActor';
 
 export const BALL = new ImageSource('/images/tiles/ball.png')
 await BALL.load()

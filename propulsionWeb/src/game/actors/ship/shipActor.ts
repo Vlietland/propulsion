@@ -6,6 +6,7 @@ import { BallActor } from '@src/game/actors/ballActor'
 import { Physics } from '@src/game/physics/physics'
 import { TractorBeam } from '@src/game/actors/ship/tractorBeam'
 import { CollisionPoints } from '@src/game/physics/collision/collisionPoints'
+import { BaseActor } from '@src/game/actors/baseActor';
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
 const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
@@ -18,7 +19,7 @@ const GUN_POWER = 300
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 10
 
-export class ShipActor extends Actor {
+export class ShipActor extends BaseActor {
     private physics?: Physics
     private camera?: Camera
     private kinematics?: Kinematics
@@ -31,17 +32,12 @@ export class ShipActor extends Actor {
 
     constructor(object: TiledObject, shipMass: number) {
         if (!object || object.x === undefined || object.y === undefined) return
-        super({
-            pos: new Vector(object.x, object.y),
-            width: SHIP.width,
-            height: SHIP.height,
-            collisionType: CollisionType.Passive,
-        })
+        super(object, SHIP, CollisionType.Passive);
         this.tractorBeam = new TractorBeam(this)
         this.pos = super.pos
         this.shipMass = shipMass
         this.rotation = (object.rotation ?? 0) - Math.PI / 2
-        this.collisionPoints = CollisionPoints.getCollisionPoints(SHIP, 64)
+        this.collisionPoints = CollisionPoints.getCollisionPoints(SHIP, 32)
         this.graphics.onPostDraw = (ctx) => {
             for (const p of this.collisionPoints) {
                 ctx.drawCircle(new Vector(p.x - this.width / 2, p.y - this.height / 2), 2, Color.Red)
@@ -58,8 +54,8 @@ export class ShipActor extends Actor {
         if (this.shipController.isThrusting() && this.fuelLevel > 0) {
             forceVector = this.physics.force(this.rotation, THRUST_FORCE)            
             this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION
-            //this.graphics.use(SHIP_THRUST.toSprite())
-        } else //this.graphics.use(SHIP.toSprite())
+            this.graphics.use(SHIP_THRUST.toSprite())
+        } else this.graphics.use(SHIP.toSprite())
 
         if (!this.isBallConnected()) {
             const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
