@@ -33,7 +33,7 @@ export class ShipActor extends Actor {
             pos: new Vector(object.x, object.y),
             width: SHIP.width,
             height: SHIP.height,
-            collisionType: CollisionType.Passive,
+            collisionType: CollisionType.Active,
         })
         this.tractorBeam = new TractorBeam(this)
         this.pos = super.pos

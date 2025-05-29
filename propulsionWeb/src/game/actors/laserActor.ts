@@ -15,7 +15,6 @@ export class LaserActor extends BaseActor {
         super(object, LASER, CollisionType.Passive);
         let rotationVector = new Vector(Math.cos(this.rotation), Math.sin(this.rotation));
         if (this.flip) rotationVector = new Vector(rotationVector.x, -rotationVector.y);
-        console.log('Rotation Vector:', rotationVector);
     }
 
     fireLaserBeam(target: Vector): LaserBeamActor {
