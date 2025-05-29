@@ -28,9 +28,26 @@ export class CollisionPoints {
                 }
             }
         if (edgePoints.length <= count) return edgePoints
-        const step = Math.max(1, Math.floor(edgePoints.length / count))
-        const points: Vector[] = []
-        for (let i = 0; i < edgePoints.length && points.length < count; i += step) points.push(edgePoints[i])
-        return points
+
+        edgePoints.sort((a, b) => a.x - b.x || a.y - b.y)
+        const cross = (o: Vector, a: Vector, b: Vector) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x)
+        const hull: Vector[] = []
+        for (const p of edgePoints) {
+            while (hull.length >= 2 && cross(hull[hull.length-2], hull[hull.length-1], p) <= 0) hull.pop()
+            hull.push(p)
+        }
+        const t = hull.length + 1
+        for (let i = edgePoints.length - 2; i >= 0; i--) {
+            const p = edgePoints[i]
+            while (hull.length >= t && cross(hull[hull.length-2], hull[hull.length-1], p) <= 0) hull.pop()
+            hull.push(p)
+        }
+        hull.pop()
+        // Subsample if too many points
+        if (hull.length > count) {
+            const step = Math.floor(hull.length / count)
+            return Array.from({length: count}, (_, i) => hull[i * step])
+        }
+        return hull
     }
 }
