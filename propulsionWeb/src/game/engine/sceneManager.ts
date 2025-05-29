@@ -1,10 +1,10 @@
-import { Scene, Engine } from 'excalibur'
+import { Scene, Engine, TileMap, Actor } from 'excalibur'
 import { MapRenderer } from '@src/game/engine/mapRenderer'
 import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
-import { CollisionManager } from '@src/game/physics/collisionManager'
+import { CollisionManager } from '@src/game/physics/collision/collisionManager'
 
 const CAMERA_ZOOM = 0.8
 
@@ -37,6 +37,20 @@ export class SceneManager {
         const collisionManager = CollisionManager.instance
         collisionManager.initialize(this.engine)
         
+        const tilemapLayers = map.getTileLayers()
+        if (tilemapLayers && tilemapLayers.length > 0) {
+            collisionManager.processTileMap(tilemapLayers[0])
+        }
+        
+        // 2. Register all actors with the collision system
+        collisionManager.registerAllActors(scene)
+        
+        // 3. Configure collision group relationships
+        collisionManager.configureCollisionRelationships()
+        
+        // 4. Set up collision system updates
+        this.setupCollisionSystem(scene, collisionManager)
+        
         const shipActor = actorFactory.getShipActor()
         if (shipActor) {
             shipActor.setPhysics(physics)
@@ -44,14 +58,29 @@ export class SceneManager {
             shipActor.setCamera(scene.camera)
             this.hud.setShip(shipActor)
         }
+
         this.engine.add('level1', scene)
         this.engine.goToScene('level1')
+    }
+
+    private setupCollisionSystem(scene: Scene, collisionManager: CollisionManager): void {
+        const collisionSystemActor = new Actor({
+            name: 'CollisionSystem'
+        })
+        
+        const originalUpdate = collisionSystemActor.update
+        collisionSystemActor.update = function(engine: Engine, delta: number) {
+            collisionManager.update(delta)
+            originalUpdate.call(this, engine, delta)
+        }
+        
+        scene.add(collisionSystemActor)
     }
 
     handleShipLoss() {
         this.availableShips -= 1
         if (this.hud) {
-            this.hud.updateLives(this.availableShips); // Update lives on HUD when a ship is lost
+            this.hud.updateLives(this.availableShips);
         }
         if (this.availableShips > 0) {
             this.resetScene()
