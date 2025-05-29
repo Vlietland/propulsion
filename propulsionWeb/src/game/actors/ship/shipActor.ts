@@ -28,22 +28,14 @@ export class ShipActor extends BaseActor {
     private tractorBeam?: TractorBeam
     private fuelLevel = FUEL_FULL
     private shipMass = 100
-    private collisionPoints: Vector[] = []
 
     constructor(object: TiledObject, shipMass: number) {
         if (!object || object.x === undefined || object.y === undefined) return
-        super(object, SHIP, CollisionType.Passive);
+        super(object, SHIP, CollisionType.Passive)
         this.tractorBeam = new TractorBeam(this)
         this.pos = super.pos
         this.shipMass = shipMass
         this.rotation = (object.rotation ?? 0) - Math.PI / 2
-        this.collisionPoints = CollisionPoints.getCollisionPoints(SHIP, 32)
-        this.graphics.onPostDraw = (ctx) => {
-            for (const p of this.collisionPoints) {
-                ctx.drawCircle(new Vector(p.x - this.width / 2, p.y - this.height / 2), 2, Color.Red)
-            }
-        }
-        console.log('Ship collision points:', this.collisionPoints)
     }
 
     onPreUpdate(engine: Engine, delta: number) {
