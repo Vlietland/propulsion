@@ -10,7 +10,7 @@ export class FuelTankActor extends BaseActor {
     private fuelLevel = this.FUEL_FULL;
 
     constructor(object: TiledObject) {
-        super(object, FUEL_TANK, CollisionType.Passive);
+        super(object, FUEL_TANK, CollisionType.Fixed);
     }
 
     getPos(): Vector {

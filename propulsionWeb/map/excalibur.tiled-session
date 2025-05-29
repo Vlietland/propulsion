@@ -20,18 +20,18 @@
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/@src/public/images/tiles.tsx": {
             "scaleInDock": 1
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json": {
-            "scale": 0.3714,
+            "scale": 0.8505,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1152.39633817986,
-                "y": 504.8465266558966
+                "x": 1152.2633744855966,
+                "y": 503.8212815990593
             }
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/public/images/tiles.tsx": {

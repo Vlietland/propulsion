@@ -31,7 +31,7 @@ export class ShipActor extends BaseActor {
 
     constructor(object: TiledObject, shipMass: number) {
         if (!object || object.x === undefined || object.y === undefined) return
-        super(object, SHIP, CollisionType.Passive)
+        super(object, SHIP, CollisionType.Active)
         this.tractorBeam = new TractorBeam(this)
         this.pos = super.pos
         this.shipMass = shipMass

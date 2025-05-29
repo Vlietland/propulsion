@@ -6,6 +6,7 @@ import { ReactorActor } from '@src/game/actors/reactorActor'
 import { LaserActor } from '@src/game/actors/laserActor'
 import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { TransformerActor } from '@src/game/actors/transformerActor'
+import { BallStoreActor } from '@src/game/actors/ballStoreActor'
 
 export class ActorFactory {
     private shipActor: ShipActor | null = null
@@ -71,6 +72,9 @@ export class ActorFactory {
                 break;
             case 'transformer':
                 actor = new TransformerActor(object);
+                break;
+            case 'ballStore':
+                actor = new BallStoreActor(object);
                 break;
             default:
                 actor = new Actor({

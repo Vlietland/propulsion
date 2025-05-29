@@ -10,7 +10,7 @@ export class LaserBeamActor extends BaseActor {
     public speed: number;
 
     constructor(object: TiledObject) {
-        super(object, LASER_BEAM, CollisionType.Passive);
+        super(object, LASER_BEAM, CollisionType.Fixed);
         this.graphics.use(LASER_BEAM.toSprite());
         this.target = new Vector(0, 0); // Default initialization
         this.speed = 0; // Default initialization

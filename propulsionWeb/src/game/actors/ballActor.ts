@@ -9,7 +9,7 @@ export class BallActor extends BaseActor {
     private mass = 100;
 
     constructor(object: TiledObject, mass: number) {
-        super(object, BALL, CollisionType.Passive);
+        super(object, BALL, CollisionType.Passive)
         this.mass = mass;
     }
 

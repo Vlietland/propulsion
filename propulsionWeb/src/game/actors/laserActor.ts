@@ -12,7 +12,7 @@ export class LaserActor extends BaseActor {
     private laserRotation : number = 0
 
     constructor(object: TiledObject) {
-        super(object, LASER, CollisionType.Passive);
+        super(object, LASER, CollisionType.Fixed);
         let rotationVector = new Vector(Math.cos(this.rotation), Math.sin(this.rotation));
         if (this.flip) rotationVector = new Vector(rotationVector.x, -rotationVector.y);
     }
