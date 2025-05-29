@@ -5,6 +5,7 @@ import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
 import { Physics } from '@src/game/physics/physics'
 import { TractorBeam } from '@src/game/actors/ship/tractorBeam'
+import { CollisionPoints } from '@src/game/physics/collision/collisionPoints'
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
 const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
@@ -26,6 +27,7 @@ export class ShipActor extends Actor {
     private tractorBeam?: TractorBeam
     private fuelLevel = FUEL_FULL
     private shipMass = 100
+    private collisionPoints: Vector[] = []
 
     constructor(object: TiledObject, shipMass: number) {
         if (!object || object.x === undefined || object.y === undefined) return
@@ -33,13 +35,14 @@ export class ShipActor extends Actor {
             pos: new Vector(object.x, object.y),
             width: SHIP.width,
             height: SHIP.height,
-            collisionType: CollisionType.Active,
+            collisionType: CollisionType.Passive,
         })
         this.tractorBeam = new TractorBeam(this)
         this.pos = super.pos
         this.shipMass = shipMass
-        this.rotation = (object.rotation ?? 0) -Math.PI / 2
-        this.graphics.use(SHIP.toSprite())
+        this.rotation = (object.rotation ?? 0) - Math.PI / 2
+        this.collisionPoints = CollisionPoints.getCollisionPoints(SHIP)
+        console.log('Ship collision points:', this.collisionPoints)
     }
 
     onPreUpdate(engine: Engine, delta: number) {
@@ -72,6 +75,20 @@ export class ShipActor extends Actor {
         }
 
         if (this.camera) this.camera.pos = this.pos        
+    }
+
+    onPostDraw(ctx: CanvasRenderingContext2D) {
+        ctx.save()
+        ctx.translate(this.pos.x, this.pos.y)
+        ctx.rotate(this.rotation)
+        ctx.fillStyle = 'red'
+        for (const p of this.collisionPoints) {
+            ctx.beginPath()
+            ctx.arc(p.x - this.width / 2, p.y - this.height / 2, 2, 0, Math.PI * 2)
+            ctx.fill()
+        }
+        ctx.restore()
+        console.log('test')
     }
 
     setPhysics(physics: Physics) {
