@@ -1,5 +1,5 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { ParticleEmitter, Camera, Actor, Vector, CollisionType, Engine, ImageSource, Color, Graphic, Circle } from 'excalibur'
+import { ParticleEmitter, Camera, Actor, Vector, CollisionType, Engine, ImageSource, Color, Graphic, Circle, CollisionStartEvent } from 'excalibur'
 import { Kinematics } from '@src/game/actors/ship/kinematics'
 import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
@@ -7,6 +7,7 @@ import { Physics } from '@src/game/physics/physics'
 import { TractorBeam } from '@src/game/actors/ship/tractorBeam'
 import { CollisionPoints } from '@src/game/physics/collisionPoints'
 import { BaseActor } from '@src/game/actors/baseActor';
+import { BulletActor } from '@src/game/actors/ship/bulletActor';
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
 const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
@@ -15,9 +16,9 @@ await SHIP_THRUST.load()
 
 const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000
-const GUN_POWER = 300
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 10
+const GUN_COOLDOWN = 100
 
 export class ShipActor extends BaseActor {
     private physics?: Physics
@@ -28,7 +29,8 @@ export class ShipActor extends BaseActor {
     private tractorBeam?: TractorBeam
     private fuelLevel = FUEL_FULL
     private shipMass = 100
-    private onShipDestroyedCallback?: () => void;
+    private lastShotTime: number = 0    
+    private onShipDestroyedCallback?: () => void
 
     constructor(object: TiledObject, shipMass: number) {
         if (!object || object.x === undefined || object.y === undefined) return
@@ -40,7 +42,7 @@ export class ShipActor extends BaseActor {
     }
 
     onInitialize(engine: Engine): void {
-        this.on('postcollision', (evt) => { this.explode()})
+        this.on('postcollision', (evt) => this.handleCollision(evt as CollisionStartEvent))
     }
 
     onPreUpdate(engine: Engine, delta: number) {
@@ -70,7 +72,25 @@ export class ShipActor extends BaseActor {
             this.tractorBeam?.attractObjects(this.pos)
         }
 
+        if (this.shipController.isShooting()) {
+            this.fire(engine);
+        }
+
         if (this.camera) this.camera.pos = this.pos        
+    }
+
+    private fire(engine: Engine): void {
+        const currentTime = engine.clock.now()
+        if (currentTime - this.lastShotTime < GUN_COOLDOWN) {
+            return
+        }
+        this.lastShotTime = currentTime
+
+        const direction = Vector.fromAngle(this.rotation)
+        const shipFrontOffset = this.height / 2 + 5
+        const bulletStartPosition = this.pos.add(direction.scale(shipFrontOffset))
+        const bullet = new BulletActor(bulletStartPosition, direction)
+        engine.currentScene.add(bullet)
     }
 
     setPhysics(physics: Physics) {
@@ -96,13 +116,19 @@ export class ShipActor extends BaseActor {
     getTractorBeam() : TractorBeam | undefined{ return this.tractorBeam }
     getMass() : number { return this.shipMass }
     getBall() {return this.ballActor }
-    isBallConnected(): boolean { return this.ballActor !== undefined && this.ballActor !== null; }
+    public isBallConnected(): boolean { return this.ballActor !== undefined && this.ballActor !== null; }
     getFuelLevel(): number { return this.fuelLevel }
     getMaxFuel(): number { return FUEL_FULL }
     increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }    
 
-    protected explode() {
-        super.explode();
-        if (this.onShipDestroyedCallback) this.onShipDestroyedCallback()
+    private handleCollision (evt: CollisionStartEvent) : void { 
+        const collidingActor = evt.other?.owner; 
+        if (collidingActor instanceof BulletActor) return
+        this.explode();
     }
+
+    protected explode(): void {
+        super.explode()
+        if (this.onShipDestroyedCallback) this.onShipDestroyedCallback()
+    }    
 }
