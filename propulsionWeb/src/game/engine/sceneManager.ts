@@ -4,6 +4,7 @@ import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
+import { GameOverScreen } from '@src/game/ui/gameOverScreen'
 
 const CAMERA_ZOOM = 0.8
 const MAIN_SCENE_NAME = 'level1'
@@ -22,25 +23,16 @@ export class SceneManager {
     }
 
     private cleanupScenes() {
-        try {
-            this.engine.remove(MAIN_SCENE_NAME)
-            this.engine.remove(GAME_OVER_SCENE_NAME)
-            this.loadingScenes.forEach(name => {
-                this.engine.remove(name)
-            })
-            this.loadingScenes = []
-        } catch (e) {
-            console.error('Scene cleanup error:', e)
-        }
+        this.engine.remove(MAIN_SCENE_NAME)
+        this.loadingScenes = []
     }
 
     handleShipLoss() {
         this.availableShips -= 1
         if (this.hud) this.hud.updateLives(this.availableShips)
-        
         setTimeout(() => {
             if (this.availableShips > 0) this.resetScene()
-            else this.showGameOverScreen()
+            else this.handleGameOver()
         }, EXPLOSION_DELAY)
     }
 
@@ -86,7 +78,7 @@ export class SceneManager {
         this.engine.goToScene(MAIN_SCENE_NAME)
     }
 
-    private async showGameOverScreen() {
+    private async handleGameOver() {
         const loadingSceneName = `loading-${Date.now()}`
         this.loadingScenes.push(loadingSceneName)
         
@@ -99,23 +91,12 @@ export class SceneManager {
         this.cleanupScenes()
         
         const gameOverScene = new Scene()
-        
-        const gameOverMessage = document.createElement('div')
-        gameOverMessage.className = 'game-over-message'
-        gameOverMessage.innerHTML = `
-            <h1>GAME OVER</h1>
-            <button id="restart-button">RESTART GAME</button>`
-        document.body.appendChild(gameOverMessage)
-        
-        const restartButton = document.getElementById('restart-button')
-        if (restartButton) {
-            restartButton.addEventListener('click', () => {
-                document.body.removeChild(gameOverMessage)
-                this.availableShips = 3
-                this.registerScene()
-            })
-        }
         this.engine.add(GAME_OVER_SCENE_NAME, gameOverScene)
         this.engine.goToScene(GAME_OVER_SCENE_NAME)
+        
+        GameOverScreen.show(() => {
+            this.availableShips = 3
+            this.registerScene()
+        })
     }
 }
