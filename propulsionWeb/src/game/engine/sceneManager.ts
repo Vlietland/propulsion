@@ -55,7 +55,7 @@ export class SceneManager {
         else this.showGameOverScreen()
     }
 
-    private resetScene() {
+    private async resetScene() {
         //this.engine.remove('level1')        
         this.registerScene
     }

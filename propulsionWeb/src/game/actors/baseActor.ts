@@ -6,7 +6,7 @@ import { Explosion } from '@src/game/physics/explosion';
 export class BaseActor extends Actor {
     protected flip : boolean = false
     protected collisionPoints: Vector[] = []
-    private COLLISION_DEBUG = true
+    private COLLISION_DEBUG = false
     private originalPolygonPoints: Vector[] = []
 
     constructor(object: TiledObject, image: ImageSource, collisionType: CollisionType = CollisionType.Passive) {
