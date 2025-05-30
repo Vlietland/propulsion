@@ -14,7 +14,7 @@ export class BallActor extends BaseActor {
     }
 
     onInitialize(engine: Engine): void {
-        this.on('postcollision', (evt) => { this.explode()})
+        this.on('postcollision', (evt) => this.explode())
     }
 
     getMass(): number {

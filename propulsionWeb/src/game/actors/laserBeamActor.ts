@@ -1,42 +1,14 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { CollisionType, Vector, ImageSource } from 'excalibur';
-import { BaseActor } from '@src/game/actors/baseActor';
+import { CollisionType, Vector, ImageSource, Engine, Actor } from 'excalibur'
+import { BaseActor } from '@src/game/actors/baseActor'
 
-export const LASER_BEAM = new ImageSource('/images/tiles/laserbeam.png');
-await LASER_BEAM.load();
+export const LASER_BEAM = new ImageSource('/images/tiles/laserbeam.png')
+await LASER_BEAM.load()
 
 export class LaserBeamActor extends BaseActor {
-    public target: Vector;
-    public speed: number;
-
     constructor(object: TiledObject) {
-        super(object, LASER_BEAM, CollisionType.Fixed);
-        this.graphics.use(LASER_BEAM.toSprite());
-        this.target = new Vector(0, 0); // Default initialization
-        this.speed = 0; // Default initialization
-    }
-
-    public setTarget(target: Vector): void {
-        this.target = target;
-    }
-
-    public setSpeed(speed: number): void {
-        this.speed = speed;
-    }
-
-    public revive(): void {
-        this.graphics.opacity = 1; // Make the laser beam fully visible
-        this.actions.clearActions(); // Ensure the actor is active
-    }
-
-    onPreUpdate(engine: ex.Engine, delta: number): void {
-        const direction = this.target.sub(this.pos).normalize();
-        const movement = direction.scale(this.speed * (delta / 1000));
-        this.pos = this.pos.add(movement);
-
-        // Remove the laser beam if it reaches the target
-        if (this.pos.distance(this.target) < 5) {
-            this.kill();
-        }
+        super(object, LASER_BEAM, CollisionType.Fixed)
+        this.graphics.use(LASER_BEAM.toSprite())
+        this.z = -1
     }
 }

@@ -71,8 +71,8 @@
                  "type":"",
                  "visible":false,
                  "width":128,
-                 "x":1088,
-                 "y":440
+                 "x":1688,
+                 "y":1240
                 }, 
                 {
                  "gid":4,
@@ -115,6 +115,12 @@
                  "height":128,
                  "id":16,
                  "name":"laser",
+                 "properties":[
+                        {
+                         "name":"group",
+                         "type":"string",
+                         "value":"0"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":false,
@@ -139,6 +145,12 @@
                  "height":128,
                  "id":18,
                  "name":"transformer",
+                 "properties":[
+                        {
+                         "name":"group",
+                         "type":"string",
+                         "value":"0"
+                        }],
                  "rotation":-90,
                  "type":"",
                  "visible":false,
@@ -151,6 +163,12 @@
                  "height":128,
                  "id":19,
                  "name":"transformer",
+                 "properties":[
+                        {
+                         "name":"group",
+                         "type":"string",
+                         "value":"0"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":false,

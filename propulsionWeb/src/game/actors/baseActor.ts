@@ -18,8 +18,8 @@ export class BaseActor extends Actor {
         if (object.rotation == 90) correction.y = image.height
         super({
             pos: new Vector(object.x+image.width/2, object.y-image.height/2).add(correction),
-            //width: image.width,
-            //height: image.height,
+            width: image.width,
+            height: image.height,
             collisionType: collisionType,
         })
         this.rotation = object.rotation * (Math.PI / 180)
@@ -32,7 +32,7 @@ export class BaseActor extends Actor {
         }
         this.setupStableCollider(image)
         this.graphics.use(image.toSprite())
-        if (this.COLLISION_DEBUG) this.collisionDraw(image)
+        if (this.COLLISION_DEBUG) this.collisionDebug(image)
     }
     
     private setupStableCollider(image: ImageSource) {
@@ -52,7 +52,12 @@ export class BaseActor extends Actor {
         this.collisionPoints = CollisionPoints.getCollisionPoints(image, count)
     }    
 
-    private collisionDraw(image?: ImageSource) {
+    protected explode() {
+        Explosion.spawn(this.scene, this.pos, this.rotation ?? 0);        
+        this.kill()
+    }
+
+    private collisionDebug(image?: ImageSource) {
         if (image === undefined) return
         this.graphics.onPostDraw = (ctx) => {
             const collider = this.collider.get()
@@ -67,10 +72,5 @@ export class BaseActor extends Actor {
                 }
             }
         }
-    }
-
-    protected explode() {
-        Explosion.spawn(this.scene, this.pos, this.rotation ?? 0);        
-        this.kill()
-    }
+    }    
 }
