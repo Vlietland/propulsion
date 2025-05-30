@@ -1,15 +1,16 @@
 import { Actor, CollisionType, Engine, ImageSource, Vector, CollisionStartEvent } from 'excalibur'
-import { BaseActor } from '../baseActor'
+import { BaseActor } from './baseActor'
 import { TiledObject, TiledProperty } from '@excalibur-tiled/index'
-import { ShipActor } from './shipActor'
+import { ShipActor } from './ship/shipActor'
 
 export const BULLET = new ImageSource('/images/tiles/bullet.png')
 BULLET.load()
 
 export class BulletActor extends BaseActor {
     private static readonly SPEED = 200
+    private firer: Actor
 
-    constructor(pos: Vector, direction: Vector) {
+    constructor(pos: Vector, direction: Vector, firer: Actor) {
         const object: TiledObject = {
             name: 'bullet',
             x: pos.x,
@@ -22,6 +23,7 @@ export class BulletActor extends BaseActor {
             properties: [] as TiledProperty[]
         }
         super(object, BULLET, CollisionType.Active)
+        this.firer = firer        
         this.vel = direction.normalize().scale(BulletActor.SPEED)
         this.rotation = direction.toAngle()        
         this.graphics.use(BULLET.toSprite())
@@ -37,5 +39,9 @@ export class BulletActor extends BaseActor {
             return
         }
         this.kill()
+    }
+
+    public getFirer(): Actor {
+        return this.firer
     }
 }

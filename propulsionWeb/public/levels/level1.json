@@ -71,8 +71,8 @@
                  "type":"",
                  "visible":false,
                  "width":128,
-                 "x":1688,
-                 "y":1240
+                 "x":1088,
+                 "y":440
                 }, 
                 {
                  "gid":4,
@@ -198,6 +198,11 @@
  "nextobjectid":25,
  "orientation":"orthogonal",
  "properties":[
+        {
+         "name":"enemyLevel",
+         "type":"string",
+         "value":"1"
+        }, 
         {
          "name":"gravity",
          "type":"string",

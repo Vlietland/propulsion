@@ -63,7 +63,7 @@ export class SceneManager {
 
         const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json')
         const actorFactory = new ActorFactory(map)
-        const physics = new Physics(map.map.properties[0].value)
+        const physics = new Physics(map.map.properties[1].value)
         await actorFactory.createActors(scene)
         
         const shipActor = actorFactory.getShipActor()

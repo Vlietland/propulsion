@@ -7,7 +7,7 @@ import { Physics } from '@src/game/physics/physics'
 import { TractorBeam } from '@src/game/actors/ship/tractorBeam'
 import { CollisionPoints } from '@src/game/physics/collisionPoints'
 import { BaseActor } from '@src/game/actors/baseActor';
-import { BulletActor } from '@src/game/actors/ship/bulletActor';
+import { BulletActor } from '@src/game/actors/bulletActor';
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
 const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
@@ -70,6 +70,7 @@ export class ShipActor extends BaseActor {
 
         if (this.shipController.isUsingTractorBeam()) {
             this.tractorBeam?.attractObjects(this.pos)
+            this.fuelLevel = this.fuelLevel - 2*FUEL_CONSUMPTION            
         }
 
         if (this.shipController.isShooting()) {
@@ -81,15 +82,20 @@ export class ShipActor extends BaseActor {
 
     private fire(engine: Engine): void {
         const currentTime = engine.clock.now()
-        if (currentTime - this.lastShotTime < GUN_COOLDOWN) {
-            return
-        }
+        if (currentTime - this.lastShotTime < GUN_COOLDOWN) return
         this.lastShotTime = currentTime
 
         const direction = Vector.fromAngle(this.rotation)
         const shipFrontOffset = this.height / 2 + 5
         const bulletStartPosition = this.pos.add(direction.scale(shipFrontOffset))
-        const bullet = new BulletActor(bulletStartPosition, direction)
+
+        console.log(`[ShipActor.fire] Firing! Rotation: ${this.rotation} (deg: ${this.rotation * 180 / Math.PI})`);
+        console.log(`[ShipActor.fire] Direction: x=${direction.x.toFixed(2)}, y=${direction.y.toFixed(2)}`);
+        console.log(`[ShipActor.fire] Ship Height: ${this.height}, FrontOffset: ${shipFrontOffset}`);
+        console.log(`[ShipActor.fire] Bullet Start Pos: x=${bulletStartPosition.x.toFixed(2)}, y=${bulletStartPosition.y.toFixed(2)}`);
+        console.log(`[ShipActor.fire] Ship Pos: x=${this.pos.x.toFixed(2)}, y=${this.pos.y.toFixed(2)}`);
+
+        const bullet = new BulletActor(bulletStartPosition, direction, this)
         engine.currentScene.add(bullet)
     }
 
@@ -122,8 +128,12 @@ export class ShipActor extends BaseActor {
     increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }    
 
     private handleCollision (evt: CollisionStartEvent) : void { 
-        const collidingActor = evt.other?.owner; 
-        if (collidingActor instanceof BulletActor) return
+        const collidingActor = evt.other?.owner;
+        if (collidingActor instanceof BulletActor) {
+            const bullet = collidingActor as BulletActor;
+            if (bullet.getFirer() === this) return
+            if (this.shipController?.isUsingTractorBeam()) return
+        }
         this.explode();
     }
 

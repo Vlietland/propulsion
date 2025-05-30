@@ -90,8 +90,6 @@ export class Physics {
             -ballDistFromCM * Math.cos(angle),
             -ballDistFromCM * Math.sin(angle)
         ))
-
-        const shipToBallDistance = shipPos.distance(ballPos)
         
         return {
             angle: newAngle,
