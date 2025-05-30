@@ -6,17 +6,59 @@ import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
 
 const CAMERA_ZOOM = 0.8
+const MAIN_SCENE_NAME = 'level1'
+const GAME_OVER_SCENE_NAME = 'gameOver'
+const TRANSITION_DELAY = 50
+const EXPLOSION_DELAY = 2500
 
 export class SceneManager {
     private mapRenderer: MapRenderer
     private hud?: HUD
     private availableShips: number = 3
+    private loadingScenes: string[] = []
 
     constructor(private engine: Engine) {
         this.mapRenderer = new MapRenderer()
     }
 
-    async registerScene() {
+    private cleanupScenes() {
+        try {
+            this.engine.remove(MAIN_SCENE_NAME)
+            this.engine.remove(GAME_OVER_SCENE_NAME)
+            this.loadingScenes.forEach(name => {
+                this.engine.remove(name)
+            })
+            this.loadingScenes = []
+        } catch (e) {
+            console.error('Scene cleanup error:', e)
+        }
+    }
+
+    handleShipLoss() {
+        this.availableShips -= 1
+        if (this.hud) this.hud.updateLives(this.availableShips)
+        
+        setTimeout(() => {
+            if (this.availableShips > 0) this.resetScene()
+            else this.showGameOverScreen()
+        }, EXPLOSION_DELAY)
+    }
+
+    private async resetScene() {
+        const loadingSceneName = `loading-${Date.now()}`
+        this.loadingScenes.push(loadingSceneName)
+        
+        const emptyScene = new Scene()
+        this.engine.add(loadingSceneName, emptyScene)
+        this.engine.goToScene(loadingSceneName)
+        
+        await new Promise(resolve => setTimeout(resolve, TRANSITION_DELAY))
+        
+        this.cleanupScenes()
+        await this.registerScene()
+    }
+
+    private async registerScene() {
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
@@ -39,35 +81,23 @@ export class SceneManager {
             shipActor.setCamera(scene.camera)
             this.hud.setShip(shipActor)
             shipActor.setOnShipDestroyedCallback(() => { this.handleShipLoss() })
-            scene.add(shipActor); // Ensure the ship actor is added to the scene
         }
-
-        this.engine.add('level1', scene)
-        this.engine.goToScene('level1')
-    }
-
-    handleShipLoss() {
-        this.availableShips -= 1
-        if (this.hud) this.hud.updateLives(this.availableShips)
-        setTimeout(() => {
-            if (this.availableShips > 0) this.resetScene()
-            else this.showGameOverScreen()
-        }, 2500)
-    }
-
-    private async resetScene() {
-        const loadingSceneName = `loading-${Date.now()}`
-        this.engine.add(loadingSceneName, new Scene())
-        this.engine.goToScene(loadingSceneName)
-        await new Promise(resolve => setTimeout(resolve, 50))
-        await this.registerScene()
+        this.engine.add(MAIN_SCENE_NAME, scene)
+        this.engine.goToScene(MAIN_SCENE_NAME)
     }
 
     private async showGameOverScreen() {
         const loadingSceneName = `loading-${Date.now()}`
-        this.engine.add(loadingSceneName, new Scene())
+        this.loadingScenes.push(loadingSceneName)
+        
+        const emptyScene = new Scene()
+        this.engine.add(loadingSceneName, emptyScene)
         this.engine.goToScene(loadingSceneName)
-        await new Promise(resolve => setTimeout(resolve, 50))
+        
+        await new Promise(resolve => setTimeout(resolve, TRANSITION_DELAY))
+        
+        this.cleanupScenes()
+        
         const gameOverScene = new Scene()
         
         const gameOverMessage = document.createElement('div')
@@ -85,8 +115,7 @@ export class SceneManager {
                 this.registerScene()
             })
         }
-        
-        this.engine.add('gameOver', gameOverScene)
-        this.engine.goToScene('gameOver')
+        this.engine.add(GAME_OVER_SCENE_NAME, gameOverScene)
+        this.engine.goToScene(GAME_OVER_SCENE_NAME)
     }
 }
