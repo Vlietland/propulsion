@@ -59,8 +59,6 @@ export class ShipActor extends BaseActor {
             this.pos = this.pos.add(displacement)
         } else { //connected
             const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
-            //this.pos = this.pos.add(shipDelta);
-            //this.ballActor?.addPos(ballDelta.clone());
             this.pos = this.pos.add(displacement).add(shipDelta);
             this.ballActor?.addPos(displacement.clone().add(ballDelta));
         }

@@ -59,5 +59,6 @@ export class HUD extends ScreenElement {
 
     dispose(): void {
         this.hudElement.remove();
+        this.ship = undefined; // Clear ship reference to prevent memory leaks
     }
 }

@@ -24,16 +24,13 @@ export class SceneManager {
         const scene = new Scene()
         scene.camera.zoom = CAMERA_ZOOM
         this.hud = new HUD()
-        this.hud.updateLives(this.availableShips);
+        this.hud.updateLives(this.availableShips)
         scene.add(this.hud)
 
-        const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json');
-
+        const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json')
         const actorFactory = new ActorFactory(map)
         const physics = new Physics(map.map.properties[0].value)
         await actorFactory.createActors(scene)
-        
-        const tilemapLayers = map.getTileLayers()
         
         const shipActor = actorFactory.getShipActor()
         if (shipActor) {
@@ -42,6 +39,7 @@ export class SceneManager {
             shipActor.setCamera(scene.camera)
             this.hud.setShip(shipActor)
             shipActor.setOnShipDestroyedCallback(() => { this.handleShipLoss() })
+            scene.add(shipActor); // Ensure the ship actor is added to the scene
         }
 
         this.engine.add('level1', scene)
@@ -51,18 +49,43 @@ export class SceneManager {
     handleShipLoss() {
         this.availableShips -= 1
         if (this.hud) this.hud.updateLives(this.availableShips)
-        if (this.availableShips > 0) this.resetScene()
-        else this.showGameOverScreen()
+        setTimeout(() => {
+            if (this.availableShips > 0) this.resetScene()
+            else this.showGameOverScreen()
+        }, 2500)
     }
 
     private async resetScene() {
-        //this.engine.remove('level1')        
-        this.registerScene
+        const loadingSceneName = `loading-${Date.now()}`
+        this.engine.add(loadingSceneName, new Scene())
+        this.engine.goToScene(loadingSceneName)
+        await new Promise(resolve => setTimeout(resolve, 50))
+        await this.registerScene()
     }
 
-    private showGameOverScreen() {
-        this.engine.remove('gameOver')
+    private async showGameOverScreen() {
+        const loadingSceneName = `loading-${Date.now()}`
+        this.engine.add(loadingSceneName, new Scene())
+        this.engine.goToScene(loadingSceneName)
+        await new Promise(resolve => setTimeout(resolve, 50))
         const gameOverScene = new Scene()
+        
+        const gameOverMessage = document.createElement('div')
+        gameOverMessage.className = 'game-over-message'
+        gameOverMessage.innerHTML = `
+            <h1>GAME OVER</h1>
+            <button id="restart-button">RESTART GAME</button>`
+        document.body.appendChild(gameOverMessage)
+        
+        const restartButton = document.getElementById('restart-button')
+        if (restartButton) {
+            restartButton.addEventListener('click', () => {
+                document.body.removeChild(gameOverMessage)
+                this.availableShips = 3
+                this.registerScene()
+            })
+        }
+        
         this.engine.add('gameOver', gameOverScene)
         this.engine.goToScene('gameOver')
     }

@@ -1,0 +1,44 @@
+.game-over-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-family: Arial, sans-serif;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 2000;
+    min-width: 300px;
+}
+
+.game-over-message h1 {
+    color: #ff0000;
+    margin-bottom: 20px;
+    font-size: 36px;
+    letter-spacing: 3px;
+}
+
+.game-over-message p {
+    margin-bottom: 30px;
+    font-size: 18px;
+    color: #cccccc;
+}
+
+#restart-button {
+    background: #0066ff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+#restart-button:hover {
+    background: #0055cc;
+}
