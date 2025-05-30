@@ -38,6 +38,10 @@ export class ShipActor extends BaseActor {
         this.rotation = (object.rotation ?? 0) - Math.PI / 2
     }
 
+    onInitialize(engine: Engine): void {
+        this.on('postcollision', (evt) => { this.explode()})
+    }
+
     onPreUpdate(engine: Engine, delta: number) {
         if (!this.shipController || !this.physics || !this.kinematics) return
         const cycleTime = delta / 350
@@ -98,7 +102,7 @@ export class ShipActor extends BaseActor {
     increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }
 
     explode() {
-        console.log('Ship exploded!')
+        console.log('💥 Ship exploded!')
         this.kill()
     }
 }

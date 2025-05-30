@@ -9,8 +9,12 @@ export class BallActor extends BaseActor {
     private mass = 100;
 
     constructor(object: TiledObject, mass: number) {
-        super(object, BALL, CollisionType.Passive)
+        super(object, BALL, CollisionType.Active)
         this.mass = mass;
+    }
+
+    onInitialize(engine: Engine): void {
+        this.on('postcollision', (evt) => { this.explode()})
     }
 
     getMass(): number {
@@ -23,5 +27,10 @@ export class BallActor extends BaseActor {
 
     addPos(pos: Vector) {
         this.pos = this.pos.add(pos)
+    }
+
+    explode() {
+        console.log('💥 Ball exploded!')
+        this.kill()
     }
 }

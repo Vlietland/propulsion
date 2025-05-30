@@ -9,4 +9,13 @@ export class TurretActor extends BaseActor {
     constructor(object: TiledObject) {
         super(object, TURRET, CollisionType.Fixed);
     }
+
+    onInitialize(engine: Engine): void {
+        this.on('postcollision', (evt) => { this.explode()})
+    }
+    
+    explode() {
+        console.log('💥 Turret exploded!')
+        this.kill()
+    }    
 }

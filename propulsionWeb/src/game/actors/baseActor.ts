@@ -17,8 +17,8 @@ export class BaseActor extends Actor {
         if (object.rotation == 90) correction.y = image.height
         super({
             pos: new Vector(object.x+image.width/2, object.y-image.height/2).add(correction),
-            width: image.width,
-            height: image.height,
+            //width: image.width,
+            //height: image.height,
             collisionType: collisionType,
         })
         this.rotation = object.rotation * (Math.PI / 180)
