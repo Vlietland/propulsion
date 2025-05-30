@@ -1,6 +1,7 @@
-import { Actor, Color, Vector, CollisionType, ImageSource, Shape } from 'excalibur'
 import { TiledObject } from '@excalibur-tiled/index'
-import { CollisionPoints } from '@src/game/physics/collision/collisionPoints'
+import { Actor, Color, Vector, CollisionType, ImageSource, Shape } from 'excalibur'
+import { CollisionPoints } from '@src/game/physics/collisionPoints'
+import { Explosion } from '@src/game/physics/explosion';
 
 export class BaseActor extends Actor {
     protected flip : boolean = false
@@ -66,5 +67,10 @@ export class BaseActor extends Actor {
                 }
             }
         }
+    }
+
+    protected explode() {
+        Explosion.spawn(this.scene, this.pos, this.rotation ?? 0);        
+        this.kill()
     }
 }

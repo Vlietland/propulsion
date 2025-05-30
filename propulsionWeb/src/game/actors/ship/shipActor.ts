@@ -1,11 +1,11 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { Camera, Actor, Vector, CollisionType, Engine, ImageSource, Color } from 'excalibur'
+import { ParticleEmitter, Camera, Actor, Vector, CollisionType, Engine, ImageSource, Color, Graphic, Circle } from 'excalibur'
 import { Kinematics } from '@src/game/actors/ship/kinematics'
 import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
 import { Physics } from '@src/game/physics/physics'
 import { TractorBeam } from '@src/game/actors/ship/tractorBeam'
-import { CollisionPoints } from '@src/game/physics/collision/collisionPoints'
+import { CollisionPoints } from '@src/game/physics/collisionPoints'
 import { BaseActor } from '@src/game/actors/baseActor';
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
@@ -28,6 +28,7 @@ export class ShipActor extends BaseActor {
     private tractorBeam?: TractorBeam
     private fuelLevel = FUEL_FULL
     private shipMass = 100
+    private onShipDestroyedCallback?: () => void;
 
     constructor(object: TiledObject, shipMass: number) {
         if (!object || object.x === undefined || object.y === undefined) return
@@ -93,16 +94,17 @@ export class ShipActor extends BaseActor {
 
     setCamera(camera: Camera) {this.camera = camera }
     setshipController(shipController: ShipController) {this.shipController = shipController }
+    public setOnShipDestroyedCallback(cb: () => void) {this.onShipDestroyedCallback = cb;}
     getTractorBeam() : TractorBeam | undefined{ return this.tractorBeam }
     getMass() : number { return this.shipMass }
     getBall() {return this.ballActor }
     isBallConnected(): boolean { return this.ballActor !== undefined && this.ballActor !== null; }
     getFuelLevel(): number { return this.fuelLevel }
     getMaxFuel(): number { return FUEL_FULL }
-    increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }
+    increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }    
 
-    explode() {
-        console.log('💥 Ship exploded!')
-        this.kill()
+    protected explode() {
+        super.explode();
+        if (this.onShipDestroyedCallback) this.onShipDestroyedCallback()
     }
 }

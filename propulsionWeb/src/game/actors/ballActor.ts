@@ -28,9 +28,4 @@ export class BallActor extends BaseActor {
     addPos(pos: Vector) {
         this.pos = this.pos.add(pos)
     }
-
-    explode() {
-        console.log('💥 Ball exploded!')
-        this.kill()
-    }
 }

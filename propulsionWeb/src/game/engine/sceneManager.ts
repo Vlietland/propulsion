@@ -34,7 +34,6 @@ export class SceneManager {
         await actorFactory.createActors(scene)
         
         const tilemapLayers = map.getTileLayers()
-                
         
         const shipActor = actorFactory.getShipActor()
         if (shipActor) {
@@ -42,6 +41,7 @@ export class SceneManager {
             shipActor.setshipController(new ShipController(this.engine))
             shipActor.setCamera(scene.camera)
             this.hud.setShip(shipActor)
+            shipActor.setOnShipDestroyedCallback(() => { this.handleShipLoss() })
         }
 
         this.engine.add('level1', scene)
@@ -50,24 +50,19 @@ export class SceneManager {
 
     handleShipLoss() {
         this.availableShips -= 1
-        if (this.hud) {
-            this.hud.updateLives(this.availableShips);
-        }
-        if (this.availableShips > 0) {
-            this.resetScene()
-        } else {
-            console.log('Game Over!')
-            this.showGameOverScreen()
-        }
+        if (this.hud) this.hud.updateLives(this.availableShips)
+        if (this.availableShips > 0) this.resetScene()
+        else this.showGameOverScreen()
     }
 
-    resetScene() {
-        this.engine.goToScene('level1')
+    private resetScene() {
+        //this.engine.remove('level1')        
+        this.registerScene
     }
 
-    showGameOverScreen() {
+    private showGameOverScreen() {
+        this.engine.remove('gameOver')
         const gameOverScene = new Scene()
-        // Add Game Over UI elements here
         this.engine.add('gameOver', gameOverScene)
         this.engine.goToScene('gameOver')
     }
