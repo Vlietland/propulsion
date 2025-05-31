@@ -3,14 +3,12 @@ import { Scene, Vector, Color, Circle, Actor, Line } from 'excalibur'
 export class HyperspaceView {
     static spawn(scene: Scene | null, pos: Vector, velocity: Vector) {
         if (!scene) return
-        
         HyperspaceView.spawnHyperspaceRings(scene, pos)
-        HyperspaceView.spawnLightStreaks(scene, pos, velocity)
         HyperspaceView.spawnParticles(scene, pos, velocity)
     }
 
     private static spawnHyperspaceRings(scene: Scene, pos: Vector) {
-        const ringCount = 5
+        const ringCount = 1
         const colors = [
             Color.Blue,
             Color.White,
@@ -33,8 +31,7 @@ export class HyperspaceView {
                     radius: radius,
                     color: colors[i % colors.length],
                     strokeColor: Color.White,
-                    lineWidth: 2,
-                    fill: false
+                    lineWidth: 2
                 })
                 
                 ring.graphics.use(circle)
@@ -46,75 +43,12 @@ export class HyperspaceView {
                 ring.on('preupdate', () => {
                     radius += growthRate
                     circle.radius = radius
-                    
                     ring.graphics.opacity *= 0.96
-                    
                     life--
                     if (life <= 0) ring.kill()
                 })
-                
                 scene.add(ring)
             }, delay)
-        }
-    }
-
-    private static spawnLightStreaks(scene: Scene, pos: Vector, velocity: Vector) {
-        const streakCount = 30
-        const baseLength = 200
-        const spread = Math.PI * 0.4
-        const direction = velocity.size ? velocity.toAngle() : 0
-        
-        for (let i = 0; i < streakCount; i++) {
-            const angle = direction + (Math.random() - 0.5) * spread
-            const length = baseLength + Math.random() * 500
-            
-            const streak = new Actor({
-                pos: pos.clone(),
-                anchor: Vector.Half
-            })
-            
-            const t = Math.random()
-            const color = HyperspaceView.lerpColor(
-                Color.White,
-                new Color(100, 170, 255),
-                t
-            )
-            
-            let currentLength = length
-            const thickness = 1 + Math.random() * 3
-            let endPoint = Vector.fromAngle(angle).scale(currentLength)
-            
-            const line = new Line({
-                start: Vector.Zero,
-                end: endPoint,
-                color: color,
-                thickness: thickness
-            })
-            
-            streak.graphics.use(line)
-            streak.graphics.opacity = 0.7 + Math.random() * 0.3
-            
-            let life = 20 + Math.floor(Math.random() * 40)
-            
-            streak.on('preupdate', () => {
-                currentLength *= 1.1
-                const newEndPoint = Vector.fromAngle(angle).scale(currentLength)
-                
-                const newLine = new Line({
-                    start: Vector.Zero,
-                    end: newEndPoint,
-                    color: color,
-                    thickness: thickness
-                })
-                
-                streak.graphics.use(newLine)
-                streak.graphics.opacity *= 0.95
-                
-                life--
-                if (life <= 0) streak.kill()
-            })
-            
-            scene.add(streak)
         }
     }
 

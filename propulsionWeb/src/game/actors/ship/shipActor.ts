@@ -34,7 +34,8 @@ export class ShipActor extends BaseActor {
     private lastShotTime: number = 0   
     private hyperspace?: Hyperspace
     private onShipLostCallback?: () => void
-    private onMissionFinishedCallback?: () => void    
+    private onMissionFinishedCallback?: () => void
+    private lastVelocity: Vector = new Vector(0, 0);
 
     constructor(object: TiledObject) {
         if (!object || object.x === undefined || object.y === undefined) return
@@ -67,10 +68,12 @@ export class ShipActor extends BaseActor {
         if (!this.isBallConnected()) {
             const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
             this.pos = this.pos.add(displacement)
+            this.lastVelocity = displacement.scale(1 / cycleTime)            
         } else { //connected
             const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
             this.pos = this.pos.add(displacement).add(shipDelta);
             this.ballActor?.addPos(displacement.clone().add(ballDelta));
+            this.lastVelocity = displacement.scale(1 / cycleTime)                        
         }
 
         const rotationDirection = this.shipController.getRotationDirection()
@@ -135,14 +138,20 @@ export class ShipActor extends BaseActor {
             if (this.shipController?.isUsingTractorBeam()) return
         }
         if (this.hyperspace?.checkHyperspaceReached(this)) {  
-            HyperspaceView.spawn(this.scene, this.pos, this.vel);        
+            this.ballActor?.enterHyperspace()
+            HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity);        
             if (this.onMissionFinishedCallback) this.onMissionFinishedCallback()
         }
-        else this.explode()
+        else {
+            if (this.isBallConnected()) this.ballActor?.explode()
+            this.explode()
+        }
     }
 
     protected explode(): void {
         super.explode()
         if (this.onShipLostCallback) this.onShipLostCallback()
-    }    
+    }   
+
+
 }
