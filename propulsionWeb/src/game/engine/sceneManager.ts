@@ -7,6 +7,7 @@ import { HUD } from '@src/game/ui/hud'
 import { GameOverScreen } from '@src/game/ui/gameOverScreen'
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { ShipActor } from '../actors/ship/shipActor'
+import { LevelManager } from '@src/game/engine/levelManager'
 
 const CAMERA_ZOOM = 0.8
 const MAIN_SCENE_NAME = 'level1'
@@ -17,6 +18,7 @@ const HYPERSPACE_DELAY = 2500
 
 export class SceneManager {
     private mapRenderer: MapRenderer
+    private levelManager: LevelManager
     private hud?: HUD
     private availableShips: number = 3
     private loadingScenes: string[] = []
@@ -24,6 +26,7 @@ export class SceneManager {
 
     constructor(private engine: Engine) {
         this.mapRenderer = new MapRenderer()
+        this.levelManager = new LevelManager()
     }
 
     private cleanupScenes() {
@@ -42,10 +45,13 @@ export class SceneManager {
     
     private handleMissionFinished() {
         if (this.shipActor) {
-            if (this.shipActor.isBallConnected())
-                console.log('Ball is connected, mission finished')
-            else
-                console.log('Ball is not connected, mission failed');
+            if (this.shipActor.isBallConnected()) {
+
+                this.levelManager.nextLevel()
+            }
+            else {
+                console.log('Ball is not connected, mission failed')
+            }
             this.shipActor.kill()
         }
         setTimeout(() => { this.resetScene() }, HYPERSPACE_DELAY)
@@ -76,7 +82,8 @@ export class SceneManager {
         this.hud.updateLives(this.availableShips)
         scene.add(this.hud)
 
-        const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json')
+        await this.levelManager.ensureInitialized()
+        const map = await this.levelManager.getMap(scene)
         const hyperspace = new Hyperspace(map)
         const actorFactory = new ActorFactory(map, hyperspace)
         const gravity = map?.map?.properties?.find((p: any) => p.name === 'gravity')
@@ -116,6 +123,7 @@ export class SceneManager {
         
         GameOverScreen.show(() => {
             this.availableShips = 3
+            this.levelManager.resetToFirstLevel()
             this.registerScene()
         })
     }
