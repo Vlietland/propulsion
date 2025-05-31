@@ -1,14 +1,16 @@
-import { Actor, CollisionType, Engine, ImageSource, Vector, CollisionStartEvent } from 'excalibur'
-import { BaseActor } from './baseActor'
+import { Actor, CollisionType, Engine, ImageSource, Vector, CollisionStartEvent, Timer, Scene } from 'excalibur'
+import { BaseActor } from '@src/game/actors/baseActor'
 import { TiledObject, TiledProperty } from '@excalibur-tiled/index'
-import { ShipActor } from './ship/shipActor'
+import { ShipActor } from '@src/game/actors/ship/shipActor'
 
 export const BULLET = new ImageSource('/images/tiles/bullet.png')
 BULLET.load()
 
 export class BulletActor extends BaseActor {
-    private static readonly SPEED = 200
+    private static readonly SPEED = 300
+    private static readonly LIFETIME = 3000
     private firer: Actor
+    private lifetimeTimer?: Timer
 
     constructor(pos: Vector, direction: Vector, firer: Actor) {
         const object: TiledObject = {
@@ -33,6 +35,23 @@ export class BulletActor extends BaseActor {
     onInitialize(engine: Engine) {
         super.onInitialize(engine)
         this.on('postcollision', (evt) => this.onCollision(evt as CollisionStartEvent))
+        this.lifetimeTimer = new Timer({
+            fcn: () => { if (!this.isKilled()) this.kill() },
+            interval: BulletActor.LIFETIME,
+            repeats: false
+        })
+        engine.currentScene.add(this.lifetimeTimer)
+        this.lifetimeTimer.start()
+    }
+
+    onPreKill(scene: Scene): void {
+        if (this.lifetimeTimer) {
+            this.lifetimeTimer.stop()
+            if (scene) scene.remove(this.lifetimeTimer)
+            else if (this.scene) this.scene.remove(this.lifetimeTimer)
+            this.lifetimeTimer = undefined
+        }
+        super.onPreKill(scene)
     }
 
     private onCollision(evt: CollisionStartEvent): void {

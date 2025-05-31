@@ -1,6 +1,6 @@
-@import '@src/styles/hud.scss';
-@import '@src/styles/menu.scss';
-@import '@src/styles/game-over.scss';
+@use '@src/styles/hud.scss';
+@use '@src/styles/menu.scss';
+@use '@src/styles/game-over.scss';
 
 body {
   margin: 0;
