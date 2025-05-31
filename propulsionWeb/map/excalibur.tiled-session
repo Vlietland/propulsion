@@ -27,14 +27,17 @@
             "scaleInDock": 1
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json": {
-            "scale": 0.8505,
-            "selectedLayer": 1,
+            "scale": 0.4549,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1152.2633744855966,
-                "y": 503.8212815990593
+                "x": 2736.865245108815,
+                "y": 1605.8474389975818
             }
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/public/images/tiles.tsx": {
+            "scaleInDock": 1
+        },
+        ":/automap-tiles.tsx": {
             "scaleInDock": 1
         },
         "excalibur.json": {
