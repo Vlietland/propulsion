@@ -1,7 +1,7 @@
 import { TiledObject } from '@excalibur-tiled/index'
 import { Actor, Color, Vector, CollisionType, ImageSource, Shape } from 'excalibur'
 import { CollisionPoints } from '@src/game/physics/collisionPoints'
-import { Explosion } from '@src/game/physics/explosion';
+import { Explosion } from '@src/game/ui/explosion';
 
 export class BaseActor extends Actor {
     protected flip : boolean = false

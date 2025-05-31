@@ -2,7 +2,7 @@ import { Actor, CollisionType, Engine, ImageSource, Vector, CollisionStartEvent,
 import { BaseActor } from '@src/game/actors/baseActor'
 import { TiledObject, TiledProperty } from '@excalibur-tiled/index'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
-import { Explosion } from '@src/game/physics/explosion'
+import { Explosion } from '@src/game/ui/explosion'
 
 export const BULLET = new ImageSource('/images/tiles/bullet.png')
 BULLET.load()

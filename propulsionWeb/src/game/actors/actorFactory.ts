@@ -7,13 +7,22 @@ import { LaserActor } from '@src/game/actors/laserActor'
 import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { TransformerActor } from '@src/game/actors/transformerActor'
 import { BallStoreActor } from '@src/game/actors/ballStoreActor'
+import { Hyperspace } from '@src/game/physics/hyperspace'
 
 export class ActorFactory {
     private shipActor: ShipActor | null = null
+    private hyperspace?: Hyperspace
     private transformers: TransformerActor[] = []
     private lasers: LaserActor[] = []
+    private map: any
 
-    constructor(private map: any) {}
+    constructor(map: any, hyperspace: Hyperspace) {
+        if (!map || !map.layers) {
+            throw new Error('Invalid map data: "layers" property is missing or undefined.')
+        }
+        this.map = map
+        this.hyperspace = hyperspace
+    }
 
     async createActors(scene: Scene, enemyLevel: number): Promise<void> {
         if (!this.map || !this.map.layers) {
@@ -59,6 +68,7 @@ export class ActorFactory {
     }
 
     private async createActorFromObject(object: any, enemyLevel: number): Promise<Actor | null> {
+        if (this.hyperspace === undefined) return null
         let actor: Actor | null = null
         switch (object.name) {
             case 'ship':
@@ -67,6 +77,7 @@ export class ActorFactory {
             case 'ball':
                 const ballActor = new BallActor(object);
                 this.shipActor?.getTractorBeam()?.setBall(ballActor);
+                this.shipActor?.setHyperspace(this.hyperspace);
                 actor = ballActor;
                 break;
             case 'reactor':
@@ -91,6 +102,7 @@ export class ActorFactory {
                 actor = new BallStoreActor(object);
                 break;
             default:
+                return null;
         }
 
         return actor;

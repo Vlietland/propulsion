@@ -133,7 +133,11 @@ export class ShipActor extends BaseActor {
             if (bullet.getFirer() === this) return
             if (this.shipController?.isUsingTractorBeam()) return
         }
-        this.explode();
+        if (this.hyperspace?.checkHyperspaceReached(this)) {  
+            this.kill()
+            if (this.onMissionFinishedCallback) this.onMissionFinishedCallback()
+        }
+        else this.explode()
     }
 
     protected explode(): void {
