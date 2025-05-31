@@ -30,6 +30,9 @@ export class LevelManager {
         return await this.mapRenderer.loadAndRenderMap(scene, this.getLevelFilename())
     }
 
+    public async ensureInitialized(): Promise<void> {
+        if (this.levelCheckPromise) await this.levelCheckPromise }
+
     private async checkTotalLevels(): Promise<void> {
         let level = 1
         let found = true
@@ -55,9 +58,6 @@ export class LevelManager {
             this.totalLevels = 1
         }
     }    
-
-    private async ensureInitialized(): Promise<void> {
-        if (this.levelCheckPromise) await this.levelCheckPromise }
         
     private getLevelFilename(): string { return `level${this.currentLevel}.json` }
     private isLastLevel(): boolean { return this.currentLevel >= this.totalLevels }
