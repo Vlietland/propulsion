@@ -1,6 +1,5 @@
 import { Scene } from 'excalibur'
 import { MapRenderer } from '@src/game/engine/mapRenderer'
-import { TiledResource } from '@excalibur-tiled/resource/tiled-resource'
 
 const LEVEL_DATA_PATH = '/levels/'
 

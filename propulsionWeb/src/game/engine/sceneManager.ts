@@ -1,5 +1,4 @@
 import { Scene, Engine, TileMap, Actor } from 'excalibur'
-import { MapRenderer } from '@src/game/engine/mapRenderer'
 import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
@@ -17,7 +16,6 @@ const EXPLOSION_DELAY = 2500
 const HYPERSPACE_DELAY = 2500
 
 export class SceneManager {
-    private mapRenderer: MapRenderer
     private levelManager: LevelManager
     private hud?: HUD
     private availableShips: number = 3
@@ -25,7 +23,6 @@ export class SceneManager {
     private shipActor?: ShipActor
 
     constructor(private engine: Engine) {
-        this.mapRenderer = new MapRenderer()
         this.levelManager = new LevelManager()
     }
 
