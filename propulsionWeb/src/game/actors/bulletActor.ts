@@ -27,6 +27,7 @@ export class BulletActor extends BaseActor {
         this.vel = direction.normalize().scale(BulletActor.SPEED)
         this.rotation = direction.toAngle()        
         this.graphics.use(BULLET.toSprite())
+        this.z = -1
     }
 
     onInitialize(engine: Engine) {
@@ -35,10 +36,9 @@ export class BulletActor extends BaseActor {
     }
 
     private onCollision(evt: CollisionStartEvent): void {
-        if (evt.other instanceof BulletActor || evt.other instanceof ShipActor) {
-            return
-        }
-        this.kill()
+        const otherActor = evt.other?.owner
+        if (otherActor === this.firer) return
+        this.kill();
     }
 
     public getFirer(): Actor {

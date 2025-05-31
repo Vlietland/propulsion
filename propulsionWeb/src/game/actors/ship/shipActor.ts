@@ -19,6 +19,7 @@ const THRUST_FORCE = 5000
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 10
 const GUN_COOLDOWN = 100
+const GUN_POSITION_OFFSET = 50
 
 export class ShipActor extends BaseActor {
     private physics?: Physics
@@ -86,15 +87,8 @@ export class ShipActor extends BaseActor {
         this.lastShotTime = currentTime
 
         const direction = Vector.fromAngle(this.rotation)
-        const shipFrontOffset = this.height / 2 + 5
+        const shipFrontOffset = GUN_POSITION_OFFSET
         const bulletStartPosition = this.pos.add(direction.scale(shipFrontOffset))
-
-        console.log(`[ShipActor.fire] Firing! Rotation: ${this.rotation} (deg: ${this.rotation * 180 / Math.PI})`);
-        console.log(`[ShipActor.fire] Direction: x=${direction.x.toFixed(2)}, y=${direction.y.toFixed(2)}`);
-        console.log(`[ShipActor.fire] Ship Height: ${this.height}, FrontOffset: ${shipFrontOffset}`);
-        console.log(`[ShipActor.fire] Bullet Start Pos: x=${bulletStartPosition.x.toFixed(2)}, y=${bulletStartPosition.y.toFixed(2)}`);
-        console.log(`[ShipActor.fire] Ship Pos: x=${this.pos.x.toFixed(2)}, y=${this.pos.y.toFixed(2)}`);
-
         const bullet = new BulletActor(bulletStartPosition, direction, this)
         engine.currentScene.add(bullet)
     }
