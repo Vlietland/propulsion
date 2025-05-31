@@ -8,6 +8,7 @@ import { TractorBeam } from '@src/game/actors/ship/tractorBeam'
 import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { Hyperspace } from '@src/game/physics/hyperspace'
+import { HyperspaceView } from '@src/game/ui/hyperspaceView'
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
 const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
@@ -134,7 +135,7 @@ export class ShipActor extends BaseActor {
             if (this.shipController?.isUsingTractorBeam()) return
         }
         if (this.hyperspace?.checkHyperspaceReached(this)) {  
-            this.kill()
+            HyperspaceView.spawn(this.scene, this.pos, this.rotation ?? 0);        
             if (this.onMissionFinishedCallback) this.onMissionFinishedCallback()
         }
         else this.explode()

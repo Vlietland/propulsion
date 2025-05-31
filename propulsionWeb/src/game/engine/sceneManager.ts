@@ -6,18 +6,21 @@ import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
 import { GameOverScreen } from '@src/game/ui/gameOverScreen'
 import { Hyperspace } from '@src/game/physics/hyperspace'
+import { ShipActor } from '../actors/ship/shipActor'
 
 const CAMERA_ZOOM = 0.8
 const MAIN_SCENE_NAME = 'level1'
 const GAME_OVER_SCENE_NAME = 'gameOver'
 const TRANSITION_DELAY = 50
 const EXPLOSION_DELAY = 2500
+const HYPERSPACE_DELAY = 2500
 
 export class SceneManager {
     private mapRenderer: MapRenderer
     private hud?: HUD
     private availableShips: number = 3
     private loadingScenes: string[] = []
+    private shipActor?: ShipActor
 
     constructor(private engine: Engine) {
         this.mapRenderer = new MapRenderer()
@@ -38,7 +41,14 @@ export class SceneManager {
     }
     
     private handleMissionFinished() {
-
+        if (this.shipActor) {
+            if (this.shipActor.isBallConnected())
+                console.log('Ball is connected, mission finished')
+            else
+                console.log('Ball is not connected, mission failed');
+            this.shipActor.kill()
+        }
+        setTimeout(() => { this.resetScene() }, HYPERSPACE_DELAY)
     }
 
     private async resetScene() {
@@ -76,6 +86,7 @@ export class SceneManager {
         
         const shipActor = actorFactory.getShipActor()
         if (shipActor) {
+            this.shipActor = shipActor
             shipActor.setPhysics(physics)
             shipActor.setshipController(new ShipController(this.engine))
             shipActor.setCamera(scene.camera)
