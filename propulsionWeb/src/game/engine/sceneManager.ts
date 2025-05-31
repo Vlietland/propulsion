@@ -27,7 +27,7 @@ export class SceneManager {
         this.loadingScenes = []
     }
 
-    handleShipLoss() {
+    private handleShipLost() {
         this.availableShips -= 1
         if (this.hud) this.hud.updateLives(this.availableShips)
         setTimeout(() => {
@@ -63,8 +63,10 @@ export class SceneManager {
 
         const map = await this.mapRenderer.loadAndRenderMap(scene, 'level1.json')
         const actorFactory = new ActorFactory(map)
-        const physics = new Physics(map.map.properties[1].value)
-        await actorFactory.createActors(scene)
+        const gravity = map?.map?.properties?.find((p: any) => p.name === 'gravity')
+        const enemyLevel = map?.map?.properties?.find((p: any) => p.name === 'enemyLevel')
+        const physics = new Physics(gravity.value || 0)
+        await actorFactory.createActors(scene, enemyLevel.value)
         
         const shipActor = actorFactory.getShipActor()
         if (shipActor) {
@@ -72,7 +74,7 @@ export class SceneManager {
             shipActor.setshipController(new ShipController(this.engine))
             shipActor.setCamera(scene.camera)
             this.hud.setShip(shipActor)
-            shipActor.setOnShipDestroyedCallback(() => { this.handleShipLoss() })
+            shipActor.setShipLostCallback(() => { this.handleShipLost() })
         }
         this.engine.add(MAIN_SCENE_NAME, scene)
         this.engine.goToScene(MAIN_SCENE_NAME)

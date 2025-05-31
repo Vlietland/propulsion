@@ -11,20 +11,66 @@ export class LaserActor extends BaseActor {
     private directionVector: Vector
     private readonly MAX_BEAMS = 6
     private object: TiledObject
+    private groupID: number | undefined = undefined
+    private enableTimer: number = 0
+    private disableDelay: number = 5000
 
     constructor(object: TiledObject) {
         super(object, LASER, CollisionType.Fixed)
         this.object = object
-        // Convert object rotation from degrees to radians for proper direction calculation
         const rotationRad = object.rotation !== undefined ? (object.rotation * Math.PI / 180) : this.rotation
         this.directionVector = this.calcDirectionVector(rotationRad)
+        if (object && object.properties) {
+            if (object.properties instanceof Map) {
+                this.groupID = Number(object.properties.get('group'))
+                this.disableDelay = Number(object.properties.get('delay')) * 1000 || 5000               
+            }
+        }
+
     }
 
     onInitialize(engine: Engine): void {
-        this.startlaser(this.object)
+        if (this.enableTimer) {
+            clearTimeout(this.enableTimer)
+            this.enableTimer = 0
+        }
+        this.enable(this.object)
     }
 
-    private startlaser(object: TiledObject): void {
+    public disable(): void {
+        for (const beam of this.laserBeams) {
+            if (beam.scene) {
+                beam.kill()
+                beam.scene.remove(beam)
+            }
+        }
+        this.laserBeams = []
+        this.enableAfterDelay()
+    }
+
+    public getGroupID(): number | undefined { return this.groupID}
+    
+    public enableAfterDelay(delay: number = this.disableDelay): void {
+        if (this.enableTimer) {
+            clearTimeout(this.enableTimer)
+        }
+        
+        this.enableTimer = window.setTimeout(() => {
+            if (this.scene) {
+                this.enable(this.object)
+            }
+        }, delay)
+    }
+    
+    public enableNow(): void {
+        if (this.enableTimer) {
+            clearTimeout(this.enableTimer)
+            this.enableTimer = 0
+        }
+        this.enable(this.object)
+    }
+
+    private enable(object: TiledObject): void {
         if (object.x === undefined || object.y === undefined || 
             object.width === undefined || object.height === undefined) return        
         if (this.laserBeams.length != 0) return
@@ -57,16 +103,6 @@ export class LaserActor extends BaseActor {
             currentBeamPos = currentBeamPos.add(this.directionVector.scale(tileWidth))
             beamCount++;
         }
-    }
-
-    public stopLaser(): void {
-        for (const beam of this.laserBeams) {
-            if (beam.scene) {
-                beam.kill()
-                beam.scene.remove(beam)
-            }
-        }
-        this.laserBeams = []
     }
 
     private calcDirectionVector(rotation: number): Vector {

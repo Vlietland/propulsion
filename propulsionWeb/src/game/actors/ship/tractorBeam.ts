@@ -4,7 +4,7 @@ import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
 
 const TRACTOR_WIDTH = 100
-const TRACTOR_POWER = 20
+const TRACTOR_POWER = 50
 const TRACTOR_REACH = 220
 
 export class TractorBeam {
@@ -12,27 +12,22 @@ export class TractorBeam {
     private ballActor?: BallActor
     private shipActor: ShipActor
 
-    constructor(shipActor: ShipActor) {
-        this.shipActor = shipActor
-    }
+    constructor(shipActor: ShipActor) { this.shipActor = shipActor }
 
-    addFuelTank(fuelTankActor: FuelTankActor): void {
-        this.fuelTanks.push(fuelTankActor)
-    }
+    public addFuelTank(fuelTankActor: FuelTankActor): void { this.fuelTanks.push(fuelTankActor) }
+    public setBall(ballActor: BallActor): void { this.ballActor = ballActor }
 
-    setBall(ballActor: BallActor): void {
-        this.ballActor = ballActor
-    }
-
-    attractObjects(shipPos: Vector): void {
+    public attractObjects(shipPos: Vector): void {
         if (this.ballActor)
         if (this.ballActor && !this.shipActor.isBallConnected() && this.isWithinRange(this.ballActor.pos, shipPos)) {
             this.attract(this.ballActor)
         }
         for (const fuelTank of this.fuelTanks) {
             if (this.isWithinRange(fuelTank.pos, shipPos)) {
-                const fuel = fuelTank.decreaseFuel(TRACTOR_POWER)
-                this.shipActor.increaseFuel(fuel)
+                if (this.shipActor.getFuelLevel() + TRACTOR_POWER < this.shipActor.getMaxFuel()) {
+                    const fuel = fuelTank.decreaseFuel(TRACTOR_POWER)
+                    this.shipActor.increaseFuel(fuel)
+                }
             }
         }
     }

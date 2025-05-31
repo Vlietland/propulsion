@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="tiles" tilewidth="128" tileheight="128" tilecount="11" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="tiles" tilewidth="128" tileheight="128" tilecount="12" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image source="tiles/ball.png" width="128" height="128"/>
@@ -26,12 +26,15 @@
   <image source="tiles/laser.png" width="128" height="128"/>
  </tile>
  <tile id="8">
-  <image source="tiles/fuelTank.png" width="128" height="128"/>
+  <image source="tiles/fuelTankFull.png" width="128" height="128"/>
  </tile>
  <tile id="9">
   <image source="tiles/transformer.png" width="128" height="128"/>
  </tile>
  <tile id="10">
   <image source="tiles/ballStore.png" width="128" height="128"/>
+ </tile>
+ <tile id="11">
+  <image source="tiles/hyperspace.png" width="128" height="128"/>
  </tile>
 </tileset>

@@ -8,9 +8,13 @@ await BALL.load()
 export class BallActor extends BaseActor {
     private mass = 100;
 
-    constructor(object: TiledObject, mass: number) {
+    constructor(object: TiledObject) {     
         super(object, BALL, CollisionType.Active)
-        this.mass = mass;
+        if (object && object.properties) {
+            if (object.properties instanceof Map) {
+                this.mass = Number(object.properties.get('mass') || 100)
+            }
+        }
     }
 
     onInitialize(engine: Engine): void {

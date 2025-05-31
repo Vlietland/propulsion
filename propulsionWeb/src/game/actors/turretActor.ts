@@ -2,31 +2,35 @@ import { TiledObject } from '@excalibur-tiled/index'
 import { Engine, CollisionType, Vector, ImageSource, Timer, Scene, CollisionStartEvent } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from './bulletActor';
-CollisionStartEvent
+
 export const TURRET = new ImageSource('/images/tiles/turret.png');
 await TURRET.load();
 
-const TURRET_FIRE_INTERVAL = 1000;
+const TURRET_FIRE_INTERVAL = 5000;
 const TURRET_BULLET_OFFSET = 80;
 
 export class TurretActor extends BaseActor {
-    private fireTimer!: Timer;
+    private fireTimer!: Timer
+    private fireRate: number = 99999
 
-    constructor(object: TiledObject) {
-        super(object, TURRET, CollisionType.Fixed);
+    constructor(object: TiledObject, enemyLevel: number) {
+        super(object, TURRET, CollisionType.Fixed)
+        if (enemyLevel > 0) this.fireRate = TURRET_FIRE_INTERVAL / enemyLevel
     }
 
     onInitialize(engine: Engine): void {
         super.onInitialize(engine);
         this.on('postcollision', (evt) => this.handleCollision(evt as CollisionStartEvent))
-
+        
         this.fireTimer = new Timer({
             fcn: () => this.fire(engine),
-            interval: TURRET_FIRE_INTERVAL,
+            interval: this.fireRate,
             repeats: true
         })
-        engine.currentScene.add(this.fireTimer);
-        this.fireTimer.start();
+        engine.currentScene.add(this.fireTimer)
+
+        const randomDelay = Math.random() * this.fireRate        
+        setTimeout(() => {if (!this.isKilled()) this.fireTimer.start() }, randomDelay)
     }
 
     private fire(engine: Engine): void {
@@ -36,14 +40,13 @@ export class TurretActor extends BaseActor {
         const bulletStartPosition = this.pos.add(direction.scale(TURRET_BULLET_OFFSET));
         const bullet = new BulletActor(bulletStartPosition, direction, this);
         engine.currentScene.add(bullet);
+        this.fireTimer.interval = this.fireRate * 0.7 + Math.random() * 0.6 // Range: 0.7-1.3 (±30%)
     }
 
     onPreKill(scene: Scene): void {
         if (this.fireTimer) {
             this.fireTimer.stop();
-            if (scene) {
-                scene.remove(this.fireTimer);
-            }
+            if (scene) scene.remove(this.fireTimer)
         }
         super.onPreKill(scene);
     }

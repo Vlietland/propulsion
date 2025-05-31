@@ -10,9 +10,12 @@ import { BallStoreActor } from '@src/game/actors/ballStoreActor'
 
 export class ActorFactory {
     private shipActor: ShipActor | null = null
+    private transformers: TransformerActor[] = []
+    private lasers: LaserActor[] = []
+
     constructor(private map: any) {}
 
-    async createActors(scene: Scene): Promise<void> {
+    async createActors(scene: Scene, enemyLevel: number): Promise<void> {
         if (!this.map || !this.map.layers) {
             throw new Error('Invalid map data: "layers" property is missing or undefined.')
         }
@@ -26,7 +29,7 @@ export class ActorFactory {
         for (const layer of objectLayers) {
             const shipObject = layer.objects.find((object: any) => object.name === 'ship')
             if (shipObject) {
-                const shipActor = await this.createActorFromObject(shipObject)
+                const shipActor = await this.createActorFromObject(shipObject, enemyLevel)
                 if (shipActor instanceof ShipActor) {
                     this.shipActor = shipActor
                     scene.add(shipActor)
@@ -37,24 +40,32 @@ export class ActorFactory {
         for (const layer of objectLayers) {
             for (const object of layer.objects) {
                 if (object.name !== 'ship') {
-                    const actor = await this.createActorFromObject(object)
+                    const actor = await this.createActorFromObject(object, enemyLevel)
                     if (actor) scene.add(actor)
+                }
+            }
+        }
+
+        for (const transformer of this.transformers) {
+            const transformerGroup = transformer.getGroupID()
+            if (transformerGroup === undefined) continue
+            for (const laser of this.lasers) {
+                if (laser.getGroupID() === transformerGroup) {
+                    transformer.setLaser(laser)
+                    break
                 }
             }
         }
     }
 
-    private async createActorFromObject(object: any): Promise<Actor | null> {
-        let actor: Actor
-        let mass = 0
+    private async createActorFromObject(object: any, enemyLevel: number): Promise<Actor | null> {
+        let actor: Actor | null = null
         switch (object.name) {
             case 'ship':
-                mass = Number(object.properties.get('mass'))
-                actor = new ShipActor(object, mass);
+                actor = new ShipActor(object);
                 break;
             case 'ball':
-                mass = Number(object.properties.get('mass'))                
-                const ballActor = new BallActor(object, mass);
+                const ballActor = new BallActor(object);
                 this.shipActor?.getTractorBeam()?.setBall(ballActor);
                 actor = ballActor;
                 break;
@@ -63,27 +74,23 @@ export class ActorFactory {
                 break;
             case 'fueltank':
                 actor = new FuelTankActor(object);
+                this.shipActor?.getTractorBeam()?.addFuelTank(actor as FuelTankActor);
                 break;
             case 'turret':
-                actor = new TurretActor(object);
+                actor = new TurretActor(object, enemyLevel);
                 break;
             case 'laser':
                 actor = new LaserActor(object);
+                this.lasers.push(actor as LaserActor);
                 break;
             case 'transformer':
                 actor = new TransformerActor(object);
+                this.transformers.push(actor as TransformerActor);
                 break;
             case 'ballStore':
                 actor = new BallStoreActor(object);
                 break;
             default:
-                actor = new Actor({
-                    pos: new Vector(object.x, object.y),
-                    width: object.width,
-                    height: object.height,
-                    collisionType: CollisionType.Fixed,
-                });
-                break;
         }
 
         return actor;

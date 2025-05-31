@@ -2,6 +2,7 @@ import { Actor, CollisionType, Engine, ImageSource, Vector, CollisionStartEvent,
 import { BaseActor } from '@src/game/actors/baseActor'
 import { TiledObject, TiledProperty } from '@excalibur-tiled/index'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
+import { Explosion } from '@src/game/physics/explosion'
 
 export const BULLET = new ImageSource('/images/tiles/bullet.png')
 BULLET.load()
@@ -57,7 +58,9 @@ export class BulletActor extends BaseActor {
     private onCollision(evt: CollisionStartEvent): void {
         const otherActor = evt.other?.owner
         if (otherActor === this.firer) return
-        this.kill();
+        
+        Explosion.spawnSmall(this.scene, this.pos)
+        this.kill()
     }
 
     public getFirer(): Actor {
