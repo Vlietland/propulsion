@@ -7,6 +7,8 @@ export class HUD extends ScreenElement {
     private fuelBarElement: HTMLElement
     private statusElement: HTMLElement
     private livesElement: HTMLElement
+    private levelElement: HTMLElement
+    private scoreElement: HTMLElement
     
     constructor() {
         super();
@@ -27,6 +29,10 @@ export class HUD extends ScreenElement {
         this.hudElement.appendChild(this.statusElement);
         this.livesElement = this.createLabel('LIVES: 3');
         this.hudElement.appendChild(this.livesElement);
+        this.levelElement = this.createLabel('LEVEL: 1');
+        this.hudElement.appendChild(this.levelElement);
+        this.scoreElement = this.createLabel('SCORE: 0');
+        this.hudElement.appendChild(this.scoreElement);
     }
 
     private createLabel(text: string): HTMLElement {
@@ -55,6 +61,14 @@ export class HUD extends ScreenElement {
 
     updateLives(lives: number): void {
         this.livesElement.textContent = `LIVES: ${lives}`;
+    }
+
+    updateLevel(level: number): void {
+        this.levelElement.textContent = `LEVEL: ${level}`;
+    }
+
+    updateScore(score: number): void {
+        this.scoreElement.textContent = `SCORE: ${score}`;
     }
 
     dispose(): void {
