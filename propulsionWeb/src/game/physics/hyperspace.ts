@@ -34,9 +34,9 @@ export class Hyperspace {
     }
 
     private isAtHorizontalEdge(position: Vector): boolean {
-        const boundaryTiles = 10
-        const leftEdge = position.x <= boundaryTiles * this.tileWidth
-        const rightEdge = position.x >= (this.mapWidth - boundaryTiles) * this.tileWidth
+        const boundaryTiles = 7
+        const leftEdge = position.x <= boundaryTiles * 2*this.tileWidth
+        const rightEdge = position.x >= (this.mapWidth - 2*boundaryTiles) * this.tileWidth
         
         return leftEdge || rightEdge
     }

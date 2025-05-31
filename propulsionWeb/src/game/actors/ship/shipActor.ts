@@ -135,7 +135,7 @@ export class ShipActor extends BaseActor {
             if (this.shipController?.isUsingTractorBeam()) return
         }
         if (this.hyperspace?.checkHyperspaceReached(this)) {  
-            HyperspaceView.spawn(this.scene, this.pos, this.rotation ?? 0);        
+            HyperspaceView.spawn(this.scene, this.pos, this.vel);        
             if (this.onMissionFinishedCallback) this.onMissionFinishedCallback()
         }
         else this.explode()

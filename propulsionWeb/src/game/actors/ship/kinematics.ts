@@ -64,4 +64,5 @@ export class Kinematics {
     setObjectAngle(objectAngle: number) { this.objectAngle = objectAngle }
     setTowLength(towLength: number) { this.towLength = towLength }
     resetObjectVelocity() { this.objectVelocity = Vector.Zero }
+    getVelocity() { return this.objectVelocity }
 }

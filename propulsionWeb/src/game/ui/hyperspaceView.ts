@@ -1,12 +1,12 @@
 import { Scene, Vector, Color, Circle, Actor, Line } from 'excalibur'
 
 export class HyperspaceView {
-    static spawn(scene: Scene | null, pos: Vector, direction: number) {
+    static spawn(scene: Scene | null, pos: Vector, velocity: Vector) {
         if (!scene) return
         
         HyperspaceView.spawnHyperspaceRings(scene, pos)
-        HyperspaceView.spawnLightStreaks(scene, pos, direction)
-        HyperspaceView.spawnParticles(scene, pos, direction)
+        HyperspaceView.spawnLightStreaks(scene, pos, velocity)
+        HyperspaceView.spawnParticles(scene, pos, velocity)
     }
 
     private static spawnHyperspaceRings(scene: Scene, pos: Vector) {
@@ -58,10 +58,11 @@ export class HyperspaceView {
         }
     }
 
-    private static spawnLightStreaks(scene: Scene, pos: Vector, direction: number) {
+    private static spawnLightStreaks(scene: Scene, pos: Vector, velocity: Vector) {
         const streakCount = 30
         const baseLength = 200
         const spread = Math.PI * 0.4
+        const direction = velocity.size ? velocity.toAngle() : 0
         
         for (let i = 0; i < streakCount; i++) {
             const angle = direction + (Math.random() - 0.5) * spread
@@ -117,11 +118,12 @@ export class HyperspaceView {
         }
     }
 
-    private static spawnParticles(scene: Scene, pos: Vector, direction: number) {
+    private static spawnParticles(scene: Scene, pos: Vector, velocity: Vector) {
         const spread = Math.PI * 2
         const minSpeed = 50
         const maxSpeed = 400
         const particleCount = 25
+        const direction = velocity.size ? velocity.toAngle() : 0
 
         for (let i = 0; i < particleCount; i++) {
             const angle = direction + (Math.random() - 0.5) * spread
