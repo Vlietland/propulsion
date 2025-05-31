@@ -15,6 +15,8 @@ const GAME_OVER_SCENE_NAME = 'gameOver'
 const TRANSITION_DELAY = 50
 const EXPLOSION_DELAY = 2500
 const HYPERSPACE_DELAY = 2500
+const MISSION_FAILED_SCORE = -1000
+const MISSION_SUCCESS_SCORE = 2000
 
 export class SceneManager {
     private levelManager: LevelManager
@@ -27,6 +29,7 @@ export class SceneManager {
     constructor(private engine: Engine) {
         this.levelManager = new LevelManager()
         this.scoreManager = new ScoreManager()
+        this.hud = new HUD(this.scoreManager)
     }
 
     private cleanupScenes() {
@@ -47,11 +50,11 @@ export class SceneManager {
         if (this.shipActor) {
             if (this.shipActor.isBallConnected()) {
                 this.levelManager.nextLevel()
-                this.scoreManager.addPoints(100) // Example score increment
+                this.scoreManager.addScore(MISSION_SUCCESS_SCORE)
                 if (this.hud) this.hud.updateScore(this.scoreManager.getScore())
             }
             else {
-                console.log('Ball is not connected, mission failed')
+                this.scoreManager.addScore(MISSION_FAILED_SCORE)
             }
             this.shipActor.kill()
         }
@@ -79,7 +82,7 @@ export class SceneManager {
         }
         const scene = new Scene()
         scene.camera.zoom = CAMERA_ZOOM
-        this.hud = new HUD()
+        this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(this.availableShips)
         this.hud.updateScore(this.scoreManager.getScore())
         scene.add(this.hud)

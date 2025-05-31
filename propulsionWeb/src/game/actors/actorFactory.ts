@@ -13,7 +13,7 @@ import { ScoreManager } from '../engine/scoreManager'
 export class ActorFactory {
     private shipActor: ShipActor | null = null
     private hyperspace?: Hyperspace
-    private scoreManager?: ScoreManager
+    private scoreManager: ScoreManager
     private transformers: TransformerActor[] = []
     private lasers: LaserActor[] = []
     private map: any
@@ -87,7 +87,7 @@ export class ActorFactory {
                 actor = new ReactorActor(object, this.scoreManager);
                 break;
             case 'fueltank':
-                actor = new FuelTankActor(object, this);
+                actor = new FuelTankActor(object, this.scoreManager);
                 this.shipActor?.getTractorBeam()?.addFuelTank(actor as FuelTankActor);
                 break;
             case 'turret':

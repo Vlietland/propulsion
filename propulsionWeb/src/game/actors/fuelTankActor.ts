@@ -7,6 +7,7 @@ export const FUEL_TANK_FULL = new ImageSource('/images/tiles/fuelTankFull.png')
 export const FUEL_TANK_EMPTY = new ImageSource('/images/tiles/fuelTankEmpty.png')
 await FUEL_TANK_FULL.load()
 await FUEL_TANK_EMPTY.load()
+const FUEL_SCORE = 5;
 
 export class FuelTankActor extends BaseActor {
     private FUEL_FULL = 1000;
@@ -27,11 +28,11 @@ export class FuelTankActor extends BaseActor {
             this.fuelLevel = 0
         }
         this.fuelLevel -= decrease
-        this.scoreManager.addScore(5);
         if (this.fuelLevel <= 0) {
             this.fuelLevel = 0
             this.graphics.use(FUEL_TANK_EMPTY.toSprite())
         }
+        this.scoreManager.addScore(FUEL_SCORE);        
         return decrease
     }
 

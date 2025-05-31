@@ -1,5 +1,6 @@
 import { System, SystemType, World, Scene, ScreenElement, Engine } from 'excalibur'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
+import { ScoreManager } from '@src/game/engine/scoreManager'
 
 export class HUD extends ScreenElement {
     private ship?: ShipActor
@@ -9,8 +10,8 @@ export class HUD extends ScreenElement {
     private livesElement: HTMLElement
     private levelElement: HTMLElement
     private scoreElement: HTMLElement
-    
-    constructor() {
+
+    constructor(scoreManager: ScoreManager) {
         super();
         const container = document.getElementById('game-container');
         this.hudElement = document.createElement('div');
@@ -33,6 +34,8 @@ export class HUD extends ScreenElement {
         this.hudElement.appendChild(this.levelElement);
         this.scoreElement = this.createLabel('SCORE: 0');
         this.hudElement.appendChild(this.scoreElement);
+
+        scoreManager.addObserver(this.updateScore.bind(this));
     }
 
     private createLabel(text: string): HTMLElement {
@@ -41,10 +44,10 @@ export class HUD extends ScreenElement {
         label.textContent = text;
         return label;
     }
-    
+
     setShip(ship: ShipActor): void { this.ship = ship }
     initialize(world: World, scene: Scene<unknown>): void {}
-    
+
     update(engine: Engine<any>, elapsed: number): void {
         if (!this.ship) return;
         const fuelPercentage = Math.max(0, Math.min(100, (this.ship.getFuelLevel() / this.ship.getMaxFuel()) * 100));
@@ -55,7 +58,6 @@ export class HUD extends ScreenElement {
         } else if (fuelPercentage < 40) {
             this.fuelBarElement.classList.add('warning');
         }
-
         this.statusElement.textContent = this.ship.isBallConnected() ? 'TOWING ACTIVE' : 'TRACTOR READY';
     }
 
@@ -73,6 +75,6 @@ export class HUD extends ScreenElement {
 
     dispose(): void {
         this.hudElement.remove();
-        this.ship = undefined; // Clear ship reference to prevent memory leaks
+        this.ship = undefined;
     }
 }
