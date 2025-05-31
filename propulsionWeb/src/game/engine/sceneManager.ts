@@ -7,6 +7,7 @@ import { GameOverScreen } from '@src/game/ui/gameOverScreen'
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { ShipActor } from '../actors/ship/shipActor'
 import { LevelManager } from '@src/game/engine/levelManager'
+import { ScoreManager } from '@src/game/engine/scoreManager'
 
 const CAMERA_ZOOM = 0.8
 const MAIN_SCENE_NAME = 'level1'
@@ -21,9 +22,11 @@ export class SceneManager {
     private availableShips: number = 3
     private loadingScenes: string[] = []
     private shipActor?: ShipActor
+    private scoreManager: ScoreManager
 
     constructor(private engine: Engine) {
         this.levelManager = new LevelManager()
+        this.scoreManager = new ScoreManager()
     }
 
     private cleanupScenes() {
@@ -43,8 +46,9 @@ export class SceneManager {
     private handleMissionFinished() {
         if (this.shipActor) {
             if (this.shipActor.isBallConnected()) {
-
                 this.levelManager.nextLevel()
+                this.scoreManager.addPoints(100) // Example score increment
+                if (this.hud) this.hud.updateScore(this.scoreManager.getScore())
             }
             else {
                 console.log('Ball is not connected, mission failed')
@@ -77,12 +81,13 @@ export class SceneManager {
         scene.camera.zoom = CAMERA_ZOOM
         this.hud = new HUD()
         this.hud.updateLives(this.availableShips)
+        this.hud.updateScore(this.scoreManager.getScore())
         scene.add(this.hud)
 
         await this.levelManager.ensureInitialized()
         const map = await this.levelManager.getMap(scene)
         const hyperspace = new Hyperspace(map)
-        const actorFactory = new ActorFactory(map, hyperspace)
+        const actorFactory = new ActorFactory(map, hyperspace, this.scoreManager)
         const gravity = map?.map?.properties?.find((p: any) => p.name === 'gravity')
         const enemyLevel = map?.map?.properties?.find((p: any) => p.name === 'enemyLevel')
         const physics = new Physics(gravity.value || 0)
@@ -118,9 +123,10 @@ export class SceneManager {
         this.engine.add(GAME_OVER_SCENE_NAME, gameOverScene)
         this.engine.goToScene(GAME_OVER_SCENE_NAME)
         
-        GameOverScreen.show(() => {
+        GameOverScreen.show(this.scoreManager.getScore(), () => {
             this.availableShips = 3
             this.levelManager.resetToFirstLevel()
+            this.scoreManager.resetScore()
             this.registerScene()
         })
     }

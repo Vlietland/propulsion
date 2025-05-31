@@ -5,7 +5,7 @@ export class ScoreManager {
         return this.score
     }
 
-    addPoints(points: number): void {
+    addScore(points: number): void {
         this.score += points
     }
 

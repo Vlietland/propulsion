@@ -8,20 +8,23 @@ import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { TransformerActor } from '@src/game/actors/transformerActor'
 import { BallStoreActor } from '@src/game/actors/ballStoreActor'
 import { Hyperspace } from '@src/game/physics/hyperspace'
+import { ScoreManager } from '../engine/scoreManager'
 
 export class ActorFactory {
     private shipActor: ShipActor | null = null
     private hyperspace?: Hyperspace
+    private scoreManager?: ScoreManager
     private transformers: TransformerActor[] = []
     private lasers: LaserActor[] = []
     private map: any
 
-    constructor(map: any, hyperspace: Hyperspace) {
+    constructor(map: any, hyperspace: Hyperspace, scoreManager: ScoreManager) {
         if (!map || !map.layers) {
             throw new Error('Invalid map data: "layers" property is missing or undefined.')
         }
         this.map = map
         this.hyperspace = hyperspace
+        this.scoreManager = scoreManager
     }
 
     async createActors(scene: Scene, enemyLevel: number): Promise<void> {
@@ -81,14 +84,14 @@ export class ActorFactory {
                 actor = ballActor;
                 break;
             case 'reactor':
-                actor = new ReactorActor(object);
+                actor = new ReactorActor(object, this.scoreManager);
                 break;
             case 'fueltank':
-                actor = new FuelTankActor(object);
+                actor = new FuelTankActor(object, this);
                 this.shipActor?.getTractorBeam()?.addFuelTank(actor as FuelTankActor);
                 break;
             case 'turret':
-                actor = new TurretActor(object, enemyLevel);
+                actor = new TurretActor(object, enemyLevel, this.scoreManager);
                 break;
             case 'laser':
                 actor = new LaserActor(object);

@@ -1,6 +1,7 @@
 import { TiledObject } from '@excalibur-tiled/index'
 import { Vector, CollisionType, Engine, ImageSource } from 'excalibur'
 import { BaseActor } from '@src/game/actors/baseActor';
+import { ScoreManager } from '@src/game/engine/scoreManager';
 
 export const FUEL_TANK_FULL = new ImageSource('/images/tiles/fuelTankFull.png')
 export const FUEL_TANK_EMPTY = new ImageSource('/images/tiles/fuelTankEmpty.png')
@@ -10,9 +11,11 @@ await FUEL_TANK_EMPTY.load()
 export class FuelTankActor extends BaseActor {
     private FUEL_FULL = 1000;
     private fuelLevel = this.FUEL_FULL;
+    private scoreManager: ScoreManager;
 
-    constructor(object: TiledObject) {
+    constructor(object: TiledObject, scoreManager: ScoreManager) {
         super(object, FUEL_TANK_FULL, CollisionType.Fixed);
+        this.scoreManager = scoreManager;
     }
 
     getPos(): Vector { return this.pos }
@@ -24,6 +27,7 @@ export class FuelTankActor extends BaseActor {
             this.fuelLevel = 0
         }
         this.fuelLevel -= decrease
+        this.scoreManager.addScore(5);
         if (this.fuelLevel <= 0) {
             this.fuelLevel = 0
             this.graphics.use(FUEL_TANK_EMPTY.toSprite())

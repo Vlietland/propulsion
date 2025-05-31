@@ -2,20 +2,24 @@ import { TiledObject } from '@excalibur-tiled/index'
 import { Engine, CollisionType, Vector, ImageSource, Timer, Scene, CollisionStartEvent } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from './bulletActor';
+import { ScoreManager } from '@src/game/engine/scoreManager';
 
 export const TURRET = new ImageSource('/images/tiles/turret.png');
 await TURRET.load();
 
 const TURRET_FIRE_INTERVAL = 5000;
 const TURRET_BULLET_OFFSET = 80;
+const DESTRUCTION_SCORE = 500;
 
 export class TurretActor extends BaseActor {
-    private fireTimer!: Timer
-    private fireRate: number = 99999
+    private fireTimer!: Timer;
+    private fireRate: number = 99999;
+    private scoreManager: ScoreManager;
 
-    constructor(object: TiledObject, enemyLevel: number) {
-        super(object, TURRET, CollisionType.Fixed)
-        if (enemyLevel > 0) this.fireRate = TURRET_FIRE_INTERVAL / enemyLevel
+    constructor(object: TiledObject, enemyLevel: number, scoreManager: ScoreManager) {
+        super(object, TURRET, CollisionType.Fixed);
+        this.scoreManager = scoreManager;
+        if (enemyLevel > 0) this.fireRate = TURRET_FIRE_INTERVAL / enemyLevel;
     }
 
     onInitialize(engine: Engine): void {
@@ -58,5 +62,6 @@ export class TurretActor extends BaseActor {
             if (bullet.getFirer() instanceof TurretActor) return
         }
         this.explode();
+        this.scoreManager.addScore(DESTRUCTION_SCORE);
     }
 }
