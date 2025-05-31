@@ -35,30 +35,21 @@ export class LevelManager {
 
     private async checkTotalLevels(): Promise<void> {
         let level = 1
-        let found = true
         this.totalLevels = 0
-        
-        while (found && level <= 100) {
+        while (level <= 20) {
+            const response = await fetch(`${LEVEL_DATA_PATH}level${level}.json`)
+            if (!response.ok) break
             try {
-                const response = await fetch(`${LEVEL_DATA_PATH}level${level}.json`, { method: 'HEAD' })
-                if (response.ok) {
-                    level++
-                } else {
-                    found = false
-                }
-            } catch (error) {
-                console.error(`Error checking level ${level}:`, error)
-                found = false
+                const content = await response.text()
+                if (!content.trim().startsWith('{')) break
+                this.totalLevels = level
+                level++
+            } catch {
+                break
             }
         }
-        this.totalLevels = level - 1        
-        console.log(`LevelManager: Found ${this.totalLevels} levels`)
-        if (this.totalLevels === 0) {
-            console.error('LevelManager: No levels found! Setting default to 1')
-            this.totalLevels = 1
-        }
+        if (this.totalLevels === 0) this.totalLevels = 1
     }    
         
     private getLevelFilename(): string { return `level${this.currentLevel}.json` }
-    private isLastLevel(): boolean { return this.currentLevel >= this.totalLevels }
 }

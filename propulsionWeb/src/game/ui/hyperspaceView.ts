@@ -31,14 +31,14 @@ export class HyperspaceView {
                     radius: radius,
                     color: colors[i % colors.length],
                     strokeColor: Color.White,
-                    lineWidth: 2
+                    lineWidth: 1
                 })
                 
                 ring.graphics.use(circle)
                 ring.graphics.opacity = 0.9
                 
                 let life = 60
-                const growthRate = 8 + i * 2
+                const growthRate = 15 + i * 10
                 
                 ring.on('preupdate', () => {
                     radius += growthRate
@@ -55,7 +55,7 @@ export class HyperspaceView {
     private static spawnParticles(scene: Scene, pos: Vector, velocity: Vector) {
         const spread = Math.PI * 2
         const minSpeed = 50
-        const maxSpeed = 400
+        const maxSpeed = 600
         const particleCount = 25
         const direction = velocity.size ? velocity.toAngle() : 0
 
@@ -130,7 +130,7 @@ export class HyperspaceView {
         }
     }
 
-    static lerpColor(a: Color, b: Color, t: number): Color {
+    private static lerpColor(a: Color, b: Color, t: number): Color {
         return new Color(
             a.r + (b.r - a.r) * t,
             a.g + (b.g - a.g) * t,
