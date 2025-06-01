@@ -8,7 +8,8 @@ import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { TransformerActor } from '@src/game/actors/transformerActor'
 import { BallStoreActor } from '@src/game/actors/ballStoreActor'
 import { Hyperspace } from '@src/game/physics/hyperspace'
-import { ScoreManager } from '../engine/scoreManager'
+import { ScoreManager } from '@src/game/engine/scoreManager'
+import { World } from '@src/game/engine/world'
 
 export class ActorFactory {
     private shipActor: ShipActor | null = null
@@ -17,11 +18,13 @@ export class ActorFactory {
     private transformers: TransformerActor[] = []
     private lasers: LaserActor[] = []
     private map: any
+    private world: World
 
-    constructor(map: any, hyperspace: Hyperspace, scoreManager: ScoreManager) {
+    constructor(world: World, map: any, hyperspace: Hyperspace, scoreManager: ScoreManager) {
         if (!map || !map.layers) {
             throw new Error('Invalid map data: "layers" property is missing or undefined.')
         }
+        this.world = world
         this.map = map
         this.hyperspace = hyperspace
         this.scoreManager = scoreManager

@@ -1,5 +1,4 @@
-import { Vector } from 'excalibur'
-import { ShipActor } from '@src/game/actors/ship/shipActor'
+import { Actor, Vector } from 'excalibur'
 
 const HYPER_SPACE_BOUNDARY_HEIGHT = 10
 
@@ -9,7 +8,7 @@ export class Hyperspace {
     private tileWidth: number
     private tileHeight: number
     private hyperspaceBoundaryDepth: number
-    private onHyperspaceReachedCallback?: () => void
+    //private onHyperspaceReachedCallback?: () => void
 
     constructor(map: any) {
         if (!map || !map.map) {
@@ -22,11 +21,9 @@ export class Hyperspace {
         this.hyperspaceBoundaryDepth = HYPER_SPACE_BOUNDARY_HEIGHT * this.tileHeight
     }
 
-    public checkHyperspaceReached(ship: ShipActor): boolean {
-        if (!ship) return false
-        const shipPos = ship.pos
-        const reachedHyperspaceY = shipPos.y <= 2*this.tileHeight
-        const atMapEdge = this.isAtHorizontalEdge(shipPos)
+    public checkHyperspaceReached(actor: Actor): boolean {
+        const reachedHyperspaceY = actor.pos.y <= 2*this.tileHeight
+        const atMapEdge = this.isAtHorizontalEdge(actor.pos)
         if (reachedHyperspaceY || atMapEdge) {
             return true
         }
@@ -37,7 +34,6 @@ export class Hyperspace {
         const boundaryTiles = 7
         const leftEdge = position.x <= boundaryTiles * 2*this.tileWidth
         const rightEdge = position.x >= (this.mapWidth - 2*boundaryTiles) * this.tileWidth
-        
         return leftEdge || rightEdge
     }
 }

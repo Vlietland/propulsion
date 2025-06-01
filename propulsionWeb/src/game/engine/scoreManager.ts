@@ -19,6 +19,7 @@ export class ScoreManager {
 
     public addObserver(observer: (score: number) => void): void {
         this.observers.push(observer)
+        observer(this.score)
     }
 
     public removeObserver(observer: (score: number) => void): void {

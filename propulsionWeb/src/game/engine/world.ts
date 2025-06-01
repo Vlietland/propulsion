@@ -17,16 +17,17 @@ export class World {
         private levelManager: LevelManager
     ) {}
 
-    async initialize(enemyLevel: number): Promise<void> {
+    async initialize(): Promise<void> {
         await this.levelManager.ensureInitialized()
         const map = await this.levelManager.getMap(this.scene)
         const hyperspace = new Hyperspace(map)
         
-        this.actorFactory = new ActorFactory(map, hyperspace, this.scoreManager)
+        this.actorFactory = new ActorFactory(this, map, hyperspace, this.scoreManager)
         
         const gravity = map?.map?.properties?.find((p: any) => p.name === 'gravity')
         this.physics = new Physics(gravity?.value || 0)
         
+        const enemyLevel = map?.map?.properties?.find((p: any) => p.name === 'enemyLevel')?.value || 1
         await this.actorFactory.createActors(this.scene, enemyLevel)
         this.shipActor = this.actorFactory.getShipActor() || undefined
     }

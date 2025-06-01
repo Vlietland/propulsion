@@ -10,9 +10,14 @@ export class HUD extends ScreenElement {
     private livesElement: HTMLElement
     private levelElement: HTMLElement
     private scoreElement: HTMLElement
+    private scoreManager: ScoreManager
+    private boundUpdateScore: (score: number) => void
 
     constructor(scoreManager: ScoreManager) {
         super();
+        this.scoreManager = scoreManager
+        this.boundUpdateScore = this.updateScore.bind(this)
+        
         const container = document.getElementById('game-container');
         this.hudElement = document.createElement('div');
         this.hudElement.className = 'game-hud';
@@ -35,7 +40,7 @@ export class HUD extends ScreenElement {
         this.scoreElement = this.createLabel('SCORE: 0');
         this.hudElement.appendChild(this.scoreElement);
 
-        scoreManager.addObserver(this.updateScore.bind(this));
+        scoreManager.addObserver(this.boundUpdateScore);
     }
 
     private createLabel(text: string): HTMLElement {
@@ -76,5 +81,7 @@ export class HUD extends ScreenElement {
     dispose(): void {
         this.hudElement.remove();
         this.ship = undefined;
+        // Remove observer to prevent memory leaks and multiple observers
+        this.scoreManager.removeObserver(this.boundUpdateScore);
     }
 }

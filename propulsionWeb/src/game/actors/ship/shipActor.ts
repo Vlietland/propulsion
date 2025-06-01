@@ -1,5 +1,5 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { Camera, Vector, CollisionType, Engine, ImageSource, Color, Graphic, Circle, CollisionStartEvent } from 'excalibur'
+import { Camera, Vector, CollisionType, Engine, ImageSource, CollisionStartEvent } from 'excalibur'
 import { Kinematics } from '@src/game/actors/ship/kinematics'
 import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
@@ -34,6 +34,7 @@ export class ShipActor extends BaseActor {
     private mass = 100
     private lastShotTime: number = 0   
     private hyperspace?: Hyperspace
+    private inHyperspace = false    
     private onGameResultCallback?: (result: GameResult) => void
     private lastVelocity: Vector = new Vector(0, 0);
 
@@ -114,7 +115,9 @@ export class ShipActor extends BaseActor {
         this.kinematics?.setObjectAngle(objectAngle)
         this.kinematics?.setTowLength(this.pos.distance(ballActor.pos))
         this.kinematics?.resetObjectVelocity()
-        this.ballActor = ballActor        
+        this.ballActor = ballActor
+        this.ballActor.setHyperspace(this.hyperspace)
+        this.ballActor.setShip(this)      
     }
 
     public setCamera(camera: Camera) {this.camera = camera }
@@ -129,31 +132,28 @@ export class ShipActor extends BaseActor {
     public getMaxFuel(): number { return FUEL_FULL }
     public increaseFuel(fuel: number) { this.fuelLevel = this.fuelLevel + fuel }    
 
+    public requestHyperspace(result: GameResult) {
+        if (this.inHyperspace) return
+        this.inHyperspace = true
+        HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity);        
+        if (this.onGameResultCallback) this.onGameResultCallback(result)
+    }
+
     private handleCollision (evt: CollisionStartEvent) : void { 
         const collidingActor = evt.other?.owner;
         if (collidingActor instanceof BulletActor) {
             const bullet = collidingActor as BulletActor;
             if (bullet.getFirer() === this) return
             if (this.shipController?.isUsingTractorBeam()) return
-        }
-        
-        if (this.isBallConnected()) {
-            this.ballActor?.requestHyperspace()
-            HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity);
-            const result = GameResult.ShipBallHyperspace
-            this.kill()
-            if (this.onGameResultCallback) this.onGameResultCallback(result)
-            return
-        }
+        }        
         
         if (this.hyperspace?.checkHyperspaceReached(this)) {  
-            if (this.isBallConnected()) this.ballActor?.requestHyperspace()
-            HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity);        
             const result = this.isBallConnected()
                 ? GameResult.ShipBallHyperspace 
                 : GameResult.ShipHyperspace
+            if (this.isBallConnected()) this.ballActor?.requestHyperspace()
+            this.requestHyperspace(result)
             this.kill()
-            if (this.onGameResultCallback) this.onGameResultCallback(result)
         }
         else {
             if (this.isBallConnected()) this.ballActor?.explode()

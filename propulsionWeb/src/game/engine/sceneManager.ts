@@ -21,7 +21,7 @@ export class SceneManager {
         private engine: Engine,
         private scoreManager: ScoreManager,
         private levelManager: LevelManager
-    )
+    ) {}
 
     public async registerScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
         if (this.hud) {
@@ -38,8 +38,7 @@ export class SceneManager {
         scene.add(this.hud)
 
         this.world = new World(scene, this.scoreManager, this.levelManager)
-        const enemyLevel = await this.levelManager.getEnemyLevel()
-        await this.world.initialize(enemyLevel)
+        await this.world.initialize()
         
         const shipActor = this.world.getShipActor()
         const physics = this.world.getPhysics()
@@ -54,14 +53,6 @@ export class SceneManager {
         this.engine.add(this.currentSceneName, scene)
         this.engine.goToScene(this.currentSceneName)
     }
-
-/*    private async getEnemyLevel(): Promise<number> {
-        await this.levelManager.ensureInitialized()
-        const scene = new Scene()
-        const map = await this.levelManager.getMap(scene)
-        const enemyLevelProp = map?.map?.properties?.find((p: any) => p.name === 'enemyLevel')
-        return enemyLevelProp?.value || 1
-    } */
 
     async showGameOverScene(): Promise<void> {
         const gameOverSceneName = `gameOver-${Date.now()}`
