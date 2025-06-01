@@ -35,6 +35,7 @@ export class SceneManager {
         scene.camera.zoom = CAMERA_ZOOM
         this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(availableShips)
+        this.hud.updateLevel(this.levelManager.getCurrentLevel())
         scene.add(this.hud)
 
         this.world = new World(scene, this.scoreManager, this.levelManager)
