@@ -1,9 +1,8 @@
-import { Scene, Engine, TileMap, Actor } from 'excalibur'
+import { Scene, Engine } from 'excalibur'
 import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipController } from '@src/game/controller/shipController'
 import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
-import { GameOverScreen } from '@src/game/ui/gameOverScreen'
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { ShipActor } from '../actors/ship/shipActor'
 import { LevelManager } from '@src/game/engine/levelManager'
@@ -13,55 +12,29 @@ const CAMERA_ZOOM = 0.8
 const MAIN_SCENE_NAME = 'level1'
 const GAME_OVER_SCENE_NAME = 'gameOver'
 const TRANSITION_DELAY = 50
-const EXPLOSION_DELAY = 2500
-const HYPERSPACE_DELAY = 2500
-const MISSION_FAILED_SCORE = -1000
-const MISSION_SUCCESS_SCORE = 2000
+
+export interface GameCallbacks {
+    onShipLost: () => void
+    onMissionFinished: () => void
+}
 
 export class SceneManager {
-    private levelManager: LevelManager
-    private hud?: HUD
-    private availableShips: number = 3
     private loadingScenes: string[] = []
     private shipActor?: ShipActor
-    private scoreManager: ScoreManager
+    private hud?: HUD
 
-    constructor(private engine: Engine) {
-        this.levelManager = new LevelManager()
-        this.scoreManager = new ScoreManager()
-        this.hud = new HUD(this.scoreManager)
-    }
+    constructor(
+        private engine: Engine,
+        private scoreManager: ScoreManager,
+        private levelManager: LevelManager
+    ) {}
 
-    private cleanupScenes() {
+    private cleanupScenes(): void {
         this.engine.remove(MAIN_SCENE_NAME)
         this.loadingScenes = []
     }
 
-    private handleShipLost() {
-        this.availableShips -= 1
-        if (this.hud) this.hud.updateLives(this.availableShips)
-        setTimeout(() => {
-            if (this.availableShips > 0) this.resetScene()
-            else this.handleGameOver()
-        }, EXPLOSION_DELAY)
-    }
-    
-    private handleMissionFinished() {
-        if (this.shipActor) {
-            if (this.shipActor.isBallConnected()) {
-                this.levelManager.nextLevel()
-                this.scoreManager.addScore(MISSION_SUCCESS_SCORE)
-                if (this.hud) this.hud.updateScore(this.scoreManager.getScore())
-            }
-            else {
-                this.scoreManager.addScore(MISSION_FAILED_SCORE)
-            }
-            this.shipActor.kill()
-        }
-        setTimeout(() => { this.resetScene() }, HYPERSPACE_DELAY)
-    }
-
-    private async resetScene() {
+    async resetScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
         const loadingSceneName = `loading-${Date.now()}`
         this.loadingScenes.push(loadingSceneName)
         
@@ -72,19 +45,19 @@ export class SceneManager {
         await new Promise(resolve => setTimeout(resolve, TRANSITION_DELAY))
         
         this.cleanupScenes()
-        await this.registerScene()
+        await this.registerScene(availableShips, callbacks)
     }
 
-    private async registerScene() {
+    async registerScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
         }
+
         const scene = new Scene()
         scene.camera.zoom = CAMERA_ZOOM
         this.hud = new HUD(this.scoreManager)
-        this.hud.updateLives(this.availableShips)
-        this.hud.updateScore(this.scoreManager.getScore())
+        this.hud.updateLives(availableShips)
         scene.add(this.hud)
 
         await this.levelManager.ensureInitialized()
@@ -103,14 +76,14 @@ export class SceneManager {
             shipActor.setshipController(new ShipController(this.engine))
             shipActor.setCamera(scene.camera)
             this.hud.setShip(shipActor)
-            shipActor.setShipLostCallback(() => { this.handleShipLost() })
-            shipActor.setMissionFinishedCallback(() => { this.handleMissionFinished() })            
+            shipActor.setShipLostCallback(callbacks.onShipLost)
+            shipActor.setMissionFinishedCallback(callbacks.onMissionFinished)            
         }
         this.engine.add(MAIN_SCENE_NAME, scene)
         this.engine.goToScene(MAIN_SCENE_NAME)
     }
 
-    private async handleGameOver() {
+    async showGameOverScene(): Promise<void> {
         const loadingSceneName = `loading-${Date.now()}`
         this.loadingScenes.push(loadingSceneName)
         
@@ -125,12 +98,9 @@ export class SceneManager {
         const gameOverScene = new Scene()
         this.engine.add(GAME_OVER_SCENE_NAME, gameOverScene)
         this.engine.goToScene(GAME_OVER_SCENE_NAME)
-        
-        GameOverScreen.show(this.scoreManager.getScore(), () => {
-            this.availableShips = 3
-            this.levelManager.resetToFirstLevel()
-            this.scoreManager.resetScore()
-            this.registerScene()
-        })
+    }
+
+    getShipActor(): ShipActor | undefined {
+        return this.shipActor
     }
 }
