@@ -17,11 +17,11 @@ export class ScoreManager {
         this.notifyObservers()
     }
 
-    addObserver(observer: (score: number) => void): void {
+    public addObserver(observer: (score: number) => void): void {
         this.observers.push(observer)
     }
 
-    removeObserver(observer: (score: number) => void): void {
+    public removeObserver(observer: (score: number) => void): void {
         this.observers = this.observers.filter(obs => obs !== observer)
     }
 

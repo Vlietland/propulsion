@@ -9,6 +9,12 @@ const HYPERSPACE_DELAY = 2500
 const MISSION_FAILED_SCORE = -1000
 const MISSION_SUCCESS_SCORE = 2000
 
+export enum GameResult {
+    ShipLost = 'shiplost',
+    ShipHyperspace = 'shiphyperspace',
+    ShipBallHyperspace = 'shipballhyperspace'
+}
+
 export class GameManager {
     private scoreManager: ScoreManager
     private levelManager: LevelManager
@@ -21,54 +27,50 @@ export class GameManager {
         this.sceneManager = new SceneManager(engine, this.scoreManager, this.levelManager)
     }
 
-    async start(): Promise<void> {
+    public async start(): Promise<void> {
         await this.sceneManager.registerScene(this.availableShips, {
-            onShipLost: () => this.handleShipLost(),
-            onMissionFinished: () => this.handleMissionFinished()
+            onGameResult: (result: GameResult) => this.handleGameResult(result)
         })
     }
 
-    private handleShipLost(): void {
-        this.availableShips -= 1
-        setTimeout(() => {
-            if (this.availableShips > 0) {
-                this.restartSceneManager()
-            } else {
-                this.handleGameOver()
-            }
-        }, EXPLOSION_DELAY)
-    }
-    
-    private handleMissionFinished(): void {
-        const shipActor = this.sceneManager.getShipActor()
-        if (shipActor) {
-            if (shipActor.isBallConnected()) {
+    private handleGameResult(result: GameResult): void {
+        switch (result) {
+            case GameResult.ShipLost:
+                this.availableShips -= 1
+                setTimeout(() => {
+                    if (this.availableShips > 0) {
+                        this.restartSceneManager()
+                    } else {
+                        this.handleGameOver()
+                    }
+                }, EXPLOSION_DELAY)
+                break
+            case GameResult.ShipBallHyperspace:
                 this.levelManager.nextLevel()
                 this.scoreManager.addScore(MISSION_SUCCESS_SCORE)
-            } else {
+                setTimeout(() => {
+                    this.restartSceneManager()
+                }, HYPERSPACE_DELAY)
+                break
+            case GameResult.ShipHyperspace:
                 this.scoreManager.addScore(MISSION_FAILED_SCORE)
-            }
-            shipActor.kill()
+                setTimeout(() => {
+                    this.restartSceneManager()
+                }, HYPERSPACE_DELAY)
+                break
         }
-        setTimeout(() => {
-            this.restartSceneManager()
-        }, HYPERSPACE_DELAY)
     }
 
     private async restartSceneManager(): Promise<void> {
-        this.purgeSceneManager()
-        this.sceneManager = new SceneManager(this.engine, this.scoreManager, this.levelManager)
-        await this.sceneManager.registerScene(this.availableShips, {
-            onShipLost: () => this.handleShipLost(),
-            onMissionFinished: () => this.handleMissionFinished()
-        })
-    }
-
-    private purgeSceneManager(): void {
         if (this.sceneManager && typeof this.sceneManager.dispose === 'function') {
             this.sceneManager.dispose()
         }
         this.sceneManager = null as any
+
+        this.sceneManager = new SceneManager(this.engine, this.scoreManager, this.levelManager)
+        await this.sceneManager.registerScene(this.availableShips, {
+            onGameResult: (result: GameResult) => this.handleGameResult(result)
+        })
     }
 
     private async handleGameOver(): Promise<void> {
@@ -79,13 +81,5 @@ export class GameManager {
             this.scoreManager.resetScore()
             this.restartSceneManager()
         })
-    }
-
-    getScoreManager(): ScoreManager {
-        return this.scoreManager
-    }
-
-    getLevelManager(): LevelManager {
-        return this.levelManager
     }
 }

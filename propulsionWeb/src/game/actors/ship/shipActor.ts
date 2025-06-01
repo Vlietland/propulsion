@@ -9,6 +9,7 @@ import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { HyperspaceView } from '@src/game/ui/hyperspaceView'
+import { GameResult } from '@src/game/engine/gameManager'
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
 const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
@@ -33,8 +34,7 @@ export class ShipActor extends BaseActor {
     private mass = 100
     private lastShotTime: number = 0   
     private hyperspace?: Hyperspace
-    private onShipLostCallback?: () => void
-    private onMissionFinishedCallback?: () => void
+    private onGameResultCallback?: (result: GameResult) => void
     private lastVelocity: Vector = new Vector(0, 0);
 
     constructor(object: TiledObject) {
@@ -119,8 +119,7 @@ export class ShipActor extends BaseActor {
 
     public setCamera(camera: Camera) {this.camera = camera }
     public setshipController(shipController: ShipController) {this.shipController = shipController }
-    public setShipLostCallback(cb: () => void) {this.onShipLostCallback = cb;}
-    public setMissionFinishedCallback(cb: () => void) {this.onMissionFinishedCallback = cb;}    
+    public setOnGameResult(callback: (result: GameResult) => void) {this.onGameResultCallback = callback}
     public setHyperspace(hyperspace: Hyperspace) { this.hyperspace = hyperspace }
     public getTractorBeam() : TractorBeam | undefined{ return this.tractorBeam }
     public getMass() : number { return this.mass }
@@ -137,10 +136,24 @@ export class ShipActor extends BaseActor {
             if (bullet.getFirer() === this) return
             if (this.shipController?.isUsingTractorBeam()) return
         }
+        
+        if (this.isBallConnected()) {
+            this.ballActor?.requestHyperspace()
+            HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity);
+            const result = GameResult.ShipBallHyperspace
+            this.kill()
+            if (this.onGameResultCallback) this.onGameResultCallback(result)
+            return
+        }
+        
         if (this.hyperspace?.checkHyperspaceReached(this)) {  
-            this.ballActor?.enterHyperspace()
+            if (this.isBallConnected()) this.ballActor?.requestHyperspace()
             HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity);        
-            if (this.onMissionFinishedCallback) this.onMissionFinishedCallback()
+            const result = this.isBallConnected()
+                ? GameResult.ShipBallHyperspace 
+                : GameResult.ShipHyperspace
+            this.kill()
+            if (this.onGameResultCallback) this.onGameResultCallback(result)
         }
         else {
             if (this.isBallConnected()) this.ballActor?.explode()
@@ -150,8 +163,6 @@ export class ShipActor extends BaseActor {
 
     protected explode(): void {
         super.explode()
-        if (this.onShipLostCallback) this.onShipLostCallback()
+        if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)
     }   
-
-
 }

@@ -1,22 +1,19 @@
 import { Scene, Engine } from 'excalibur'
-import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipController } from '@src/game/controller/shipController'
-import { Physics } from '@src/game/physics/physics'
 import { HUD } from '@src/game/ui/hud'
-import { Hyperspace } from '@src/game/physics/hyperspace'
-import { ShipActor } from '../actors/ship/shipActor'
 import { LevelManager } from '@src/game/engine/levelManager'
 import { ScoreManager } from '@src/game/engine/scoreManager'
+import { World } from '@src/game/engine/world'
+import { GameResult } from '@src/game/engine/gameManager'
 
 const CAMERA_ZOOM = 0.8
 
 export interface GameCallbacks {
-    onShipLost: () => void
-    onMissionFinished: () => void
+    onGameResult: (result: GameResult) => void
 }
 
 export class SceneManager {
-    private shipActor?: ShipActor
+    private world?: World
     private hud?: HUD
     private currentSceneName?: string
 
@@ -24,9 +21,9 @@ export class SceneManager {
         private engine: Engine,
         private scoreManager: ScoreManager,
         private levelManager: LevelManager
-    ) {}
+    )
 
-    async registerScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
+    public async registerScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
@@ -40,28 +37,31 @@ export class SceneManager {
         this.hud.updateLives(availableShips)
         scene.add(this.hud)
 
-        await this.levelManager.ensureInitialized()
-        const map = await this.levelManager.getMap(scene)
-        const hyperspace = new Hyperspace(map)
-        const actorFactory = new ActorFactory(map, hyperspace, this.scoreManager)
-        const gravity = map?.map?.properties?.find((p: any) => p.name === 'gravity')
-        const enemyLevel = map?.map?.properties?.find((p: any) => p.name === 'enemyLevel')
-        const physics = new Physics(gravity.value || 0)
-        await actorFactory.createActors(scene, enemyLevel.value)
+        this.world = new World(scene, this.scoreManager, this.levelManager)
+        const enemyLevel = await this.levelManager.getEnemyLevel()
+        await this.world.initialize(enemyLevel)
         
-        const shipActor = actorFactory.getShipActor()
-        if (shipActor) {
-            this.shipActor = shipActor
+        const shipActor = this.world.getShipActor()
+        const physics = this.world.getPhysics()
+        
+        if (shipActor && physics) {
             shipActor.setPhysics(physics)
             shipActor.setshipController(new ShipController(this.engine))
             shipActor.setCamera(scene.camera)
             this.hud.setShip(shipActor)
-            shipActor.setShipLostCallback(callbacks.onShipLost)
-            shipActor.setMissionFinishedCallback(callbacks.onMissionFinished)            
+            shipActor.setOnGameResult((result: GameResult) => callbacks.onGameResult(result))
         }
         this.engine.add(this.currentSceneName, scene)
         this.engine.goToScene(this.currentSceneName)
     }
+
+/*    private async getEnemyLevel(): Promise<number> {
+        await this.levelManager.ensureInitialized()
+        const scene = new Scene()
+        const map = await this.levelManager.getMap(scene)
+        const enemyLevelProp = map?.map?.properties?.find((p: any) => p.name === 'enemyLevel')
+        return enemyLevelProp?.value || 1
+    } */
 
     async showGameOverScene(): Promise<void> {
         const gameOverSceneName = `gameOver-${Date.now()}`
@@ -70,15 +70,14 @@ export class SceneManager {
         this.engine.goToScene(gameOverSceneName)
     }
 
-    getShipActor(): ShipActor | undefined {
-        return this.shipActor
-    }
-
     dispose(): void {
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
         }
-        this.shipActor = undefined
+        if (this.world) {
+            this.world.dispose()
+            this.world = undefined
+        }
     }
 }
