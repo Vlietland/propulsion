@@ -53,7 +53,7 @@ export class BallActor extends BaseActor {
             const collidingActor = evt.other?.owner;            
             if (collidingActor instanceof BulletActor) {
                 const bullet = collidingActor as BulletActor;
-                if (bullet.getFirer() instanceof TurretActor ) return
+                if (bullet.getFirer() instanceof TurretActor && !this.ship) return
             }        
             this.explode()
         }

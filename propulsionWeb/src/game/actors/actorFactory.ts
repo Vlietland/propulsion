@@ -87,7 +87,9 @@ export class ActorFactory {
                 actor = ballActor;
                 break;
             case 'reactor':
-                actor = new ReactorActor(object, this.scoreManager);
+                const reactorActor = new ReactorActor(object, this.scoreManager);
+                reactorActor.setOnExplode(() => this.world.explodeAllActors());
+                actor = reactorActor;
                 break;
             case 'fueltank':
                 actor = new FuelTankActor(object, this.scoreManager);
@@ -109,6 +111,10 @@ export class ActorFactory {
                 break;
             default:
                 return null;
+        }
+
+        if (actor) {
+            this.world.registerActor(actor)
         }
 
         return actor;

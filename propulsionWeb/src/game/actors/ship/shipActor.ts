@@ -116,8 +116,8 @@ export class ShipActor extends BaseActor {
         this.kinematics?.setTowLength(this.pos.distance(ballActor.pos))
         this.kinematics?.resetObjectVelocity()
         this.ballActor = ballActor
-        this.ballActor.setHyperspace(this.hyperspace)
         this.ballActor.setShip(this)      
+        if (this.hyperspace) this.ballActor.setHyperspace(this.hyperspace)        
     }
 
     public setCamera(camera: Camera) {this.camera = camera }

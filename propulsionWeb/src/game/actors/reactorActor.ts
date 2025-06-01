@@ -17,6 +17,7 @@ export class ReactorActor extends BaseActor {
     private scoreManager: ScoreManager;
     private armor: number = ARMOR;
     private destroyTimer?: Timer;
+    private onExplodeCallback?: () => void;
 
     constructor(object: TiledObject, scoreManager: ScoreManager) {
         super(object, REACTOR, CollisionType.Fixed);
@@ -26,6 +27,10 @@ export class ReactorActor extends BaseActor {
     onInitialize(engine: Engine): void {
         super.onInitialize(engine);
         this.on('postcollision', (evt) => this.handleCollision(evt as CollisionStartEvent));
+    }
+
+    setOnExplode(callback: () => void): void {
+        this.onExplodeCallback = callback;
     }
 
     private handleCollision(evt: CollisionStartEvent): void {
@@ -54,7 +59,10 @@ export class ReactorActor extends BaseActor {
     protected explode(): void {
         console.log('Reactor exploded!');
         this.scoreManager.addScore(DESTRUCTION_SCORE);
-        this.explode()
+        super.explode()
+        if (this.onExplodeCallback) {
+            this.onExplodeCallback();
+        }
     }
 
     isDestructionTimerSet(): boolean {
