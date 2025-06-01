@@ -6,7 +6,7 @@ import { ScoreManager } from '@src/game/engine/scoreManager'
 import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/game/engine/gameManager'
 
-const CAMERA_ZOOM = 0.8
+const CAMERA_ZOOM = 0.7
 
 export interface GameCallbacks {
     onGameResult: (result: GameResult) => void
@@ -32,7 +32,7 @@ export class SceneManager {
         this.currentSceneName = `level-${Date.now()}`
 
         const scene = new Scene()
-        scene.camera.zoom = CAMERA_ZOOM
+        scene.camera.zoom = 0.1
         this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(availableShips)
         this.hud.updateLevel(this.levelManager.getCurrentLevel())
@@ -53,6 +53,22 @@ export class SceneManager {
         }
         this.engine.add(this.currentSceneName, scene)
         this.engine.goToScene(this.currentSceneName)
+
+        this.animateZoom(scene)
+    }
+
+    private animateZoom(scene: Scene): void {
+        const camera = scene.camera
+        const startTime = Date.now()
+        const duration = 2500
+        const animate = () => {
+            const elapsed = Date.now() - startTime
+            const progress = Math.min(elapsed / duration, 1)
+            camera.zoom = 0.3 + (CAMERA_ZOOM - 0.3) * progress
+            if (progress < 1) requestAnimationFrame(animate)
+        }
+
+        animate()
     }
 
     async showGameOverScene(): Promise<void> {
