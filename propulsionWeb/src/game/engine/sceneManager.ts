@@ -9,9 +9,6 @@ import { LevelManager } from '@src/game/engine/levelManager'
 import { ScoreManager } from '@src/game/engine/scoreManager'
 
 const CAMERA_ZOOM = 0.8
-const MAIN_SCENE_NAME = 'level1'
-const GAME_OVER_SCENE_NAME = 'gameOver'
-const TRANSITION_DELAY = 50
 
 export interface GameCallbacks {
     onShipLost: () => void
@@ -19,9 +16,9 @@ export interface GameCallbacks {
 }
 
 export class SceneManager {
-    private loadingScenes: string[] = []
     private shipActor?: ShipActor
     private hud?: HUD
+    private currentSceneName?: string
 
     constructor(
         private engine: Engine,
@@ -29,30 +26,13 @@ export class SceneManager {
         private levelManager: LevelManager
     ) {}
 
-    private cleanupScenes(): void {
-        this.engine.remove(MAIN_SCENE_NAME)
-        this.loadingScenes = []
-    }
-
-    async resetScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
-        const loadingSceneName = `loading-${Date.now()}`
-        this.loadingScenes.push(loadingSceneName)
-        
-        const emptyScene = new Scene()
-        this.engine.add(loadingSceneName, emptyScene)
-        this.engine.goToScene(loadingSceneName)
-        
-        await new Promise(resolve => setTimeout(resolve, TRANSITION_DELAY))
-        
-        this.cleanupScenes()
-        await this.registerScene(availableShips, callbacks)
-    }
-
     async registerScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
         }
+
+        this.currentSceneName = `level-${Date.now()}`
 
         const scene = new Scene()
         scene.camera.zoom = CAMERA_ZOOM
@@ -79,28 +59,26 @@ export class SceneManager {
             shipActor.setShipLostCallback(callbacks.onShipLost)
             shipActor.setMissionFinishedCallback(callbacks.onMissionFinished)            
         }
-        this.engine.add(MAIN_SCENE_NAME, scene)
-        this.engine.goToScene(MAIN_SCENE_NAME)
+        this.engine.add(this.currentSceneName, scene)
+        this.engine.goToScene(this.currentSceneName)
     }
 
     async showGameOverScene(): Promise<void> {
-        const loadingSceneName = `loading-${Date.now()}`
-        this.loadingScenes.push(loadingSceneName)
-        
-        const emptyScene = new Scene()
-        this.engine.add(loadingSceneName, emptyScene)
-        this.engine.goToScene(loadingSceneName)
-        
-        await new Promise(resolve => setTimeout(resolve, TRANSITION_DELAY))
-        
-        this.cleanupScenes()
-        
+        const gameOverSceneName = `gameOver-${Date.now()}`
         const gameOverScene = new Scene()
-        this.engine.add(GAME_OVER_SCENE_NAME, gameOverScene)
-        this.engine.goToScene(GAME_OVER_SCENE_NAME)
+        this.engine.add(gameOverSceneName, gameOverScene)
+        this.engine.goToScene(gameOverSceneName)
     }
 
     getShipActor(): ShipActor | undefined {
         return this.shipActor
+    }
+
+    dispose(): void {
+        if (this.hud) {
+            this.hud.dispose()
+            this.hud = undefined
+        }
+        this.shipActor = undefined
     }
 }

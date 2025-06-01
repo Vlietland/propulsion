@@ -1,4 +1,4 @@
-import { Engine } from 'excalibur'
+import { Engine, Scene } from 'excalibur'
 import { ScoreManager } from '@src/game/engine/scoreManager'
 import { LevelManager } from '@src/game/engine/levelManager'
 import { SceneManager } from '@src/game/engine/sceneManager'
@@ -32,10 +32,7 @@ export class GameManager {
         this.availableShips -= 1
         setTimeout(() => {
             if (this.availableShips > 0) {
-                this.sceneManager.resetScene(this.availableShips, {
-                    onShipLost: () => this.handleShipLost(),
-                    onMissionFinished: () => this.handleMissionFinished()
-                })
+                this.restartSceneManager()
             } else {
                 this.handleGameOver()
             }
@@ -54,24 +51,33 @@ export class GameManager {
             shipActor.kill()
         }
         setTimeout(() => {
-            this.sceneManager.resetScene(this.availableShips, {
-                onShipLost: () => this.handleShipLost(),
-                onMissionFinished: () => this.handleMissionFinished()
-            })
+            this.restartSceneManager()
         }, HYPERSPACE_DELAY)
+    }
+
+    private async restartSceneManager(): Promise<void> {
+        this.purgeSceneManager()
+        this.sceneManager = new SceneManager(this.engine, this.scoreManager, this.levelManager)
+        await this.sceneManager.registerScene(this.availableShips, {
+            onShipLost: () => this.handleShipLost(),
+            onMissionFinished: () => this.handleMissionFinished()
+        })
+    }
+
+    private purgeSceneManager(): void {
+        if (this.sceneManager && typeof this.sceneManager.dispose === 'function') {
+            this.sceneManager.dispose()
+        }
+        this.sceneManager = null as any
     }
 
     private async handleGameOver(): Promise<void> {
         await this.sceneManager.showGameOverScene()
-        
         GameOverScreen.show(this.scoreManager.getScore(), () => {
             this.availableShips = 3
             this.levelManager.resetToFirstLevel()
             this.scoreManager.resetScore()
-            this.sceneManager.registerScene(this.availableShips, {
-                onShipLost: () => this.handleShipLost(),
-                onMissionFinished: () => this.handleMissionFinished()
-            })
+            this.restartSceneManager()
         })
     }
 
