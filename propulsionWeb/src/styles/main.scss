@@ -2,11 +2,13 @@
 @use '@src/styles/menu.scss';
 @use '@src/styles/game-over.scss';
 
-body {
+html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: #000;
+  width: 100%;
+  height: 100%;
 }
 
 canvas {

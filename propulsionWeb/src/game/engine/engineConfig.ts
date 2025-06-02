@@ -5,4 +5,5 @@ export const ENGINE_CONFIG: EngineOptions = {
     canvasElementId: 'game',
     antialiasing: false,
     pixelArt: true,
+    displayMode: DisplayMode.FitScreenAndFill,
 }

@@ -81,7 +81,6 @@ export class HUD extends ScreenElement {
     dispose(): void {
         this.hudElement.remove();
         this.ship = undefined;
-        // Remove observer to prevent memory leaks and multiple observers
         this.scoreManager.removeObserver(this.boundUpdateScore);
     }
 }

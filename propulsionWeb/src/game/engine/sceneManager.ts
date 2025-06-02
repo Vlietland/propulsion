@@ -60,7 +60,7 @@ export class SceneManager {
     private animateZoom(scene: Scene): void {
         const camera = scene.camera
         const startTime = Date.now()
-        const duration = 2500
+        const duration = 2000
         const animate = () => {
             const elapsed = Date.now() - startTime
             const progress = Math.min(elapsed / duration, 1)
