@@ -1,8 +1,9 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { Engine, CollisionType, Vector, ImageSource, Timer, Scene, CollisionStartEvent } from 'excalibur';
+import { Engine, CollisionType, Vector, ImageSource, Timer, Scene, CollisionStartEvent, Sound } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from './bulletActor';
 import { ScoreManager } from '@src/game/engine/scoreManager';
+import { SoundManager } from '@src/game/engine/soundManager'
 
 export const TURRET = new ImageSource('/images/tiles/turret.png');
 await TURRET.load();
@@ -44,6 +45,7 @@ export class TurretActor extends BaseActor {
         const bulletStartPosition = this.pos.add(direction.scale(TURRET_BULLET_OFFSET));
         const bullet = new BulletActor(bulletStartPosition, direction, this);
         engine.currentScene.add(bullet);
+        SoundManager.playTurretGun()
         this.fireTimer.interval = this.fireRate * 0.7 + Math.random() * 0.6 // Range: 0.7-1.3 (±30%)
     }
 
@@ -61,6 +63,7 @@ export class TurretActor extends BaseActor {
             const bullet = collidingActor as BulletActor;
             if (bullet.getFirer() instanceof TurretActor) return
         }
+        SoundManager.playActorExplosion();
         this.explode();
         this.scoreManager.addScore(DESTRUCTION_SCORE);
     }

@@ -87,6 +87,7 @@ export class ShipActor extends BaseActor {
 
         if (this.shipController.isUsingTractorBeam()) {
             this.tractorBeam?.attractObjects(this.pos)
+            SoundManager.playTractorBeam()
             this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION            
         }
 
@@ -103,6 +104,7 @@ export class ShipActor extends BaseActor {
         const shipFrontOffset = GUN_POSITION_OFFSET
         const bulletStartPosition = this.pos.add(direction.scale(shipFrontOffset))
         const bullet = new BulletActor(bulletStartPosition, direction, this)
+        SoundManager.playShipGun()
         engine.currentScene.add(bullet)
     }
 
@@ -167,6 +169,8 @@ export class ShipActor extends BaseActor {
     }
 
     protected explode(): void {
+        SoundManager.stopThrust()
+        SoundManager.playShipExplosion()
         super.explode()
         if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)
     }   

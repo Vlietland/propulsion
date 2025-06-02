@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json",
+    "activeFile": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level2.json",
     "expandedProjectPaths": [
-        ".",
-        "propulsionWeb"
+        "propulsionWeb",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -27,11 +27,22 @@
             "scaleInDock": 1
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json": {
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 0.4549,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 2624.7526928995385,
                 "y": 1216.7509342712683
+            }
+        },
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level2.json": {
+            "scale": 0.4667,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 2989.0722091279195,
+                "y": 2111.634883222627
             }
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/public/images/tiles.tsx": {
@@ -61,12 +72,13 @@
     "map.tileWidth": 128,
     "openFiles": [
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json",
-        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx"
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level2.json"
     ],
     "project": "excalibur.tiled-project",
     "recentFiles": [
-        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level2.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/excalibur.json",
         "tiles.tsx",
         "excalibur.json"

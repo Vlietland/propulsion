@@ -7,6 +7,7 @@ import { GameResult } from '@src/game/engine/gameManager'
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor'
+import { SoundManager } from '@src/game/engine/soundManager'
 
 export const BALL = new ImageSource('/images/tiles/ball.png')
 await BALL.load()
@@ -55,6 +56,7 @@ export class BallActor extends BaseActor {
                 const bullet = collidingActor as BulletActor;
                 if (bullet.getFirer() instanceof TurretActor && !this.ship) return
             }        
+            SoundManager.playActorExplosion();            
             this.explode()
         }
     }
