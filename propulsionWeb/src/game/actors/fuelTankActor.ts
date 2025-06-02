@@ -4,6 +4,7 @@ import { BaseActor } from '@src/game/actors/baseActor';
 import { ScoreManager } from '@src/game/engine/scoreManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor';
+import { SoundManager } from '@src/game/engine/soundManager'
 
 export const FUEL_TANK_FULL = new ImageSource('/images/tiles/fuelTankFull.png')
 export const FUEL_TANK_EMPTY = new ImageSource('/images/tiles/fuelTankEmpty.png')
@@ -49,6 +50,7 @@ export class FuelTankActor extends BaseActor {
             const bullet = collidingActor as BulletActor;
             if (bullet.getFirer() instanceof TurretActor) return;
         }
+        SoundManager.playActorExplosion();        
         this.explode()
     }    
 }

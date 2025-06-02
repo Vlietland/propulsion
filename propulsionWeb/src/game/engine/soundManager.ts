@@ -1,9 +1,11 @@
+//use https://sfxr.me/ for sound effects (do not remove this line !!!)
 import { Sound, Loader } from 'excalibur'
 
 export class SoundManager {
     private static instance: SoundManager | null = null
     private sounds: Map<string, Sound> = new Map()
     private thrustPlaying = false
+    private tractorBeamPlaying = false
     
     public static readonly SOUND_PATHS = {
         TRACTOR_BEAM: '/sounds/tractorBeam.wav',
@@ -12,7 +14,8 @@ export class SoundManager {
         BULLET_HIT: '/sounds/bulletHit.wav',
         TURRET_GUN: '/sounds/turretGun.wav',
         SHIP_GUN: '/sounds/shipGun.wav',
-        THRUST: '/sounds/thrust.wav'
+        THRUST: '/sounds/thrust.wav',
+        ALARM: '/sounds/alarm.wav'
     }
     
     constructor(loader?: Loader) {
@@ -34,49 +37,39 @@ export class SoundManager {
         }
         return SoundManager.instance
     }
-        
-    public static play(soundKey: string, volume: number = 1.0, loop: boolean = false): void {
+            
+    public static playTractorBeam(): void {
         const instance = this.getInstance()
-        const sound = instance.sounds.get(soundKey)
+        if (instance.tractorBeamPlaying) return
+        const sound = instance.sounds.get('TRACTOR_BEAM')
         if (sound) {
-            sound.volume = Math.max(0, Math.min(1, volume))
-            sound.loop = loop
+            sound.loop = true
             sound.play()
-        } else {
-            console.warn(`Sound '${soundKey}' not found or not loaded`)
+            instance.tractorBeamPlaying = true
         }
     }
     
-    public static playTractorBeam(volume: number = 0.7): void {
-        this.play('TRACTOR_BEAM', volume)
+    public static stopTractorBeam(): void {
+        const instance = this.getInstance()
+        const sound = instance.sounds.get('TRACTOR_BEAM')
+        if (sound) {
+            sound.stop()
+            instance.tractorBeamPlaying = false
+        }
     }
     
-    public static playShipExplosion(volume: number = 1.0): void {
-        this.play('SHIP_EXPLOSION', volume)
-    }
+    public static playShipExplosion(): void { this.play('SHIP_EXPLOSION') }
+    public static playActorExplosion(): void { this.play('ACTOR_EXPLOSION') }
+    public static playBulletHit(): void { this.play('BULLET_HIT') }
+    public static playTurretGun(): void { this.play('TURRET_GUN') }
+    public static playShipGun(): void { this.play('SHIP_GUN') }
+    public static playAlarm(): void { this.play('ALARM') }
     
-    public static playActorExplosion(volume: number = 0.8): void {
-        this.play('ACTOR_EXPLOSION', volume)
-    }
-    
-    public static playBulletHit(volume: number = 0.6): void {
-        this.play('BULLET_HIT', volume)
-    }
-    
-    public static playTurretGun(volume: number = 0.7): void {
-        this.play('TURRET_GUN', volume)
-    }
-    
-    public static playShipGun(volume: number = 0.8): void {
-        this.play('SHIP_GUN', volume)
-    }
-    
-    public static playThrust(volume: number = 0.5): void {
+    public static playThrust(): void {
         const instance = this.getInstance()
         if (instance.thrustPlaying) return
         const sound = instance.sounds.get('THRUST')
         if (sound) {
-            sound.volume = Math.max(0, Math.min(1, volume))
             sound.loop = true
             sound.play()
             instance.thrustPlaying = true
@@ -98,9 +91,21 @@ export class SoundManager {
     }
 
     private static getInstance(): SoundManager {
-        if (!SoundManager.instance) {
+        if (!SoundManager.instance)  {
             throw new Error('SoundManager not initialized. Call SoundManager.initialize() first.')
         }
         return SoundManager.instance
     }
+
+    private static play(soundKey: string, loop: boolean = false): void {
+        const instance = this.getInstance()
+        const sound = instance.sounds.get(soundKey)
+        if (sound) {
+            sound.loop = loop
+            sound.play()
+        } else {
+            console.warn(`Sound '${soundKey}' not found or not loaded`)
+        }
+    }
+
 }

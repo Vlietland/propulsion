@@ -89,6 +89,8 @@ export class ShipActor extends BaseActor {
             this.tractorBeam?.attractObjects(this.pos)
             SoundManager.playTractorBeam()
             this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION            
+        } else {
+            SoundManager.stopTractorBeam()
         }
 
         if (this.shipController.isShooting()) { this.fire(engine) }
