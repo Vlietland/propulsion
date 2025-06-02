@@ -82,7 +82,7 @@ export class ShipActor extends BaseActor {
 
         if (this.shipController.isUsingTractorBeam()) {
             this.tractorBeam?.attractObjects(this.pos)
-            this.fuelLevel = this.fuelLevel - 2*FUEL_CONSUMPTION            
+            this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION            
         }
 
         if (this.shipController.isShooting()) { this.fire(engine) }

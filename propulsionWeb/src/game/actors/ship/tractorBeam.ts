@@ -2,6 +2,7 @@ import { Vector } from 'excalibur'
 import { BallActor } from '@src/game/actors/ballActor'
 import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
+import { TractorBeamView } from '@src/game/ui/tractorBeamView'
 
 const TRACTOR_WIDTH = 100
 const TRACTOR_POWER = 25
@@ -18,15 +19,25 @@ export class TractorBeam {
     public setBall(ballActor: BallActor): void { this.ballActor = ballActor }
 
     public attractObjects(shipPos: Vector): void {
-        if (this.ballActor)
+        TractorBeamView.spawnActivationRing(this.shipActor.scene, shipPos);        
+        let beamActive = false;
+        
         if (this.ballActor && !this.shipActor.isBallConnected() && this.isWithinRange(this.ballActor.pos, shipPos)) {
-            this.attract(this.ballActor)
+            this.attract(this.ballActor);
+            TractorBeamView.spawn(this.shipActor.scene, shipPos, this.ballActor.pos, TRACTOR_WIDTH, TRACTOR_REACH);
+            beamActive = true;
         }
+        
         for (const fuelTank of this.fuelTanks) {
             if (this.isWithinRange(fuelTank.pos, shipPos)) {
                 if (this.shipActor.getFuelLevel() + TRACTOR_POWER < this.shipActor.getMaxFuel()) {
                     const fuel = fuelTank.decreaseFuel(TRACTOR_POWER)
                     this.shipActor.increaseFuel(fuel)
+                    
+                    if (!beamActive) {
+                        TractorBeamView.spawn(this.shipActor.scene, shipPos, fuelTank.pos, TRACTOR_WIDTH, TRACTOR_REACH);
+                        beamActive = true;
+                    }
                 }
             }
         }
