@@ -13,8 +13,17 @@ export class EngineBootstrap {
     }
 
     async start() {
-        SoundManager.initialize()
+        console.log('Initializing SoundManager...')
+        await SoundManager.initialize()
+        console.log('SoundManager initialized, starting game...')
+        
         await this.gameManager.start()
         await this.engine.start()
+        
+        // Test sound system after everything is loaded
+        setTimeout(() => {
+            console.log('Testing sound system after startup...')
+            SoundManager.testSound()
+        }, 2000)
     }
 }

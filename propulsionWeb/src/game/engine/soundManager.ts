@@ -18,11 +18,9 @@ export class SoundManager {
     }
     
     constructor() {
-        console.log('Initializing SoundManager with sounds...')
         for (const [key, path] of Object.entries(SoundManager.SOUND_PATHS)) {
             const sound = new Sound(path)
             this.sounds.set(key, sound)
-            console.log(`Added sound: ${key} -> ${path}`)
         }
     }
         
@@ -33,47 +31,7 @@ export class SoundManager {
         }
         return SoundManager.instance
     }
-
-    private async loadAllSounds(): Promise<void> {
-        console.log('Loading all sounds...')
-        const loadPromises = Array.from(this.sounds.values()).map(sound => sound.load())
-        await Promise.all(loadPromises)
-        console.log('All sounds loaded!')
-    }
-
-    public static play(soundKey: string, volume: number = 1.0, loop: boolean = false): void {
-        const instance = this.getInstance()
-        const sound = instance.sounds.get(soundKey)
-        if (sound) {
-            sound.volume = Math.max(0, Math.min(1, volume))
-            sound.loop = loop
-            sound.play()
-        } else {
-            console.warn(`Sound '${soundKey}' not found or not loaded`)
-        }
-    }
-    
-    public static stop(soundKey: string): void {
-        const instance = this.getInstance()
-        const sound = instance.sounds.get(soundKey)
-        if (sound) {
-            sound.stop()
-        }
-    }        
-
-    public static stopAll(): void {
-        const instance = this.getInstance()
-        instance.sounds.forEach(sound => sound.stop())
-    }
-    
-    public static setGlobalVolume(volume: number): void {
-        const instance = this.getInstance()
-        const normalizedVolume = Math.max(0, Math.min(1, volume))
-        instance.sounds.forEach(sound => {
-            sound.volume = normalizedVolume
-        })
-    }
-    
+        
     public static playTractorBeam(volume: number = 0.7): void {
         this.play('TRACTOR_BEAM', volume)
     }
@@ -97,12 +55,68 @@ export class SoundManager {
     public static playShipGun(volume: number = 0.8): void {
         this.play('SHIP_GUN', volume)
     }
+       
+    public static playThrust(volume: number = 0.5): void {
+        const instance = this.getInstance()
+        if (instance.thrustPlaying) return
+        
+        if (!instance.thrustAudioContext || instance.thrustOscillators.length === 0) {
+            instance.createJetEngineSound()
+        }
+        
+        if (instance.thrustAudioContext?.state === 'suspended') {
+            instance.thrustAudioContext.resume()
+        }
+        
+        instance.thrustOscillators.forEach((osc) => {
+            try {
+                osc.start()
+            } catch (e) {
+            }
+        })
+        
+        if (instance.thrustGainNode && instance.thrustAudioContext) {
+            instance.thrustGainNode.gain.cancelScheduledValues(instance.thrustAudioContext.currentTime)
+            instance.thrustGainNode.gain.setValueAtTime(0, instance.thrustAudioContext.currentTime)
+            instance.thrustGainNode.gain.linearRampToValueAtTime(volume * 0.8, instance.thrustAudioContext.currentTime + 0.1)
+        }
+        
+        instance.thrustPlaying = true
+    }
     
+    public static stopThrust(): void {
+        const instance = this.getInstance()
+        if (!instance.thrustPlaying || !instance.thrustGainNode || !instance.thrustAudioContext) return
+        
+        instance.thrustGainNode.gain.cancelScheduledValues(instance.thrustAudioContext.currentTime)
+        instance.thrustGainNode.gain.setValueAtTime(instance.thrustGainNode.gain.value, instance.thrustAudioContext.currentTime)
+        instance.thrustGainNode.gain.linearRampToValueAtTime(0, instance.thrustAudioContext.currentTime + 0.2)
+        
+        setTimeout(() => {
+            instance.thrustOscillators.forEach((osc) => {
+                try { 
+                    osc.stop()
+                } catch (e) {
+                }
+            })
+            instance.thrustOscillators = []
+            instance.thrustPlaying = false
+            
+            if (instance.thrustAudioContext) {
+                instance.thrustAudioContext.close()
+                instance.thrustAudioContext = undefined
+                instance.thrustGainNode = undefined
+            }
+        }, 250)
+    }
+
     private createJetEngineSound(): void {
         this.thrustAudioContext = new AudioContext()
         this.thrustGainNode = this.thrustAudioContext.createGain()
         this.thrustGainNode.connect(this.thrustAudioContext.destination)
         this.thrustGainNode.gain.value = 0
+        
+        this.thrustOscillators = []
         
         const baseFreq = 120
         const frequencies = [baseFreq, baseFreq * 1.5, baseFreq * 2.3, baseFreq * 3.1]
@@ -139,49 +153,9 @@ export class SoundManager {
         
         noiseSource.connect(noiseFilter)
         noiseFilter.connect(noiseGain)
-        noiseGain.connect(this.thrustGainNode)
+        noiseGain.connect(this.thrustGainNode!)
         
         this.thrustOscillators.push(noiseSource as any)
-    }
-    
-    public static playThrust(volume: number = 0.5): void {
-        const instance = this.getInstance()
-        if (instance.thrustPlaying) return
-        
-        if (!instance.thrustAudioContext) {
-            instance.createJetEngineSound()
-        }
-        
-        if (instance.thrustAudioContext?.state === 'suspended') {
-            instance.thrustAudioContext.resume()
-        }
-        
-        instance.thrustOscillators.forEach(osc => osc.start())
-        
-        if (instance.thrustGainNode) {
-            instance.thrustGainNode.gain.cancelScheduledValues(instance.thrustAudioContext!.currentTime)
-            instance.thrustGainNode.gain.setValueAtTime(0, instance.thrustAudioContext!.currentTime)
-            instance.thrustGainNode.gain.linearRampToValueAtTime(volume * 0.3, instance.thrustAudioContext!.currentTime + 0.1)
-        }
-        
-        instance.thrustPlaying = true
-    }
-    
-    public static stopThrust(): void {
-        const instance = this.getInstance()
-        if (!instance.thrustPlaying || !instance.thrustGainNode) return
-        
-        instance.thrustGainNode.gain.cancelScheduledValues(instance.thrustAudioContext!.currentTime)
-        instance.thrustGainNode.gain.setValueAtTime(instance.thrustGainNode.gain.value, instance.thrustAudioContext!.currentTime)
-        instance.thrustGainNode.gain.linearRampToValueAtTime(0, instance.thrustAudioContext!.currentTime + 0.2)
-        
-        setTimeout(() => {
-            instance.thrustOscillators.forEach(osc => {
-                try { osc.stop() } catch (e) {}
-            })
-            instance.thrustOscillators = []
-            instance.thrustPlaying = false
-        }, 200)
     }
 
     private static getInstance(): SoundManager {
@@ -189,5 +163,20 @@ export class SoundManager {
             throw new Error('SoundManager not initialized. Call SoundManager.initialize() first.')
         }
         return SoundManager.instance
+    }
+
+    private async loadAllSounds(): Promise<void> {
+        const loadPromises = Array.from(this.sounds.values()).map(sound => sound.load())
+        await Promise.all(loadPromises)
+    }
+
+    private static play(soundKey: string, volume: number = 1.0, loop: boolean = false): void {
+        const instance = this.getInstance()
+        const sound = instance.sounds.get(soundKey)
+        if (sound) {
+            sound.volume = Math.max(0, Math.min(1, volume))
+            sound.loop = loop
+            sound.play()
+        }
     }
 }
