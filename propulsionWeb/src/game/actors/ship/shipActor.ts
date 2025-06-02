@@ -10,6 +10,7 @@ import { BulletActor } from '@src/game/actors/bulletActor';
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { HyperspaceView } from '@src/game/ui/hyperspaceView'
 import { GameResult } from '@src/game/engine/gameManager'
+import { SoundManager } from '@src/game/engine/soundManager'
 
 const SHIP = new ImageSource('/images/tiles/ship.png')
 const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
@@ -63,8 +64,15 @@ export class ShipActor extends BaseActor {
         if (this.shipController.isThrusting() && this.fuelLevel > 0) {
             forceVector = this.physics.force(this.rotation, THRUST_FORCE)            
             this.fuelLevel = this.fuelLevel - FUEL_CONSUMPTION
+            SoundManager.playThrust()
             this.graphics.use(SHIP_THRUST.toSprite())
-        } else this.graphics.use(SHIP.toSprite())
+        } else {
+            this.graphics.use(SHIP.toSprite())
+            SoundManager.stopThrust()
+        }
+
+        const rotationDirection = this.shipController.getRotationDirection()
+        this.rotation += rotationDirection * ROTATION_SPEED * cycleTime
 
         if (!this.isBallConnected()) {
             const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
@@ -76,9 +84,6 @@ export class ShipActor extends BaseActor {
             this.ballActor?.addPos(displacement.clone().add(ballDelta));
             this.lastVelocity = displacement.scale(1 / cycleTime)                        
         }
-
-        const rotationDirection = this.shipController.getRotationDirection()
-        this.rotation += rotationDirection * ROTATION_SPEED * cycleTime
 
         if (this.shipController.isUsingTractorBeam()) {
             this.tractorBeam?.attractObjects(this.pos)
