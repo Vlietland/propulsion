@@ -155,7 +155,7 @@ export class ShipActor extends BaseActor {
             if (bullet.getFirer() === this) return
             if (this.shipController?.isUsingTractorBeam()) return
         }        
-        
+        SoundManager.stopThrust()       
         if (this.hyperspace?.checkHyperspaceReached(this)) {  
             const result = this.isBallConnected()
                 ? GameResult.ShipBallHyperspace 
@@ -171,7 +171,6 @@ export class ShipActor extends BaseActor {
     }
 
     protected explode(): void {
-        SoundManager.stopThrust()
         SoundManager.playShipExplosion()
         super.explode()
         if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)

@@ -2,6 +2,7 @@ import { TiledObject } from '@excalibur-tiled/index'
 import { CollisionType, Vector, ImageSource, CollisionStartEvent, Engine, Timer, Scene } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
 import { ScoreManager } from '@src/game/engine/scoreManager';
+import { SoundManager } from '@src/game/engine/soundManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from './turretActor';
 
@@ -17,6 +18,7 @@ export class ReactorActor extends BaseActor {
     private scoreManager: ScoreManager;
     private armor: number = ARMOR;
     private destroyTimer?: Timer;
+    private alarmTimer?: Timer;
     private onExplodeCallback?: () => void;
 
     constructor(object: TiledObject, scoreManager: ScoreManager) {
@@ -54,11 +56,25 @@ export class ReactorActor extends BaseActor {
         });
         this.scene?.engine.add(this.destroyTimer);
         this.destroyTimer.start();
+
+        this.alarmTimer = new Timer({
+            fcn: () => SoundManager.playAlarm(),
+            interval: 1000,
+            repeats: true
+        });
+        this.scene?.engine.add(this.alarmTimer);
+        this.alarmTimer.start();
     }
 
     protected explode(): void {
         console.log('Reactor exploded!');
         this.scoreManager.addScore(DESTRUCTION_SCORE);
+        
+        if (this.alarmTimer) {
+            this.alarmTimer.stop();
+            this.scene?.engine.remove(this.alarmTimer);
+        }
+        
         super.explode()
         if (this.onExplodeCallback) {
             this.onExplodeCallback();
