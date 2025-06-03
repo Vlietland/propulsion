@@ -29,7 +29,7 @@ export class EngineBootstrap {
         if (!this.mainMenu) {
             this.mainMenu = new MainMenu(this.engine, {
                 onStartGame: () => this.startGame(),
-                onShowOptions: () => this.showOptions(),
+                onShowHighScore: () => this.showHighScore(),
                 onShowCredits: () => this.showCredits(),
                 onExit: () => this.exitGame()
             })
@@ -43,7 +43,7 @@ export class EngineBootstrap {
         await this.gameManager.start()
     }
 
-    private showOptions(): void {
+    private showHighScore(): void { 
         console.log('Options menu not implemented yet')
     }
 
@@ -54,13 +54,10 @@ export class EngineBootstrap {
     private exitGame(): void { this.engine.stop() }
 
     public returnToMainMenu(): void {
-        console.log('returnToMainMenu called')
         if (this.gameManager) {
-            console.log('Disposing gameManager')
             this.gameManager.dispose?.()
             this.gameManager = null
         }
-        console.log('Calling showMainMenu')
         this.showMainMenu()
     }
 }
