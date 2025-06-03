@@ -1,18 +1,23 @@
 import { Engine } from 'excalibur'
-import { ENGINE_CONFIG } from '@src/menu/engineConfig'
 import { GameManager } from '@src/menu/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
-import { MenuManager } from '@src/menu/menuManager'
+import { MainMenu } from '@src/menu/mainMenu'
+import { DisplayMode, EngineOptions, Color } from 'excalibur'
+
+export const ENGINE_CONFIG: EngineOptions = {
+    backgroundColor: Color.Black,
+    canvasElementId: 'game',
+    antialiasing: false,
+    pixelArt: true,
+    displayMode: DisplayMode.FitScreenAndFill,
+}
 
 export class EngineBootstrap {
     public engine: Engine
     private gameManager: GameManager | null = null
-    private menuManager: MenuManager
+    private mainMenu: MainMenu | null = null
 
-    constructor() {
-        this.engine = new Engine(ENGINE_CONFIG)
-        this.menuManager = new MenuManager(this.engine)
-    }
+    constructor() { this.engine = new Engine(ENGINE_CONFIG) }
 
     async start() {
         await SoundManager.initialize()
@@ -21,22 +26,20 @@ export class EngineBootstrap {
     }
 
     private showMainMenu(): void {
-        this.menuManager.showMainMenu({
-            onStartGame: () => this.startGame(),
-            onShowOptions: () => this.showOptions(),
-            onShowCredits: () => this.showCredits(),
-            onExit: () => this.exitGame()
-        })
+        if (!this.mainMenu) {
+            this.mainMenu = new MainMenu(this.engine, {
+                onStartGame: () => this.startGame(),
+                onShowOptions: () => this.showOptions(),
+                onShowCredits: () => this.showCredits(),
+                onExit: () => this.exitGame()
+            })
+        }
+        this.mainMenu.show()
     }
 
     private async startGame(): Promise<void> {
-        this.menuManager.hideMainMenu()
-        this.menuManager.setCurrentMenu('game')
-        
-        if (!this.gameManager) {
-            this.gameManager = new GameManager(this.engine, () => this.returnToMainMenu())
-        }
-        
+        if (this.mainMenu) this.mainMenu.hide()
+        if (!this.gameManager) this.gameManager = new GameManager(this.engine, () => this.returnToMainMenu())
         await this.gameManager.start()
     }
 
@@ -48,10 +51,7 @@ export class EngineBootstrap {
         console.log('Credits screen not implemented yet')
     }
 
-    private exitGame(): void {
-        console.log('Exit game')
-        this.engine.stop()
-    }
+    private exitGame(): void { this.engine.stop() }
 
     public returnToMainMenu(): void {
         console.log('returnToMainMenu called')

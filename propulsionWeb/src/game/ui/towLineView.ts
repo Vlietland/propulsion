@@ -26,7 +26,6 @@ export class TowLineView {
 
     public hide(): void {
         if (this.towLine && this.scene) {
-            console.log('Hiding tow line')
             this.towLine.kill()
             this.towLine = null
         }
@@ -39,21 +38,18 @@ export class TowLineView {
         const distance = lineVector.distance()
         const alpha = Math.max(0.4, Math.min(0.9, 1 - distance / 800))
         const thickness = Math.max(1, Math.min(4, 6 - distance / 200))
-        
         const glowLine = new Line({
             start: Vector.Zero,
             end: lineVector,
             color: new Color(100, 200, 255, alpha * 0.7),
             thickness: thickness * 3
         })
-        
         const mainLine = new Line({
             start: Vector.Zero,
             end: lineVector,
             color: new Color(100, 200, 255, alpha * 0.3),
             thickness: thickness
         })
-        
         return new GraphicsGroup({
             members: [
                 { graphic: glowLine, offset: Vector.Zero },
