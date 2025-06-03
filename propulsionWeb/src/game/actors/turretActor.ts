@@ -2,7 +2,7 @@ import { TiledObject } from '@excalibur-tiled/index'
 import { Engine, CollisionType, Vector, ImageSource, Timer, Scene, CollisionStartEvent, Sound } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from './bulletActor';
-import { ScoreManager } from '@src/game/engine/scoreManager';
+import { ScoreManager } from '@src/menu/scoreManager';
 import { SoundManager } from '@src/game/engine/soundManager'
 
 export const TURRET = new ImageSource('/images/tiles/turret.png');

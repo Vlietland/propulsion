@@ -1,7 +1,7 @@
 import { TiledObject } from '@excalibur-tiled/index'
 import { CollisionType, Vector, ImageSource, CollisionStartEvent, Engine, Timer, Scene } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
-import { ScoreManager } from '@src/game/engine/scoreManager';
+import { ScoreManager } from '@src/menu/scoreManager';
 import { SoundManager } from '@src/game/engine/soundManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from './turretActor';

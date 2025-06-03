@@ -2,9 +2,9 @@ import { Scene, Engine } from 'excalibur'
 import { ShipController } from '@src/game/controller/shipController'
 import { HUD } from '@src/game/ui/hud'
 import { LevelManager } from '@src/game/engine/levelManager'
-import { ScoreManager } from '@src/game/engine/scoreManager'
+import { ScoreManager } from '@src/menu/scoreManager'
 import { World } from '@src/game/engine/world'
-import { GameResult } from '@src/game/engine/gameManager'
+import { GameResult } from '@src/menu/gameManager'
 
 const START_ZOOM = 0.2
 const CAMERA_ZOOM = 0.6
@@ -34,6 +34,10 @@ export class SceneManager {
 
         const scene = new Scene()
         scene.camera.zoom = 0.1
+        
+        this.engine.add(this.currentSceneName, scene)
+        this.engine.goToScene(this.currentSceneName)
+        
         this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(availableShips)
         this.hud.updateLevel(this.levelManager.getCurrentLevel())
@@ -52,8 +56,6 @@ export class SceneManager {
             this.hud.setShip(shipActor)
             shipActor.setOnGameResult((result: GameResult) => callbacks.onGameResult(result))
         }
-        this.engine.add(this.currentSceneName, scene)
-        this.engine.goToScene(this.currentSceneName)
 
         this.animateZoom(scene)
     }

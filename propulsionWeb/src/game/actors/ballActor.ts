@@ -3,7 +3,7 @@ import { Vector, CollisionType, Engine, ImageSource, CollisionStartEvent } from 
 import { BaseActor } from '@src/game/actors/baseActor';
 import { HyperspaceView } from '@src/game/ui/hyperspaceView'
 import { ShipActor } from '@src/game/actors/ship/shipActor';
-import { GameResult } from '@src/game/engine/gameManager'
+import { GameResult } from '@src/menu/gameManager'
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor'

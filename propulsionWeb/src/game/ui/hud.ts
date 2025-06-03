@@ -1,6 +1,6 @@
 import { System, SystemType, World, Scene, ScreenElement, Engine } from 'excalibur'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
-import { ScoreManager } from '@src/game/engine/scoreManager'
+import { ScoreManager } from '@src/menu/scoreManager'
 
 export class HUD extends ScreenElement {
     private ship?: ShipActor

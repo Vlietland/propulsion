@@ -10,7 +10,7 @@ import { BulletActor } from '@src/game/actors/bulletActor';
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { HyperspaceView } from '@src/game/ui/hyperspaceView'
 import { TowLineView } from '@src/game/ui/towLineView'
-import { GameResult } from '@src/game/engine/gameManager'
+import { GameResult } from '@src/menu/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
 
 const SHIP = new ImageSource('/images/tiles/ship.png')

@@ -3,7 +3,7 @@ import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
 import { Physics } from '@src/game/physics/physics'
 import { Hyperspace } from '@src/game/physics/hyperspace'
-import { ScoreManager } from '@src/game/engine/scoreManager'
+import { ScoreManager } from '@src/menu/scoreManager'
 import { LevelManager } from '@src/game/engine/levelManager'
 
 export class World {

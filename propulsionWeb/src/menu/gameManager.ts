@@ -1,11 +1,12 @@
 import { Engine, Scene } from 'excalibur'
-import { ScoreManager } from '@src/game/engine/scoreManager'
+import { ScoreManager } from '@src/menu/scoreManager'
 import { LevelManager } from '@src/game/engine/levelManager'
 import { SceneManager } from '@src/game/engine/sceneManager'
-import { GameOverScreen } from '@src/game/ui/gameOverScreen'
+import { GameOverScreen } from '@src/menu/gameOverScreen'
 
 const EXPLOSION_DELAY = 2000
 const HYPERSPACE_DELAY = 1500
+
 const MISSION_FAILED_SCORE = -1000
 const MISSION_SUCCESS_SCORE = 2000
 
@@ -20,11 +21,13 @@ export class GameManager {
     private levelManager: LevelManager
     private sceneManager: SceneManager
     private availableShips: number = 3
+    private onReturnToMenu?: () => void
 
-    constructor(private engine: Engine) {
+    constructor(private engine: Engine, onReturnToMenu?: () => void) {
         this.scoreManager = new ScoreManager()
         this.levelManager = new LevelManager()
         this.sceneManager = new SceneManager(engine, this.scoreManager, this.levelManager)
+        this.onReturnToMenu = onReturnToMenu
     }
 
     public async start(): Promise<void> {
@@ -75,11 +78,25 @@ export class GameManager {
 
     private async handleGameOver(): Promise<void> {
         await this.sceneManager.showGameOverScene()
-        GameOverScreen.show(this.scoreManager.getScore(), () => {
-            this.availableShips = 3
-            this.levelManager.resetToFirstLevel()
-            this.scoreManager.resetScore()
-            this.restartSceneManager()
-        })
+        GameOverScreen.show(
+            this.scoreManager.getScore(), 
+            () => {
+                this.availableShips = 3
+                this.levelManager.resetToFirstLevel()
+                this.scoreManager.resetScore()
+                this.restartSceneManager()
+            },
+            this.onReturnToMenu ? () => {
+                this.dispose()
+                this.onReturnToMenu!()
+            } : undefined
+        )
+    }
+
+    public dispose(): void {
+        if (this.sceneManager && typeof this.sceneManager.dispose === 'function') {
+            this.sceneManager.dispose()
+        }
+        this.sceneManager = null as any
     }
 }
