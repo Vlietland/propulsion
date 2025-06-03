@@ -29,6 +29,7 @@ export class EngineBootstrap {
         if (!this.mainMenu) {
             this.mainMenu = new MainMenu(this.engine, {
                 onStartGame: () => this.startGame(),
+                onShowBriefing: () => this.showBriefing(),
                 onShowHighScore: () => this.showHighScore(),
                 onShowCredits: () => this.showCredits(),
                 onExit: () => this.exitGame()
@@ -43,8 +44,16 @@ export class EngineBootstrap {
         await this.gameManager.start()
     }
 
+    private showHelp(): void {
+        console.log('Help screen not implemented yet')
+    }
+
+    private showBriefing(): void {
+        console.log('Briefing screen not implemented yet')
+    }
+
     private showHighScore(): void { 
-        console.log('Options menu not implemented yet')
+        console.log('High Score menu not implemented yet')
     }
 
     private showCredits(): void {
