@@ -9,6 +9,7 @@ import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { HyperspaceView } from '@src/game/ui/hyperspaceView'
+import { TowLineView } from '@src/game/ui/towLineView'
 import { GameResult } from '@src/game/engine/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
 
@@ -31,6 +32,7 @@ export class ShipActor extends BaseActor {
     private shipController?: ShipController
     private ballActor?: BallActor
     private tractorBeam?: TractorBeam
+    private towLineView?: TowLineView
     private fuelLevel = FUEL_FULL /2
     private mass = 100
     private lastShotTime: number = 0   
@@ -54,6 +56,7 @@ export class ShipActor extends BaseActor {
 
     onInitialize(engine: Engine): void {
         this.on('postcollision', (evt) => this.handleCollision(evt as CollisionStartEvent))
+        this.towLineView = new TowLineView(this.scene)
     }
 
     onPreUpdate(engine: Engine, delta: number) {
@@ -77,12 +80,22 @@ export class ShipActor extends BaseActor {
         if (!this.isBallConnected()) {
             const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
             this.pos = this.pos.add(displacement)
-            this.lastVelocity = displacement.scale(1 / cycleTime)            
+            this.lastVelocity = displacement.scale(1 / cycleTime)
+            this.towLineView?.hide()
         } else { //connected
             const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
             this.pos = this.pos.add(displacement).add(shipDelta);
             this.ballActor?.addPos(displacement.clone().add(ballDelta));
-            this.lastVelocity = displacement.scale(1 / cycleTime)                        
+            this.lastVelocity = displacement.scale(1 / cycleTime)
+            
+            // Update tow line visual
+            if (this.ballActor && this.towLineView) {
+                if (this.towLineView.isVisible()) {
+                    this.towLineView.update(this.pos, this.ballActor.getPos())
+                } else {
+                    this.towLineView.show(this.pos, this.ballActor.getPos())
+                }
+            }
         }
 
         if (this.shipController.isUsingTractorBeam()) {
