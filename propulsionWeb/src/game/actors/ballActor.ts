@@ -41,22 +41,22 @@ export class BallActor extends BaseActor {
     public requestHyperspace(): void {
         if (this.inHyperspace) return
         this.inHyperspace = true
+        SoundManager.playHyperspace()
         this.kill()
-        HyperspaceView.spawn(this.scene, this.pos, new Vector(0, 0));        
+        HyperspaceView.spawn(this.scene, this.pos, new Vector(0, 0))        
     }
 
     private handleCollision(evt: CollisionStartEvent): void {
         if (this.hyperspace?.checkHyperspaceReached(this)) {
-            if (this.ship === undefined) return            
-            this.requestHyperspace()
+            if (this.ship === undefined) return   
             this.ship.requestHyperspace(GameResult.ShipBallHyperspace)
+            this.requestHyperspace()
         } else {
             const collidingActor = evt.other?.owner;            
             if (collidingActor instanceof BulletActor) {
                 const bullet = collidingActor as BulletActor;
                 if (bullet.getFirer() instanceof TurretActor && !this.ship) return
             }
-            console.log('BallActor collision with', collidingActor)
             this.ship?.attachBall(undefined)
             SoundManager.playActorExplosion();
             this.explode()

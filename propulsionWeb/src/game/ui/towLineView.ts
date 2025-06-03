@@ -14,18 +14,19 @@ export class TowLineView {
             anchor: Vector.Zero,
             z: -1
         })
-        this.towLine.graphics.use(this.createTrapezoidGlow(shipPos, ballPos))
+        this.towLine.graphics.use(this.createLine(shipPos, ballPos))
         this.scene.add(this.towLine)
     }
 
     public update(shipPos: Vector, ballPos: Vector): void {
         if (!this.towLine || !this.scene) return
         this.towLine.pos = shipPos.clone()
-        this.towLine.graphics.use(this.createTrapezoidGlow(shipPos, ballPos))
+        this.towLine.graphics.use(this.createLine(shipPos, ballPos))
     }
 
     public hide(): void {
         if (this.towLine && this.scene) {
+            console.log('Hiding tow line')
             this.towLine.kill()
             this.towLine = null
         }
@@ -33,7 +34,7 @@ export class TowLineView {
 
     public isVisible(): boolean { return this.towLine !== null }
 
-    private createTrapezoidGlow(shipPos: Vector, ballPos: Vector): GraphicsGroup {
+    private createLine(shipPos: Vector, ballPos: Vector): GraphicsGroup {
         const lineVector = ballPos.sub(shipPos)
         const distance = lineVector.distance()
         const alpha = Math.max(0.4, Math.min(0.9, 1 - distance / 800))
@@ -43,7 +44,7 @@ export class TowLineView {
             start: Vector.Zero,
             end: lineVector,
             color: new Color(100, 200, 255, alpha * 0.7),
-            thickness: thickness * 5
+            thickness: thickness * 3
         })
         
         const mainLine = new Line({

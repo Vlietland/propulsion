@@ -6,7 +6,8 @@ import { ScoreManager } from '@src/game/engine/scoreManager'
 import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/game/engine/gameManager'
 
-const CAMERA_ZOOM = 0.7
+const START_ZOOM = 0.2
+const CAMERA_ZOOM = 0.6
 
 export interface GameCallbacks {
     onGameResult: (result: GameResult) => void
@@ -64,7 +65,7 @@ export class SceneManager {
         const animate = () => {
             const elapsed = Date.now() - startTime
             const progress = Math.min(elapsed / duration, 1)
-            camera.zoom = 0.3 + (CAMERA_ZOOM - 0.3) * progress
+            camera.zoom = START_ZOOM + (CAMERA_ZOOM - 0.3) * progress
             if (progress < 1) requestAnimationFrame(animate)
         }
 

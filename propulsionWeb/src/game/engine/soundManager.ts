@@ -15,7 +15,8 @@ export class SoundManager {
         TURRET_GUN: '/sounds/turretGun.wav',
         SHIP_GUN: '/sounds/shipGun.wav',
         THRUST: '/sounds/thrust.wav',
-        ALARM: '/sounds/alarm.wav'
+        ALARM: '/sounds/alarm.wav',
+        HYPERSPACE: '/sounds/hyperspace.wav'
     }
     
     constructor(loader?: Loader) {
@@ -64,6 +65,7 @@ export class SoundManager {
     public static playTurretGun(): void { this.play('TURRET_GUN') }
     public static playShipGun(): void { this.play('SHIP_GUN') }
     public static playAlarm(): void { this.play('ALARM') }
+    public static playHyperspace(): void { this.play('HYPERSPACE', 0.5) }
     
     public static playThrust(): void {
         const instance = this.getInstance()
@@ -98,11 +100,11 @@ export class SoundManager {
         return SoundManager.instance
     }
 
-    private static play(soundKey: string, loop: boolean = false): void {
+    private static play(soundKey: string, volume: number = 1): void {
         const instance = this.getInstance()
         const sound = instance.sounds.get(soundKey)
         if (sound) {
-            sound.loop = loop
+            sound.volume = volume,
             sound.play()
         } else {
             console.warn(`Sound '${soundKey}' not found or not loaded`)

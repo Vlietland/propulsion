@@ -4,8 +4,8 @@ import { LevelManager } from '@src/game/engine/levelManager'
 import { SceneManager } from '@src/game/engine/sceneManager'
 import { GameOverScreen } from '@src/game/ui/gameOverScreen'
 
-const EXPLOSION_DELAY = 2500
-const HYPERSPACE_DELAY = 2500
+const EXPLOSION_DELAY = 2000
+const HYPERSPACE_DELAY = 1500
 const MISSION_FAILED_SCORE = -1000
 const MISSION_SUCCESS_SCORE = 2000
 

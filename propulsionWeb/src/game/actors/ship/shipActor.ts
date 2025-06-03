@@ -160,7 +160,9 @@ export class ShipActor extends BaseActor {
     public requestHyperspace(result: GameResult) {
         if (this.inHyperspace) return
         this.inHyperspace = true
-        this.towLineView?.hide()
+        this.ballActor = undefined
+        this.towLineView?.hide()      
+        SoundManager.playHyperspace()
         HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity)        
         if (this.onGameResultCallback) this.onGameResultCallback(result)
     }
@@ -189,7 +191,7 @@ export class ShipActor extends BaseActor {
 
     protected explode(): void {      
         SoundManager.playShipExplosion()
-        this.towLineView?.hide()        
+        this.towLineView?.hide()
         super.explode()
         if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)
     }   
