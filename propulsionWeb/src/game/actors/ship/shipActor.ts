@@ -189,6 +189,7 @@ export class ShipActor extends BaseActor {
 
     protected explode(): void {      
         SoundManager.playShipExplosion()
+        this.towLineView?.hide()        
         super.explode()
         if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)
     }   

@@ -38,11 +38,13 @@ export class TowLineView {
 
     private createLine(shipPos: Vector, ballPos: Vector): Line {
         const lineVector = ballPos.sub(shipPos)
+        const distance = lineVector.distance()
+        const alpha = Math.max(0.4, Math.min(0.9, 1 - distance / 800))
         return new Line({
             start: Vector.Zero,
             end: lineVector,
-            color: new Color(200, 200, 200, 0.8),
-            thickness: 2
+            color: new Color(100, 200, 255, alpha),
+            thickness: Math.max(1, Math.min(4, 6 - distance / 200))
         })
     }
 }

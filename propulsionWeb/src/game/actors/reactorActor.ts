@@ -12,7 +12,7 @@ await REACTOR.load();
 const ARMOR = 1000;
 const DESTRUCTION_SCORE = 1000;
 const BULLET_DAMAGE = 50
-const DESTROY_DELAY = 5000;
+const DESTROY_DELAY = 10000;
 
 export class ReactorActor extends BaseActor {
     private scoreManager: ScoreManager;
