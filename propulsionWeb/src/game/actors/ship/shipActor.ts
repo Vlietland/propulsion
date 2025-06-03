@@ -87,8 +87,6 @@ export class ShipActor extends BaseActor {
             this.pos = this.pos.add(displacement).add(shipDelta);
             this.ballActor?.addPos(displacement.clone().add(ballDelta));
             this.lastVelocity = displacement.scale(1 / cycleTime)
-            
-            // Update tow line visual
             if (this.ballActor && this.towLineView) {
                 if (this.towLineView.isVisible()) {
                     this.towLineView.update(this.pos, this.ballActor.getPos())
@@ -129,7 +127,12 @@ export class ShipActor extends BaseActor {
         this.kinematics = new Kinematics(this, this.physics)        
     }
 
-    attachBall(ballActor: BallActor) {
+    attachBall(ballActor: BallActor | undefined) {
+        if (ballActor === undefined || ballActor === null) {
+            this.ballActor = undefined
+            this.towLineView?.hide()
+            return
+        }
         const objectAngle = Math.atan2(
             this.pos.y - ballActor.getPos().y,
             this.pos.x - ballActor.getPos().x
@@ -184,8 +187,7 @@ export class ShipActor extends BaseActor {
         }
     }
 
-    protected explode(): void {
-        this.towLineView?.hide()
+    protected explode(): void {      
         SoundManager.playShipExplosion()
         super.explode()
         if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)

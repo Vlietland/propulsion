@@ -10,44 +10,19 @@ export class TowLineView {
 
     public show(shipPos: Vector, ballPos: Vector): void {
         if (!this.scene) return
-        
-        // Remove existing line if any
         this.hide()
-        
-        // Create new tow line
         this.towLine = new Actor({
             pos: shipPos.clone(),
             anchor: Vector.Zero
         })
-        
-        // Calculate line from ship to ball
-        const lineVector = ballPos.sub(shipPos)
-        const line = new Line({
-            start: Vector.Zero,
-            end: lineVector,
-            color: new Color(200, 200, 200, 0.8),
-            thickness: 2
-        })
-        
-        this.towLine.graphics.use(line)
+        this.towLine.graphics.use(this.createLine(shipPos, ballPos))
         this.scene.add(this.towLine)
     }
 
     public update(shipPos: Vector, ballPos: Vector): void {
         if (!this.towLine || !this.scene) return
-        
-        // Update line position and direction
         this.towLine.pos = shipPos.clone()
-        
-        const lineVector = ballPos.sub(shipPos)
-        const line = new Line({
-            start: Vector.Zero,
-            end: lineVector,
-            color: new Color(200, 200, 200, 0.8),
-            thickness: 2
-        })
-        
-        this.towLine.graphics.use(line)
+        this.towLine.graphics.use(this.createLine(shipPos, ballPos))
     }
 
     public hide(): void {
@@ -59,5 +34,15 @@ export class TowLineView {
 
     public isVisible(): boolean {
         return this.towLine !== null
+    }
+
+    private createLine(shipPos: Vector, ballPos: Vector): Line {
+        const lineVector = ballPos.sub(shipPos)
+        return new Line({
+            start: Vector.Zero,
+            end: lineVector,
+            color: new Color(200, 200, 200, 0.8),
+            thickness: 2
+        })
     }
 }

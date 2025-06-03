@@ -55,8 +55,9 @@ export class BallActor extends BaseActor {
             if (collidingActor instanceof BulletActor) {
                 const bullet = collidingActor as BulletActor;
                 if (bullet.getFirer() instanceof TurretActor && !this.ship) return
-            }        
-            SoundManager.playActorExplosion();            
+            }
+            this.ship?.attachBall(undefined)
+            SoundManager.playActorExplosion();
             this.explode()
         }
     }
