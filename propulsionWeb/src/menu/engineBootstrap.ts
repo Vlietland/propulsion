@@ -2,6 +2,7 @@ import { Engine } from 'excalibur'
 import { GameManager } from '@src/menu/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
 import { MainMenu } from '@src/menu/mainMenu'
+import { BriefingScreen } from '@src/menu/briefingScreen'
 import { DisplayMode, EngineOptions, Color } from 'excalibur'
 
 export const ENGINE_CONFIG: EngineOptions = {
@@ -16,6 +17,7 @@ export class EngineBootstrap {
     public engine: Engine
     private gameManager: GameManager | null = null
     private mainMenu: MainMenu | null = null
+    private briefingScreen: BriefingScreen | null = null
 
     constructor() { this.engine = new Engine(ENGINE_CONFIG) }
 
@@ -44,12 +46,12 @@ export class EngineBootstrap {
         await this.gameManager.start()
     }
 
-    private showHelp(): void {
-        console.log('Help screen not implemented yet')
-    }
-
     private showBriefing(): void {
-        console.log('Briefing screen not implemented yet')
+        if (this.mainMenu) this.mainMenu.hide()
+        if (!this.briefingScreen) {
+            this.briefingScreen = new BriefingScreen(this.engine, () => this.returnToMainMenu())
+        }
+        this.briefingScreen.show()
     }
 
     private showHighScore(): void { 
