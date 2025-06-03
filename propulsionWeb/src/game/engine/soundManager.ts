@@ -71,6 +71,7 @@ export class SoundManager {
         const sound = instance.sounds.get('THRUST')
         if (sound) {
             sound.loop = true
+            sound.volume = 0.3
             sound.play()
             instance.thrustPlaying = true
         }
