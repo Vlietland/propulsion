@@ -41,13 +41,17 @@ export class EngineBootstrap {
     }
 
     private async startGame(): Promise<void> {
-        if (this.mainMenu) this.mainMenu.hide()
+        if (this.mainMenu) {
+            this.mainMenu.hide()
+        }
         if (!this.gameManager) this.gameManager = new GameManager(this.engine, () => this.returnToMainMenu())
         await this.gameManager.start()
     }
 
     private showBriefing(): void {
-        if (this.mainMenu) this.mainMenu.hide()
+        if (this.mainMenu) {
+            this.mainMenu.hide()
+        }
         if (!this.briefingScreen) {
             this.briefingScreen = new BriefingScreen(this.engine, () => this.returnToMainMenu())
         }

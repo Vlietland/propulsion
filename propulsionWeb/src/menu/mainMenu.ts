@@ -58,11 +58,14 @@ export class MainMenu {
     }
 
     public show(): void {
+        this.buttons.forEach(button => button.show())
         this.engine.add(this.sceneName, this.scene)
         this.engine.goToScene(this.sceneName)
     }
 
-    public hide(): void {}
+    public hide(): void {
+        this.buttons.forEach(button => button.hide())        
+    }
 
     public dispose(): void {
         this.buttons.forEach(button => button.dispose())
