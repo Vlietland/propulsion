@@ -6,6 +6,7 @@ const TITLE_IMAGE = new ImageSource('./images/title.png')
 export interface MainMenuOptions {
     onStartGame: () => void
     onShowBriefing?: () => void
+    onShowControls?: () => void
     onShowHighScore?: () => void
     onShowCredits?: () => void
     onExit?: () => void
@@ -45,6 +46,7 @@ export class MainMenu {
         const configs = [
             { text: 'START MISSIONS', action: this.options.onStartGame },
             { text: 'BRIEFING', action: this.options.onShowBriefing || (() => {}) },
+            { text: 'CONTROLS', action: this.options.onShowControls || (() => {}) },
             { text: 'HIGH SCORE', action: this.options.onShowHighScore || (() => {}) },
             { text: 'CREDITS', action: this.options.onShowCredits || (() => {}) },
             { text: 'EXIT', action: this.options.onExit || (() => {}) }

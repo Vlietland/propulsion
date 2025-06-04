@@ -3,6 +3,7 @@ import { GameManager } from '@src/menu/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
 import { MainMenu } from '@src/menu/mainMenu'
 import { BriefingScreen } from '@src/menu/briefingScreen'
+import { ControlsScreen } from '@src/menu/controlsScreen'
 import { DisplayMode, EngineOptions, Color } from 'excalibur'
 
 export const ENGINE_CONFIG: EngineOptions = {
@@ -18,6 +19,7 @@ export class EngineBootstrap {
     private gameManager: GameManager | null = null
     private mainMenu: MainMenu | null = null
     private briefingScreen: BriefingScreen | null = null
+    private controlsScreen: ControlsScreen | null = null
 
     constructor() { this.engine = new Engine(ENGINE_CONFIG) }
 
@@ -32,6 +34,7 @@ export class EngineBootstrap {
             this.mainMenu = new MainMenu(this.engine, {
                 onStartGame: () => this.startGame(),
                 onShowBriefing: () => this.showBriefing(),
+                onShowControls: () => this.showControls(),
                 onShowHighScore: () => this.showHighScore(),
                 onShowCredits: () => this.showCredits(),
                 onExit: () => this.exitGame()
@@ -56,6 +59,16 @@ export class EngineBootstrap {
             this.briefingScreen = new BriefingScreen(this.engine, () => this.returnToMainMenu())
         }
         this.briefingScreen.show()
+    }
+
+    private showControls(): void {
+        if (this.mainMenu) {
+            this.mainMenu.hide()
+        }
+        if (!this.controlsScreen) {
+            this.controlsScreen = new ControlsScreen(this.engine, () => this.returnToMainMenu())
+        }
+        this.controlsScreen.show()
     }
 
     private showHighScore(): void { 
