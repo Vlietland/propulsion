@@ -57,7 +57,7 @@ export class HighScoreScreen {
         }))
         this.scene.add(commanderHeader)
 
-        const separator = new Actor({ pos: new Vector(0, -160), anchor: Vector.Half })
+        const separator = new Actor({ pos: new Vector(40, -160), anchor: Vector.Half })
         separator.graphics.use(new Text({
             text: '─'.repeat(50),
             color: new Color(100, 255, 100),
@@ -102,23 +102,6 @@ export class HighScoreScreen {
             this.scene.add(commanderActor)
         })
 
-        const instructionY = 150
-        const instruction1 = new Actor({ pos: new Vector(0, instructionY), anchor: Vector.Half })
-        instruction1.graphics.use(new Text({
-            text: 'Complete missions and collect cargo pods to earn points',
-            color: new Color(180, 180, 180),
-            font: new Font({ family: 'monospace', size: 14, unit: FontUnit.Px })
-        }))
-        this.scene.add(instruction1)
-
-        const instruction2 = new Actor({ pos: new Vector(0, instructionY + 25), anchor: Vector.Half })
-        instruction2.graphics.use(new Text({
-            text: 'Destroy reactors and turrets for bonus points',
-            color: new Color(180, 180, 180),
-            font: new Font({ family: 'monospace', size: 14, unit: FontUnit.Px })
-        }))
-        this.scene.add(instruction2)
-
         const backActor = new Actor({ pos: new Vector(0, 220), anchor: Vector.Half })
         backActor.graphics.use(new Text({
             text: "Press ESC or ENTER to return to main menu",
@@ -140,10 +123,6 @@ export class HighScoreScreen {
         this.engine.add(this.sceneName, this.scene)
         this.engine.goToScene(this.sceneName)
         this.setupInput()
-    }
-
-    public hide(): void {
-        // Scene cleanup handled by engine
     }
 
     public dispose(): void {
