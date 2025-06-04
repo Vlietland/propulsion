@@ -28,14 +28,14 @@ export class MainMenu {
         const screenWidth = this.engine.screen.resolution.width
         const screenHeight = this.engine.screen.resolution.height
         const imageActor = new Actor({ 
-            pos: new Vector(screenWidth / 4, 0), // Position to the right half of screen
+            pos: new Vector(screenWidth / 4, 0),
             anchor: Vector.Half,
             z: 1
         })
         TITLE_IMAGE.load().then(() => {
             imageActor.graphics.use(new Sprite({
                 image: TITLE_IMAGE,
-                destSize: { width: screenWidth / 2, height: screenHeight } // Full right side
+                destSize: { width: screenWidth / 2, height: screenHeight }
             }))
         })
         this.scene.add(imageActor)
@@ -43,7 +43,7 @@ export class MainMenu {
 
     private createButtons(): void {
         const configs = [
-            { text: 'START GAME', action: this.options.onStartGame },
+            { text: 'START MISSIONS', action: this.options.onStartGame },
             { text: 'BRIEFING', action: this.options.onShowBriefing || (() => {}) },
             { text: 'HIGH SCORE', action: this.options.onShowHighScore || (() => {}) },
             { text: 'CREDITS', action: this.options.onShowCredits || (() => {}) },
@@ -53,7 +53,7 @@ export class MainMenu {
             const button = new MenuButton(config.text, new Vector(-280, -135 + index * 70), config.action)
             this.buttons.push(button)
             this.scene.add(button.actor)
-            this.scene.add(button) // Add the ScreenElement to the scene
+            this.scene.add(button)
         })
     }
 

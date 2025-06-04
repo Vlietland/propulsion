@@ -20,7 +20,7 @@ export class GameManager {
     private scoreManager: ScoreManager
     private levelManager: LevelManager
     private sceneManager: SceneManager
-    private availableShips: number = 3
+    private availableShips: number = 1
     private onReturnToMenu?: () => void
 
     constructor(private engine: Engine, onReturnToMenu?: () => void) {
@@ -81,15 +81,18 @@ export class GameManager {
         GameOverScreen.show(
             this.scoreManager.getScore(), 
             () => {
+                GameOverScreen.hideCurrentInstance()
                 this.availableShips = 3
                 this.levelManager.resetToFirstLevel()
                 this.scoreManager.resetScore()
                 this.restartSceneManager()
             },
             this.onReturnToMenu ? () => {
+                GameOverScreen.hideCurrentInstance()
                 this.dispose()
                 this.onReturnToMenu!()
-            } : undefined
+            } : undefined,
+            this.engine
         )
     }
 

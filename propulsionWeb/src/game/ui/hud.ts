@@ -35,7 +35,7 @@ export class HUD extends ScreenElement {
         this.hudElement.appendChild(this.statusElement);
         this.livesElement = this.createLabel('LIVES: 3');
         this.hudElement.appendChild(this.livesElement);
-        this.levelElement = this.createLabel('LEVEL: 1');
+        this.levelElement = this.createLabel('MISSION: 1');
         this.hudElement.appendChild(this.levelElement);
         this.scoreElement = this.createLabel('SCORE: 0');
         this.hudElement.appendChild(this.scoreElement);
@@ -71,7 +71,7 @@ export class HUD extends ScreenElement {
     }
 
     updateLevel(level: number): void {
-        this.levelElement.textContent = `LEVEL: ${level}`;
+        this.levelElement.textContent = `MISSION: ${level}`;
     }
 
     updateScore(score: number): void {
