@@ -18,7 +18,7 @@ export class MainMenu {
 
     constructor(private engine: Engine, private options: MainMenuOptions) {
         this.scene = new Scene()
-        this.scene.backgroundColor = new Color(10, 10, 30)
+        this.scene.backgroundColor = new Color(5, 5, 20)
         this.scene.camera.pos = new Vector(0, 0)
         this.createTitleImage()
         this.createButtons()
@@ -50,7 +50,7 @@ export class MainMenu {
             { text: 'EXIT', action: this.options.onExit || (() => {}) }
         ]
         configs.forEach((config, index) => {
-            const button = new MenuButton(config.text, new Vector(-200, -50 + index * 60), config.action)
+            const button = new MenuButton(config.text, new Vector(-280, -135 + index * 70), config.action)
             this.buttons.push(button)
             this.scene.add(button.actor)
         })
