@@ -5,6 +5,8 @@ import { MainMenu } from '@src/menu/mainMenu'
 import { BriefingScreen } from '@src/menu/ui/briefingScreen'
 import { ControlsScreen } from '@src/menu/ui/controlsScreen'
 import { CreditsScreen } from '@src/menu/ui/creditsScreen'
+import { HighScoreScreen } from '@src/menu/ui/highScoreScreen'
+import { ScoreManager } from '@src/scoreManager'
 import { DisplayMode, EngineOptions, Color } from 'excalibur'
 
 export const ENGINE_CONFIG: EngineOptions = {
@@ -22,8 +24,13 @@ export class EngineBootstrap {
     private briefingScreen: BriefingScreen | null = null
     private controlsScreen: ControlsScreen | null = null
     private creditsScreen: CreditsScreen | null = null
+    private highScoreScreen: HighScoreScreen | null = null
+    private scoreManager: ScoreManager
 
-    constructor() { this.engine = new Engine(ENGINE_CONFIG) }
+    constructor() { 
+        this.engine = new Engine(ENGINE_CONFIG)
+        this.scoreManager = new ScoreManager()
+    }
 
     async start() {
         await SoundManager.initialize()
@@ -48,7 +55,7 @@ export class EngineBootstrap {
         if (this.mainMenu) {
             this.mainMenu.hide()
         }
-        if (!this.gameManager) this.gameManager = new GameManager(this.engine, () => this.returnToMainMenu())
+        if (!this.gameManager) this.gameManager = new GameManager(this.engine, this.scoreManager, () => this.returnToMainMenu())
         await this.gameManager.start()
     }
 
@@ -72,8 +79,14 @@ export class EngineBootstrap {
         this.controlsScreen.show()
     }
 
-    private showHighScore(): void { 
-        console.log('High Score menu not implemented yet')
+    private showHighScore(): void {
+        if (this.mainMenu) {
+            this.mainMenu.hide()
+        }
+        if (!this.highScoreScreen) {
+            this.highScoreScreen = new HighScoreScreen(this.engine, this.scoreManager, () => this.returnToMainMenu())
+        }
+        this.highScoreScreen.show()
     }
 
     private showCredits(): void {

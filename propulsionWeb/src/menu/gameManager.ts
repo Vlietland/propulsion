@@ -23,8 +23,8 @@ export class GameManager {
     private availableShips: number = 1
     private onReturnToMenu?: () => void
 
-    constructor(private engine: Engine, onReturnToMenu?: () => void) {
-        this.scoreManager = new ScoreManager()
+    constructor(private engine: Engine, scoreManager: ScoreManager, onReturnToMenu?: () => void) {
+        this.scoreManager = scoreManager
         this.levelManager = new LevelManager()
         this.sceneManager = new SceneManager(engine, this.scoreManager, this.levelManager)
         this.onReturnToMenu = onReturnToMenu
@@ -78,8 +78,13 @@ export class GameManager {
 
     private async handleGameOver(): Promise<void> {
         await this.sceneManager.showGameOverScene()
+        
+        // Check if the player achieved a high score
+        const finalScore = this.scoreManager.getScore()
+        this.scoreManager.checkAndAddHighScore(finalScore)
+        
         GameOverScreen.show(
-            this.scoreManager.getScore(), 
+            finalScore, 
             () => {
                 GameOverScreen.hideCurrentInstance()
                 this.availableShips = 3
