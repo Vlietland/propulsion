@@ -8,15 +8,15 @@ export class SoundManager {
     private tractorBeamPlaying = false
     
     public static readonly SOUND_PATHS = {
-        TRACTOR_BEAM: '/sounds/tractorBeam.wav',
-        SHIP_EXPLOSION: '/sounds/shipExplosion.wav',
-        ACTOR_EXPLOSION: '/sounds/actorExplosion.wav',
-        BULLET_HIT: '/sounds/bulletHit.wav',
-        TURRET_GUN: '/sounds/turretGun.wav',
-        SHIP_GUN: '/sounds/shipGun.wav',
-        THRUST: '/sounds/thrust.wav',
-        ALARM: '/sounds/alarm.wav',
-        HYPERSPACE: '/sounds/hyperspace.wav'
+        TRACTOR_BEAM: '/docs/sounds/tractorBeam.wav',
+        SHIP_EXPLOSION: '/docs/sounds/shipExplosion.wav',
+        ACTOR_EXPLOSION: '/docs/sounds/actorExplosion.wav',
+        BULLET_HIT: '/docs/sounds/bulletHit.wav',
+        TURRET_GUN: '/docs/sounds/turretGun.wav',
+        SHIP_GUN: '/docs/sounds/shipGun.wav',
+        THRUST: '/docs/sounds/thrust.wav',
+        ALARM: '/docs/sounds/alarm.wav',
+        HYPERSPACE: '/docs/sounds/hyperspace.wav'
     }
     
     constructor(loader?: Loader) {

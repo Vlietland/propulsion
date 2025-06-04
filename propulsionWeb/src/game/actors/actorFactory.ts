@@ -8,7 +8,7 @@ import { FuelTankActor } from '@src/game/actors/fuelTankActor'
 import { TransformerActor } from '@src/game/actors/transformerActor'
 import { BallStoreActor } from '@src/game/actors/ballStoreActor'
 import { Hyperspace } from '@src/game/physics/hyperspace'
-import { ScoreManager } from '@src/menu/scoreManager'
+import { ScoreManager } from '@src/scoreManager'
 import { World } from '@src/game/engine/world'
 
 export class ActorFactory {

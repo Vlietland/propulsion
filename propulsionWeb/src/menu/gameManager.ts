@@ -1,5 +1,5 @@
 import { Engine, Scene } from 'excalibur'
-import { ScoreManager } from '@src/menu/scoreManager'
+import { ScoreManager } from '@src/scoreManager'
 import { LevelManager } from '@src/game/engine/levelManager'
 import { SceneManager } from '@src/game/engine/sceneManager'
 import { GameOverScreen } from '@src/menu/gameOverScreen'

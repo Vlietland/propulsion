@@ -3,7 +3,7 @@ import { CollisionType, Vector, ImageSource, Actor, Scene, Engine, Ray } from 'e
 import { LaserBeamActor, LASER_BEAM } from '@src/game/actors/laserBeamActor';
 import { BaseActor } from '@src/game/actors/baseActor';
 
-export const LASER = new ImageSource('/images/tiles/laser.png');
+export const LASER = new ImageSource('/docs/images/tiles/laser.png');
 await LASER.load();
 
 export class LaserActor extends BaseActor {

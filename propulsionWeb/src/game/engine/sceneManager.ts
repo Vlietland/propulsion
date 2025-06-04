@@ -2,7 +2,7 @@ import { Scene, Engine } from 'excalibur'
 import { ShipController } from '@src/game/controller/shipController'
 import { HUD } from '@src/game/ui/hud'
 import { LevelManager } from '@src/game/engine/levelManager'
-import { ScoreManager } from '@src/menu/scoreManager'
+import { ScoreManager } from '@src/scoreManager'
 import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/menu/gameManager'
 

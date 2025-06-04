@@ -2,7 +2,7 @@ import { TiledObject } from '@excalibur-tiled/index'
 import { CollisionType, Vector, ImageSource } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
 
-export const BALL_STORE = new ImageSource('/images/tiles/ballStore.png');
+export const BALL_STORE = new ImageSource('/docs/images/tiles/ballStore.png');
 await BALL_STORE.load();
 
 export class BallStoreActor extends BaseActor {

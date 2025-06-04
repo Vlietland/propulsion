@@ -1,13 +1,13 @@
 import { TiledObject } from '@excalibur-tiled/index'
 import { Vector, CollisionType, CollisionStartEvent, ImageSource } from 'excalibur'
 import { BaseActor } from '@src/game/actors/baseActor';
-import { ScoreManager } from '@src/menu/scoreManager';
+import { ScoreManager } from '@src/scoreManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor';
 import { SoundManager } from '@src/game/engine/soundManager'
 
-export const FUEL_TANK_FULL = new ImageSource('/images/tiles/fuelTankFull.png')
-export const FUEL_TANK_EMPTY = new ImageSource('/images/tiles/fuelTankEmpty.png')
+export const FUEL_TANK_FULL = new ImageSource('/docs/images/tiles/fuelTankFull.png')
+export const FUEL_TANK_EMPTY = new ImageSource('/docs/images/tiles/fuelTankEmpty.png')
 await FUEL_TANK_FULL.load()
 await FUEL_TANK_EMPTY.load()
 const FUEL_SCORE = 5;

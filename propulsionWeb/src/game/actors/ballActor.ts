@@ -9,7 +9,7 @@ import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor'
 import { SoundManager } from '@src/game/engine/soundManager'
 
-export const BALL = new ImageSource('/images/tiles/ball.png')
+export const BALL = new ImageSource('/docs/images/tiles/ball.png')
 await BALL.load()
 
 export class BallActor extends BaseActor {

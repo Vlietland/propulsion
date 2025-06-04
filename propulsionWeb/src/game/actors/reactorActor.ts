@@ -1,12 +1,12 @@
 import { TiledObject } from '@excalibur-tiled/index'
 import { CollisionType, Vector, ImageSource, CollisionStartEvent, Engine, Timer, Scene } from 'excalibur';
 import { BaseActor } from '@src/game/actors/baseActor';
-import { ScoreManager } from '@src/menu/scoreManager';
+import { ScoreManager } from '@src/scoreManager';
 import { SoundManager } from '@src/game/engine/soundManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from './turretActor';
 
-export const REACTOR = new ImageSource('/images/tiles/reactor.png');
+export const REACTOR = new ImageSource('/docs/images/tiles/reactor.png');
 await REACTOR.load();
 
 const ARMOR = 1000;

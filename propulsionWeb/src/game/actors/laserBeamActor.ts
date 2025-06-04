@@ -2,7 +2,7 @@ import { TiledObject } from '@excalibur-tiled/index'
 import { CollisionType, Vector, ImageSource, Engine, Actor } from 'excalibur'
 import { BaseActor } from '@src/game/actors/baseActor'
 
-export const LASER_BEAM = new ImageSource('/images/tiles/laserbeam.png')
+export const LASER_BEAM = new ImageSource('/docs/images/tiles/laserbeam.png')
 await LASER_BEAM.load()
 
 export class LaserBeamActor extends BaseActor {

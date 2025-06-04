@@ -1,7 +1,7 @@
 import { Scene, Vector, Color, Actor, Engine, ImageSource, Sprite } from 'excalibur'
 import { MenuButton } from '@src/menu/menuButton'
 
-const TITLE_IMAGE = new ImageSource('./images/title.png')
+const TITLE_IMAGE = new ImageSource('/docs/images/title.png')
 
 export interface MainMenuOptions {
     onStartGame: () => void
