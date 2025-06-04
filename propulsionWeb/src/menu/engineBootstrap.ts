@@ -38,8 +38,7 @@ export class EngineBootstrap {
                 onShowBriefing: () => this.showBriefing(),
                 onShowControls: () => this.showControls(),
                 onShowHighScore: () => this.showHighScore(),
-                onShowCredits: () => this.showCredits(),
-                onExit: () => this.exitGame()
+                onShowCredits: () => this.showCredits()
             })
         }
         this.mainMenu.show()
@@ -86,8 +85,6 @@ export class EngineBootstrap {
         }
         this.creditsScreen.show()
     }
-
-    private exitGame(): void { this.engine.stop() }
 
     public returnToMainMenu(): void {
         if (this.gameManager) {

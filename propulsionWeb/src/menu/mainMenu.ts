@@ -9,7 +9,6 @@ export interface MainMenuOptions {
     onShowControls?: () => void
     onShowHighScore?: () => void
     onShowCredits?: () => void
-    onExit?: () => void
 }
 
 export class MainMenu {
@@ -48,8 +47,7 @@ export class MainMenu {
             { text: 'BRIEFING', action: this.options.onShowBriefing || (() => {}) },
             { text: 'CONTROLS', action: this.options.onShowControls || (() => {}) },
             { text: 'HIGH SCORE', action: this.options.onShowHighScore || (() => {}) },
-            { text: 'CREDITS', action: this.options.onShowCredits || (() => {}) },
-            { text: 'EXIT', action: this.options.onExit || (() => {}) }
+            { text: 'CREDITS', action: this.options.onShowCredits || (() => {}) }
         ]
         configs.forEach((config, index) => {
             const button = new MenuButton(config.text, new Vector(-280, -135 + index * 70), config.action)
