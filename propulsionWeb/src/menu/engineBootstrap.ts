@@ -4,6 +4,7 @@ import { SoundManager } from '@src/game/engine/soundManager'
 import { MainMenu } from '@src/menu/mainMenu'
 import { BriefingScreen } from '@src/menu/briefingScreen'
 import { ControlsScreen } from '@src/menu/controlsScreen'
+import { CreditsScreen } from '@src/menu/creditsScreen'
 import { DisplayMode, EngineOptions, Color } from 'excalibur'
 
 export const ENGINE_CONFIG: EngineOptions = {
@@ -20,6 +21,7 @@ export class EngineBootstrap {
     private mainMenu: MainMenu | null = null
     private briefingScreen: BriefingScreen | null = null
     private controlsScreen: ControlsScreen | null = null
+    private creditsScreen: CreditsScreen | null = null
 
     constructor() { this.engine = new Engine(ENGINE_CONFIG) }
 
@@ -76,7 +78,13 @@ export class EngineBootstrap {
     }
 
     private showCredits(): void {
-        console.log('Credits screen not implemented yet')
+        if (this.mainMenu) {
+            this.mainMenu.hide()
+        }
+        if (!this.creditsScreen) {
+            this.creditsScreen = new CreditsScreen(this.engine, () => this.returnToMainMenu())
+        }
+        this.creditsScreen.show()
     }
 
     private exitGame(): void { this.engine.stop() }
