@@ -22,26 +22,24 @@ export class BriefingScreen {
         const lines = [
             "STARDATE 2387.6 - SECTOR ZETA-PRIME",
             "",
-            "Commander, the situation is critical. Our deep space mining",
-            "operations have been compromised by an unknown gravitational",
-            "anomaly. Valuable cargo pods containing rare quantum crystals",
-            "are being pulled into dangerous hyperspace rifts.",
+            "Commander, the situation is critical. Our deep space mining operations",
+            "have been compromised by hostile alien forces in the outer rim.",
+            "Valuable cargo pods containing precious quantum crystals are scattered",
+            "throughout the mining fields and heavily guarded by automated enemy turrets.",
             "",
-            "Your mission: Navigate the unstable space around the anomaly",
-            "using your ship's experimental tractor beam technology.",
-            "Collect as many cargo pods as possible before they're lost",
-            "to the void. Each pod contains materials essential for",
-            "humanity's expansion into the outer rim.",
+            "Your mission: Navigate the treacherous gravitational caves and neutralize",
+            "all enemy defenses. Collect the cargo pods using your experimental tractor",
+            "beam technology. If possible, destroy the primary reactors that process",
+            "the quantum crystals for the alien war machine. Each pod contains materials",
+            "essential for humanity's expansion in the rim.",
             "",
-            "WARNING: The gravitational fields are unpredictable.",
-            "Maintain safe distance while using your tractor beam.",
-            "If a pod reaches critical proximity to a rift, it will",
-            "hyperspace jump to safety - but the mission continues.",
+            "WARNING: The primary reactor core is highly unstable and will trigger",
+            "a catastrophic chain reaction, destroying everything within a 5000-mile",
+            "radius. Calculate your escape route carefully and do not get caught",
+            "in the blast zone. The fate of the colony ships and millions of lives",
+            "depends on you.",
             "",
-            "The fate of the colony ships depends on your success.",
-            "Failure is not an option.",
-            "",
-            "Good hunting, Commander."
+            "Good hunting, Commander. May the stars guide your path home."
         ]
 
         lines.forEach((line, index) => {
@@ -63,27 +61,8 @@ export class BriefingScreen {
             this.scene.add(textActor)
         })
 
-        // Controls section title
-        const controlsTitle = new Actor({ pos: new Vector(0, 300), anchor: Vector.Half })
-        controlsTitle.graphics.use(new Text({
-            text: 'SHIP CONTROLS',
-            color: new Color(100, 255, 100),
-            font: new Font({ family: 'monospace', size: 20, unit: FontUnit.Px })
-        }))
-        this.scene.add(controlsTitle)
-        const controls = ["ARROW KEYS / WASD - Navigate", "SPACEBAR - Tractor beam", "ESC - Abort mission"]
-        controls.forEach((control, index) => {
-            const actor = new Actor({ pos: new Vector(0, 330 + index * 25), anchor: Vector.Half })
-            actor.graphics.use(new Text({
-                text: control,
-                color: new Color(150, 255, 150),
-                font: new Font({ family: 'monospace', size: 14, unit: FontUnit.Px })
-            }))
-            this.scene.add(actor)
-        })
-
         // Create return instruction
-        const backActor = new Actor({ pos: new Vector(0, 450), anchor: Vector.Half })
+        const backActor = new Actor({ pos: new Vector(0, 350), anchor: Vector.Half })
         backActor.graphics.use(new Text({
             text: "Press ESC or ENTER to return to main menu",
             color: new Color(255, 255, 100),
