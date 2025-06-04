@@ -2,9 +2,9 @@ import { Engine } from 'excalibur'
 import { GameManager } from '@src/menu/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
 import { MainMenu } from '@src/menu/mainMenu'
-import { BriefingScreen } from '@src/menu/briefingScreen'
-import { ControlsScreen } from '@src/menu/controlsScreen'
-import { CreditsScreen } from '@src/menu/creditsScreen'
+import { BriefingScreen } from '@src/menu/ui/briefingScreen'
+import { ControlsScreen } from '@src/menu/ui/controlsScreen'
+import { CreditsScreen } from '@src/menu/ui/creditsScreen'
 import { DisplayMode, EngineOptions, Color } from 'excalibur'
 
 export const ENGINE_CONFIG: EngineOptions = {

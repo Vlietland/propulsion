@@ -46,7 +46,7 @@ export class MainMenu {
             { text: 'START MISSIONS', action: this.options.onStartGame },
             { text: 'BRIEFING', action: this.options.onShowBriefing || (() => {}) },
             { text: 'CONTROLS', action: this.options.onShowControls || (() => {}) },
-            { text: 'HIGH SCORE', action: this.options.onShowHighScore || (() => {}) },
+            { text: 'HIGH SCORES', action: this.options.onShowHighScore || (() => {}) },
             { text: 'CREDITS', action: this.options.onShowCredits || (() => {}) }
         ]
         configs.forEach((config, index) => {

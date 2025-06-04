@@ -2,7 +2,7 @@ import { Engine, Scene } from 'excalibur'
 import { ScoreManager } from '@src/scoreManager'
 import { LevelManager } from '@src/game/engine/levelManager'
 import { SceneManager } from '@src/game/engine/sceneManager'
-import { GameOverScreen } from '@src/menu/gameOverScreen'
+import { GameOverScreen } from '@src/menu/ui/gameOverScreen'
 
 const EXPLOSION_DELAY = 2000
 const HYPERSPACE_DELAY = 1500
