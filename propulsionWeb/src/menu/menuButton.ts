@@ -1,71 +1,65 @@
-import { Actor, Vector, Rectangle, Color, Font, FontUnit, Text, Line, GraphicsGroup } from 'excalibur'
+import { Actor, Vector, ScreenElement, Engine, Scene, World } from 'excalibur'
 
-export class MenuButton {
+export class MenuButton extends ScreenElement {
     public actor: Actor
     private isHovered: boolean = false
+    private htmlElement!: HTMLElement // Using definite assignment assertion
+    private buttonText: string
 
     constructor(text: string, position: Vector, private action: () => void) {
+        super()
+        this.buttonText = text
+        
+        // Create the invisible actor for positioning and collision
         this.actor = new Actor({ pos: position, anchor: Vector.Half })
         
-        const mainBg = new Rectangle({ 
-            width: 300, 
-            height: 50, 
-            color: new Color(5, 15, 35, 200),
-            strokeColor: new Color(0, 120, 200, 255), 
-            lineWidth: 2
-        })
+        // Create HTML button element
+        this.createHtmlButton(position)
         
-        const glowEffect = new Rectangle({ 
-            width: 296, 
-            height: 46, 
-            color: new Color(0, 80, 160, 40)
-        })
+        // Add event listeners
+        this.setupEventListeners()
+    }
+    
+    private createHtmlButton(position: Vector): void {
+        const container = document.getElementById('game-container') || document.body
         
-        const cornerLines = [
-            new Line({ start: new Vector(0, 0), end: new Vector(20, 0), color: new Color(0, 200, 255), thickness: 2 }),
-            new Line({ start: new Vector(0, 0), end: new Vector(0, 10), color: new Color(0, 200, 255), thickness: 2 }),
-            new Line({ start: new Vector(280, 0), end: new Vector(300, 0), color: new Color(0, 200, 255), thickness: 2 }),
-            new Line({ start: new Vector(300, 0), end: new Vector(300, 10), color: new Color(0, 200, 255), thickness: 2 }),
-            new Line({ start: new Vector(0, 40), end: new Vector(0, 50), color: new Color(0, 200, 255), thickness: 2 }),
-            new Line({ start: new Vector(0, 50), end: new Vector(20, 50), color: new Color(0, 200, 255), thickness: 2 }),
-            new Line({ start: new Vector(300, 40), end: new Vector(300, 50), color: new Color(0, 200, 255), thickness: 2 }),
-            new Line({ start: new Vector(280, 50), end: new Vector(300, 50), color: new Color(0, 200, 255), thickness: 2 })
-        ]
+        this.htmlElement = document.createElement('div')
+        this.htmlElement.className = 'sci-fi-button'
+        this.htmlElement.textContent = this.buttonText
         
-        const txt = new Text({ 
-            text, 
-            color: new Color(180, 220, 255), 
-            font: new Font({ 
-                family: 'Courier New, monospace', 
-                size: 18, 
-                unit: FontUnit.Px
-            })
-        })
+        // Position the button absolutely
+        this.htmlElement.style.position = 'absolute'
+        this.htmlElement.style.left = `${position.x + window.innerWidth / 2 - 150}px` // Center horizontally (button width 300px)
+        this.htmlElement.style.top = `${position.y + window.innerHeight / 2 - 25}px`   // Center vertically (button height 50px)
+        this.htmlElement.style.zIndex = '1500'
         
-        const graphics = new GraphicsGroup({ 
-            members: [mainBg, glowEffect, ...cornerLines, txt] 
-        })
-        
-        this.actor.graphics.use(graphics)
-        
-        this.actor.on('pointerdown', () => this.action())
-        this.actor.on('pointerenter', () => {
-            mainBg.strokeColor = new Color(0, 180, 255, 255)
-            glowEffect.color = new Color(0, 120, 200, 80)
-            txt.color = new Color(220, 240, 255)
-            cornerLines.forEach(line => line.color = new Color(0, 240, 255))
+        container.appendChild(this.htmlElement)
+    }
+    
+    private setupEventListeners(): void {
+        this.htmlElement.addEventListener('click', () => this.action())
+        this.htmlElement.addEventListener('mouseenter', () => {
             this.isHovered = true
+            this.htmlElement.classList.add('hovered')
         })
-        this.actor.on('pointerleave', () => {
-            mainBg.strokeColor = new Color(0, 120, 200, 255)
-            glowEffect.color = new Color(0, 80, 160, 40)
-            txt.color = new Color(180, 220, 255)
-            cornerLines.forEach(line => line.color = new Color(0, 200, 255))
+        this.htmlElement.addEventListener('mouseleave', () => {
             this.isHovered = false
+            this.htmlElement.classList.remove('hovered')
         })
+    }
+    
+    initialize(world: World, scene: Scene<unknown>): void {
+        // ScreenElement interface method
+    }
+    
+    update(engine: Engine<any>, elapsed: number): void {
+        // ScreenElement interface method - can be used for animations
     }
 
     public dispose(): void {
+        if (this.htmlElement && this.htmlElement.parentNode) {
+            this.htmlElement.parentNode.removeChild(this.htmlElement)
+        }
         this.actor.kill()
     }
 }

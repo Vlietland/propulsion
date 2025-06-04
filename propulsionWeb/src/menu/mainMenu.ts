@@ -53,6 +53,7 @@ export class MainMenu {
             const button = new MenuButton(config.text, new Vector(-280, -135 + index * 70), config.action)
             this.buttons.push(button)
             this.scene.add(button.actor)
+            this.scene.add(button) // Add the ScreenElement to the scene
         })
     }
 

@@ -1,158 +1,94 @@
-.main-menu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(135deg, #0a0a1e 0%, #1a1a3e 50%, #0a0a1e 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    font-family: 'Courier New', monospace;
-}
 
-.main-menu-title {
-    color: #00ccff;
-    font-size: 48px;
-    font-weight: bold;
-    letter-spacing: 8px;
-    margin-bottom: 60px;
-    text-shadow: 0 0 20px #00ccff;
-    animation: titleGlow 2s ease-in-out infinite alternate;
-}
 
-@keyframes titleGlow {
-    from {
-        text-shadow: 0 0 20px #00ccff;
-    }
-    to {
-        text-shadow: 0 0 30px #00ccff, 0 0 40px #0088cc;
-    }
-}
-
-.menu-button {
-    background: rgba(0, 100, 200, 0.2);
-    border: 2px solid #0066cc;
+// Sci-fi HTML button styles
+.sci-fi-button {
+    width: 300px;
+    height: 50px;
+    background: linear-gradient(145deg, rgba(5, 15, 35, 0.9), rgba(10, 25, 45, 0.9));
+    border: 2px solid #0078d4;
     color: #ffffff;
     font-family: 'Courier New', monospace;
     font-size: 18px;
     font-weight: bold;
     letter-spacing: 2px;
-    padding: 15px 40px;
-    margin: 10px 0;
-    min-width: 250px;
     text-align: center;
+    line-height: 46px; /* Adjust for border */
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-}
-
-.menu-button:hover {
-    background: rgba(0, 150, 255, 0.3);
-    border-color: #00aaff;
-    box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
-    transform: scale(1.05);
-}
-
-.menu-button.selected {
-    background: rgba(0, 200, 255, 0.4);
-    border-color: #00ccff;
-    box-shadow: 0 0 20px rgba(0, 204, 255, 0.6);
-    animation: buttonPulse 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes buttonPulse {
-    from {
-        box-shadow: 0 0 20px rgba(0, 204, 255, 0.6);
-    }
-    to {
-        box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
-    }
-}
-
-.loader-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(to bottom, #050510 0%, #0a0a20 50%, #050510 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    font-family: 'Courier New', monospace;
-}
-
-.loader-title {
-    color: #0099ff;
-    font-size: 36px;
-    font-weight: bold;
-    letter-spacing: 6px;
-    margin-bottom: 40px;
-    text-shadow: 0 0 15px #0099ff;
-}
-
-.progress-container {
-    width: 400px;
-    height: 20px;
-    border: 2px solid #0066cc;
-    background: rgba(0, 30, 60, 0.8);
-    margin-bottom: 20px;
     position: relative;
     overflow: hidden;
+    
+    /* Corner decoration lines */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            linear-gradient(90deg, #00c7ff 0px, #00c7ff 20px, transparent 20px, transparent 280px, #00c7ff 280px, #00c7ff 300px),
+            linear-gradient(0deg, #00c7ff 0px, #00c7ff 10px, transparent 10px, transparent 40px, #00c7ff 40px, #00c7ff 50px),
+            linear-gradient(90deg, #00c7ff 0px, #00c7ff 20px, transparent 20px, transparent 280px, #00c7ff 280px, #00c7ff 300px),
+            linear-gradient(0deg, #00c7ff 0px, #00c7ff 10px, transparent 10px, transparent 40px, #00c7ff 40px, #00c7ff 50px);
+        background-size: 300px 2px, 2px 50px, 300px 2px, 2px 50px;
+        background-position: 0 0, 0 0, 0 48px, 298px 0;
+        background-repeat: no-repeat;
+        opacity: 0.8;
+        z-index: 1;
+    }
+    
+    /* Inner glow effect */
+    &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        right: 2px;
+        bottom: 2px;
+        background: rgba(0, 120, 200, 0.1);
+        pointer-events: none;
+        z-index: 2;
+    }
+    
+    /* Text styling */
+    span, & {
+        position: relative;
+        z-index: 3;
+    }
 }
 
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #0066cc 0%, #00ccff 100%);
-    transition: width 0.3s ease;
-    box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
-}
-
-.loading-text {
-    color: #aaaaaa;
-    font-size: 16px;
-    letter-spacing: 2px;
-    animation: loadingDots 1.5s infinite;
-}
-
-@keyframes loadingDots {
-    0%, 20% {
+.sci-fi-button:hover,
+.sci-fi-button.hovered {
+    background: linear-gradient(145deg, rgba(0, 100, 200, 0.3), rgba(0, 150, 255, 0.3));
+    border-color: #00aaff;
+    color: #ffffff;
+    box-shadow: 
+        0 0 20px rgba(0, 170, 255, 0.5),
+        inset 0 0 20px rgba(0, 120, 200, 0.2);
+    transform: scale(1.02);
+    
+    &::before {
         opacity: 1;
+        background: 
+            linear-gradient(90deg, #00f0ff 0px, #00f0ff 20px, transparent 20px, transparent 280px, #00f0ff 280px, #00f0ff 300px),
+            linear-gradient(0deg, #00f0ff 0px, #00f0ff 10px, transparent 10px, transparent 40px, #00f0ff 40px, #00f0ff 50px),
+            linear-gradient(90deg, #00f0ff 0px, #00f0ff 20px, transparent 20px, transparent 280px, #00f0ff 280px, #00f0ff 300px),
+            linear-gradient(0deg, #00f0ff 0px, #00f0ff 10px, transparent 10px, transparent 40px, #00f0ff 40px, #00f0ff 50px);
+        background-size: 300px 2px, 2px 50px, 300px 2px, 2px 50px;
+        background-position: 0 0, 0 0, 0 48px, 298px 0;
+        background-repeat: no-repeat;
     }
-    50% {
-        opacity: 0.5;
-    }
-    100% {
-        opacity: 1;
+    
+    &::after {
+        background: rgba(0, 180, 255, 0.2);
     }
 }
 
-.button-container {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-#main-menu-button {
-    background: #006600;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-    letter-spacing: 1px;
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-}
-
-#main-menu-button:hover {
-    background: #008800;
+.sci-fi-button:active {
+    transform: scale(0.98);
+    box-shadow: 
+        0 0 15px rgba(0, 170, 255, 0.7),
+        inset 0 0 25px rgba(0, 120, 200, 0.4);
 }
