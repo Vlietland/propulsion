@@ -9,4 +9,5 @@ export default defineConfig({
       '@src': '/src'
     }
   },
+  publicDir: 'docs', // Serve static files from docs instead of public
 })
