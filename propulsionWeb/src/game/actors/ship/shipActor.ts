@@ -18,7 +18,7 @@ const SHIP_THRUST = new ImageSource('/images/tiles/shipThrust.png')
 await SHIP.load()
 await SHIP_THRUST.load()
 
-const ROTATION_SPEED = 1
+const ROTATION_SPEED = 0.8
 const THRUST_FORCE = 5000
 const FUEL_FULL = 3300
 const FUEL_CONSUMPTION = 4
@@ -61,7 +61,7 @@ export class ShipActor extends BaseActor {
 
     onPreUpdate(engine: Engine, delta: number) {
         if (!this.shipController || !this.physics || !this.kinematics) return
-        const cycleTime = delta / 350
+        const cycleTime = delta / 300
         let forceVector = new Vector(0, 0)
 
         if (this.shipController.isThrusting() && this.fuelLevel > 0) {

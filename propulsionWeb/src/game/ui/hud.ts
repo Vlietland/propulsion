@@ -33,11 +33,11 @@ export class HUD extends ScreenElement {
         this.hudElement.appendChild(fuelBarContainer);
         this.statusElement = this.createLabel('TRACTOR READY');
         this.hudElement.appendChild(this.statusElement);
-        this.livesElement = this.createLabel('LIVES: 3');
+        this.livesElement = this.createLabel('LIVES: -1');
         this.hudElement.appendChild(this.livesElement);
-        this.levelElement = this.createLabel('MISSION: 1');
+        this.levelElement = this.createLabel('MISSION: -1');
         this.hudElement.appendChild(this.levelElement);
-        this.scoreElement = this.createLabel('SCORE: 0');
+        this.scoreElement = this.createLabel('SCORE: -1');
         this.hudElement.appendChild(this.scoreElement);
 
         scoreManager.addObserver(this.boundUpdateScore);
