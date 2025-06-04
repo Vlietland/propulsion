@@ -43,7 +43,7 @@ export class MainMenu {
 
     private createButtons(): void {
         const configs = [
-            { text: 'START MISSIONS', action: this.options.onStartGame },
+            { text: 'START MISSION', action: this.options.onStartGame },
             { text: 'BRIEFING', action: this.options.onShowBriefing || (() => {}) },
             { text: 'CONTROLS', action: this.options.onShowControls || (() => {}) },
             { text: 'HIGH SCORES', action: this.options.onShowHighScore || (() => {}) },

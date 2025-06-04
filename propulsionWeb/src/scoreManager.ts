@@ -15,7 +15,7 @@ export class ScoreManager {
     private initializeHighScores(): void {
         const savedScores = localStorage.getItem('propulsion-high-scores')
         if (savedScores) this.highScores = JSON.parse(savedScores)
-        else this.highScores = [9000, 8000, 7000, 6000, 5000, 4000, 3000, 2000, 1000]
+        else this.highScores = [8000, 7000, 6000, 5000, 4000, 3000, 2000, 1000, 1000]
         while (this.highScores.length < 8) this.highScores.push(1000)
         this.highScores = this.highScores.slice(0, 8)
         this.highScores.sort((a, b) => b - a) // Sort descending
@@ -51,7 +51,7 @@ export class ScoreManager {
         if (score > lowestHighScore) {
             this.highScores.push(score)
             this.highScores.sort((a, b) => b - a)
-            this.highScores = this.highScores.slice(0, 8) // Keep only top 8
+            this.highScores = this.highScores.slice(0, 8)
             this.saveHighScores()
             const position = this.highScores.indexOf(score) + 1
             return { isHighScore: true, position }
