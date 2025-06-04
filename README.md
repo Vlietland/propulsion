@@ -1,0 +1,141 @@
+# Propulsion
+
+A modern web-based remake of a classic space physics game, featuring gravity-based gameplay, tractor beam mechanics, and challenging cargo collection missions.
+
+## Overview
+
+Propulsion is a 2D space game where players navigate through gravitational caves using experimental tractor beam technology to collect valuable cargo pods before they're lost to hyperspace rifts. The game combines precise physics simulation with strategic gameplay elements.
+
+## Features
+
+- **Physics-Based Gameplay**: Realistic gravity simulation and momentum-based movement
+- **Tractor Beam Mechanics**: Advanced beam technology for cargo manipulation
+- **Multiple Levels**: Progressive difficulty with unique gravitational challenges
+- **Retro-style Sci-Fi Atmosphere**: Immersive space setting with retro graphics and sound
+- **Web-Based**: Runs in any modern web browser
+- **Legacy Heritage**: Built upon classic game concepts with modern implementation
+
+## Project Structure
+
+- `propulsionWeb/` - Modern TypeScript/JavaScript web implementation
+- `legacyCode/` - My old partical remake in C++ and assembler game source code and assets, made in 1997
+- `docs/` - Project documentation and design documents
+
+## Technologies Used
+
+- **TypeScript** - Type-safe JavaScript development
+- **Excalibur.js** - 2D game engine
+- **Vite** - Modern build tool and dev server
+- **SCSS** - Enhanced CSS styling
+- **Tiled** - Level map creation
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 16 or higher)
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository
+2. Navigate to the `propulsionWeb` directory
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open your browser to `http://localhost:5173`
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+## Game Controls
+
+- **Z and X** - Rotate your ship
+- **Shift** - Thrust your ship
+- **Spacebar** - Activate tractor beam
+- **ESC** - Pause game / Return to menu
+
+## Development
+
+This project follows modern web development practices with TypeScript for type safety and modular architecture. The game engine is built on Excalibur.js, providing robust 2D game development capabilities.
+
+### Code Structure
+
+- `src/game/` - Core game physics, logic, actors and game UI
+- `src/menu/` - Menu system and UI
+- `src/styles/` - SCSS stylesheets
+- `docs/` - Documentation
+- `docs/public` - Static assets (images, sounds, levels)
+
+## Contributing
+
+Contributions are welcome! Please read the license terms below and ensure your contributions comply with the GPL v3 requirements.
+
+## Legacy
+
+This project is inspired by and builds upon classic space physic game Thrust, modernizing the concept for contemporary web browsers while maintaining the core gameplay that made the original compelling.
+
+---
+
+## License
+
+**GNU GENERAL PUBLIC LICENSE Version 3**
+
+Copyright (C) 2025 Propulsion Game Project
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+### GPL v3 License Terms
+
+This project is licensed under the **GNU General Public License version 3 (GPL v3)**, which is a strong copyleft license. This means:
+
+#### Your Rights:
+- **Use** - You can use this software for any purpose
+- **Study** - You can study how the program works and access the source code
+- **Share** - You can redistribute copies of the software
+- **Modify** - You can modify the software and distribute your modifications
+
+#### Your Obligations:
+- **Share Source** - If you distribute this software (modified or unmodified), you must provide the source code
+- **Same License** - Any derivative works must also be licensed under GPL v3
+- **Attribution** - You must preserve copyright notices and license information
+- **No Additional Restrictions** - You cannot impose additional restrictions beyond those in the GPL
+
+#### Important Notes:
+- This license applies to the **entire work** - if you incorporate GPL v3 code into your project, your entire project must be GPL v3 compatible
+- **Commercial use is allowed**, but the source code must still be provided under GPL v3 terms
+- **Patents** - Contributors grant patent rights for their contributions
+- **No Warranty** - The software is provided "as is" without warranty
+
+#### For Businesses and Proprietary Projects:
+If you need to use this code in a proprietary project without GPL obligations, you must either:
+1. Not use this GPL v3 licensed code at all, or
+2. Contact the copyright holders for alternative licensing arrangements
+
+#### Third-Party Components:
+Some dependencies may have different licenses. Check individual component licenses in `package.json` and their respective documentation.
+
+For the complete license text, see: https://www.gnu.org/licenses/gpl-3.0.html
+
+---
+
+**Contact**: For licensing questions or alternative licensing arrangements, please open an issue in the project repository.
