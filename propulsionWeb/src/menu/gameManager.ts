@@ -80,12 +80,12 @@ export class GameManager {
     private async handleGameOver(): Promise<void> {
         await this.sceneManager.showGameOverScene()
         
-        // Check if the player achieved a high score
         const finalScore = this.scoreManager.getScore()
-        this.scoreManager.checkAndAddHighScore(finalScore)
+        const isHighScore = this.scoreManager.highScoreApplicable(finalScore)
         
         GameOverScreen.show(
             finalScore, 
+            isHighScore,
             () => {
                 GameOverScreen.hideCurrentInstance()
                 this.availableShips = INITIAL_SHIP_COUNT
@@ -98,6 +98,9 @@ export class GameManager {
                 this.dispose()
                 this.onReturnToMenu!()
             } : undefined,
+            (name: string) => {
+                this.scoreManager.addHighScore(finalScore, name)
+            },
             this.engine
         )
     }

@@ -31,6 +31,7 @@ export class HighScoreScreen {
         this.scene.add(subtitle)
 
         const highScores = this.scoreManager.getHighScores()
+        console.log('High Scores:', highScores)
         
         const headerY = -180
         const positionHeader = new Actor({ pos: new Vector(-180, headerY), anchor: Vector.Half })
@@ -84,18 +85,8 @@ export class HighScoreScreen {
             this.scene.add(scoreActor)
 
             const commanderActor = new Actor({ pos: new Vector(170, yPos), anchor: Vector.Half })
-            const commanderNames = [
-                'ADMIRAL CHEN',
-                'CPT. RODRIGUEZ', 
-                'CDR. WILLIAMS',
-                'LT.CDR. PATEL',
-                'LT. ANDERSON',
-                'ENS. JOHNSON',
-                'ENS. MARTINEZ',
-                'CADET SMITH'
-            ]
             commanderActor.graphics.use(new Text({
-                text: commanderNames[index] || 'UNKNOWN',
+                text: entry.name || 'UNKNOWN',
                 color: new Color(150, 200, 255),
                 font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
             }))
