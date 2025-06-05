@@ -1,14 +1,12 @@
 import { Actor, Vector } from 'excalibur'
 
-const HYPER_SPACE_BOUNDARY_HEIGHT = 10
-
 export class Hyperspace {
     private mapWidth: number
     private mapHeight: number
     private tileWidth: number
     private tileHeight: number
-    private hyperspaceBoundaryDepth: number
-    //private onHyperspaceReachedCallback?: () => void
+    private hyperspaceBorderX: number
+    private hyperspaceBorderY: number    
 
     constructor(map: any) {
         if (!map || !map.map) {
@@ -18,12 +16,16 @@ export class Hyperspace {
         this.mapHeight = map.map.height
         this.tileWidth = map.map.tilewidth
         this.tileHeight = map.map.tileheight
-        this.hyperspaceBoundaryDepth = HYPER_SPACE_BOUNDARY_HEIGHT * this.tileHeight
+        this.hyperspaceBorderX = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderX')?.value     
+        this.hyperspaceBorderY = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderY')?.value
+        console.log(`Hyperspace initialized with map size: ${this.mapWidth}x${this.mapHeight}, tile size: ${this.tileWidth}x${this.tileHeight}, borders: X=${this.hyperspaceBorderX}, Y=${this.hyperspaceBorderY}`) 
     }
 
     public checkHyperspaceReached(actor: Actor): boolean {
-        const reachedHyperspaceY = actor.pos.y <= 2*this.tileHeight
+        const MARGIN = this.tileHeight / 2
+        const reachedHyperspaceY = actor.pos.y <= this.tileHeight * this.hyperspaceBorderY - MARGIN
         const atMapEdge = this.isAtHorizontalEdge(actor.pos)
+        console.log(`Hyperspace check: Y=${actor.pos.y}, BorderY=${this.tileHeight * this.hyperspaceBorderY}, MARGIN=${MARGIN}, ReachedY=${reachedHyperspaceY}, AtEdge=${atMapEdge}`)
         if (reachedHyperspaceY || atMapEdge) {
             return true
         }
@@ -31,9 +33,9 @@ export class Hyperspace {
     }
 
     private isAtHorizontalEdge(position: Vector): boolean {
-        const boundaryTiles = 7
-        const leftEdge = position.x <= boundaryTiles * 2*this.tileWidth
-        const rightEdge = position.x >= (this.mapWidth - 2*boundaryTiles) * this.tileWidth
+        const MARGIN = this.tileWidth / 2
+        const leftEdge = position.x <= (this.hyperspaceBorderX * this.tileWidth) + MARGIN 
+        const rightEdge = position.x >= ((this.mapWidth - this.hyperspaceBorderX) * this.tileWidth) - MARGIN
         return leftEdge || rightEdge
     }
 }
