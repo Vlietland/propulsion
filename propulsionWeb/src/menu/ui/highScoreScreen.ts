@@ -16,7 +16,7 @@ export class HighScoreScreen {
     private createHighScoreDisplay(): void {
         const title = new Actor({ pos: new Vector(0, -280), anchor: Vector.Half })
         title.graphics.use(new Text({
-            text: 'HIGH SCORES',
+            text: 'HALL OF FAME',
             color: new Color(255, 100, 100),
             font: new Font({ family: 'monospace', size: 32, unit: FontUnit.Px })
         }))

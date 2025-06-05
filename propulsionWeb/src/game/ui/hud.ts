@@ -33,7 +33,7 @@ export class HUD extends ScreenElement {
         this.hudElement.appendChild(fuelBarContainer);
         this.statusElement = this.createLabel('TRACTOR READY');
         this.hudElement.appendChild(this.statusElement);
-        this.livesElement = this.createLabel('LIVES: -1');
+        this.livesElement = this.createLabel('SHIPS: -1');
         this.hudElement.appendChild(this.livesElement);
         this.levelElement = this.createLabel('MISSION: -1');
         this.hudElement.appendChild(this.levelElement);
@@ -67,7 +67,7 @@ export class HUD extends ScreenElement {
     }
 
     updateLives(lives: number): void {
-        this.livesElement.textContent = `LIVES: ${lives}`;
+        this.livesElement.textContent = `SHIPS: ${lives}`;
     }
 
     updateLevel(level: number): void {
