@@ -4,6 +4,7 @@ import { ScoreManager } from '@src/scoreManager'
 export class HighScoreScreen {
     private scene: Scene
     private sceneName = 'high-score-screen'
+    private keyboardListener?: (evt: KeyEvent) => void
 
     constructor(private engine: Engine, private scoreManager: ScoreManager, private onBack: () => void) {
         this.scene = new Scene()
@@ -103,7 +104,7 @@ export class HighScoreScreen {
 
         const backActor = new Actor({ pos: new Vector(0, 220), anchor: Vector.Half })
         backActor.graphics.use(new Text({
-            text: "Press ESC or ENTER to return to main menu",
+            text: "Press ESC to return to main menu",
             color: new Color(255, 255, 100),
             font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
         }))
@@ -111,11 +112,12 @@ export class HighScoreScreen {
     }
 
     private setupInput(): void {
-        this.engine.input.keyboard.on('press', (evt: KeyEvent) => {
-            if (evt.key === Keys.Escape || evt.key === Keys.Enter) {
+        this.keyboardListener = (evt: KeyEvent) => {
+            if (evt.key === Keys.Escape) {
                 this.onBack()
             }
-        })
+        }
+        this.engine.input.keyboard.on('press', this.keyboardListener)
     }
 
     public show(): void {
@@ -125,6 +127,10 @@ export class HighScoreScreen {
     }
 
     public dispose(): void {
+        if (this.keyboardListener) {
+            this.engine.input.keyboard.off('press', this.keyboardListener)
+            this.keyboardListener = undefined
+        }
         this.scene.clear()
         this.engine.remove(this.sceneName)
     }

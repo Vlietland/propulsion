@@ -1,22 +1,27 @@
-import { Scene, Engine } from 'excalibur'
+import { Scene, Engine, Keys, KeyEvent } from 'excalibur'
 import { ShipController } from '@src/game/controller/shipController'
 import { HUD } from '@src/game/ui/hud'
 import { LevelManager } from '@src/game/engine/levelManager'
 import { ScoreManager } from '@src/scoreManager'
 import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/menu/gameManager'
+import { PauseScreen } from '@src/menu/ui/pauseScreen'
 
 const START_ZOOM = 0.2
 const CAMERA_ZOOM = 0.6
 
 export interface GameCallbacks {
     onGameResult: (result: GameResult) => void
+    onReturnToMenu?: () => void
 }
 
 export class SceneManager {
     private world?: World
     private hud?: HUD
     private currentSceneName?: string
+    private isPaused: boolean = false
+    private pauseKeyListener?: (evt: KeyEvent) => void
+    private onReturnToMenu?: () => void
 
     constructor(
         private engine: Engine,
@@ -29,23 +34,18 @@ export class SceneManager {
             this.hud.dispose()
             this.hud = undefined
         }
-
+        this.onReturnToMenu = callbacks.onReturnToMenu
         this.currentSceneName = `level-${Date.now()}`
-
         const scene = new Scene()
         scene.camera.zoom = 0.1
-        
         this.engine.add(this.currentSceneName, scene)
         this.engine.goToScene(this.currentSceneName)
-        
         this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(availableShips)
         this.hud.updateLevel(this.levelManager.getCurrentLevel())
         scene.add(this.hud)
-
         this.world = new World(scene, this.scoreManager, this.levelManager)
         await this.world.initialize()
-        
         const shipActor = this.world.getShipActor()
         const physics = this.world.getPhysics()
         
@@ -56,8 +56,8 @@ export class SceneManager {
             this.hud.setShip(shipActor)
             shipActor.setOnGameResult((result: GameResult) => callbacks.onGameResult(result))
         }
-
         this.animateZoom(scene)
+        this.setupPauseHandling()
     }
 
     private animateZoom(scene: Scene): void {
@@ -74,6 +74,44 @@ export class SceneManager {
         animate()
     }
 
+    private setupPauseHandling(): void {
+        this.removePauseHandling()
+        this.pauseKeyListener = (evt: KeyEvent) => {
+            if (evt.key === Keys.Escape && !this.isPaused) this.pauseGame()
+        }
+        this.engine.input.keyboard.on('press', this.pauseKeyListener)
+    }
+
+    private removePauseHandling(): void {
+        if (this.pauseKeyListener) {
+            this.engine.input.keyboard.off('press', this.pauseKeyListener)
+            this.pauseKeyListener = undefined
+        }
+    }
+
+    private pauseGame(): void {
+        if (this.isPaused) return
+        this.isPaused = true
+        PauseScreen.show(
+            () => this.resumeGame(),
+            this.onReturnToMenu ? () => this.returnToMainMenu() : undefined,
+            this.engine
+        )
+    }
+
+    private resumeGame(): void {
+        if (!this.isPaused) return
+        this.isPaused = false
+        PauseScreen.hideCurrentInstance()
+        if (this.currentSceneName) this.engine.goToScene(this.currentSceneName)
+    }
+
+    private returnToMainMenu(): void {
+        PauseScreen.hideCurrentInstance()
+        this.dispose()
+        if (this.onReturnToMenu) this.onReturnToMenu()
+    }
+
     async showGameOverScene(): Promise<void> {
         const gameOverSceneName = `gameOver-${Date.now()}`
         const gameOverScene = new Scene()
@@ -82,6 +120,8 @@ export class SceneManager {
     }
 
     dispose(): void {
+        this.removePauseHandling()
+        PauseScreen.disposeCurrentInstance()
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined

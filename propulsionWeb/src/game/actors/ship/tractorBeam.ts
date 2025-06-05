@@ -5,7 +5,7 @@ import { ShipActor } from '@src/game/actors/ship/shipActor'
 import { TractorBeamView } from '@src/game/ui/tractorBeamView'
 
 const TRACTOR_WIDTH = 100
-const TRACTOR_POWER = 25
+const TRACTOR_POWER = 50
 const TRACTOR_REACH = 220
 
 export class TractorBeam {
