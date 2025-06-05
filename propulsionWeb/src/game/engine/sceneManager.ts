@@ -97,6 +97,8 @@ export class SceneManager {
     private pauseGame(): void {
         if (this.isPaused) return
         this.isPaused = true
+        // Stop the engine to pause all game logic while keeping input listeners active
+        this.engine.stop()
         PauseScreen.show(
             () => this.resumeGame(),
             this.onReturnToMenu ? () => this.returnToMainMenu() : undefined,
@@ -108,6 +110,8 @@ export class SceneManager {
         if (!this.isPaused) return
         this.isPaused = false
         PauseScreen.hideCurrentInstance()
+        // Restart the engine to resume all game logic
+        this.engine.start()
     }
 
     private returnToMainMenu(): void {
