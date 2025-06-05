@@ -18,14 +18,12 @@ export class Hyperspace {
         this.tileHeight = map.map.tileheight
         this.hyperspaceBorderX = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderX')?.value     
         this.hyperspaceBorderY = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderY')?.value
-        console.log(`Hyperspace initialized with map size: ${this.mapWidth}x${this.mapHeight}, tile size: ${this.tileWidth}x${this.tileHeight}, borders: X=${this.hyperspaceBorderX}, Y=${this.hyperspaceBorderY}`) 
     }
 
     public checkHyperspaceReached(actor: Actor): boolean {
         const MARGIN = this.tileHeight / 2
-        const reachedHyperspaceY = actor.pos.y <= this.tileHeight * this.hyperspaceBorderY - MARGIN
+        const reachedHyperspaceY = actor.pos.y <= this.tileHeight * this.hyperspaceBorderY + MARGIN
         const atMapEdge = this.isAtHorizontalEdge(actor.pos)
-        console.log(`Hyperspace check: Y=${actor.pos.y}, BorderY=${this.tileHeight * this.hyperspaceBorderY}, MARGIN=${MARGIN}, ReachedY=${reachedHyperspaceY}, AtEdge=${atMapEdge}`)
         if (reachedHyperspaceY || atMapEdge) {
             return true
         }

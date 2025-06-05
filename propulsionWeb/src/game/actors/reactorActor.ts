@@ -43,7 +43,6 @@ export class ReactorActor extends BaseActor {
         }
         this.armor -= BULLET_DAMAGE;
         if (this.armor <= 0 && !this.destroyTimer) {
-            console.log('timer set')
             this.startDestructionTimer();
         }
     }
@@ -67,7 +66,6 @@ export class ReactorActor extends BaseActor {
     }
 
     protected explode(): void {
-        console.log('Reactor exploded!');
         this.scoreManager.addScore(DESTRUCTION_SCORE);
         
         if (this.alarmTimer) {

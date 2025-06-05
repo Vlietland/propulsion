@@ -156,7 +156,7 @@
         {
          "name":"hyperspaceBorderY",
          "type":"string",
-         "value":"12"
+         "value":"1"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

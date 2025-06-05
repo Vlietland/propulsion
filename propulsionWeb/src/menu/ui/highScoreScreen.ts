@@ -31,8 +31,6 @@ export class HighScoreScreen {
         this.scene.add(subtitle)
 
         const highScores = this.scoreManager.getHighScores()
-        console.log('High Scores:', highScores)
-        
         const headerY = -180
         const positionHeader = new Actor({ pos: new Vector(-180, headerY), anchor: Vector.Half })
         positionHeader.graphics.use(new Text({
