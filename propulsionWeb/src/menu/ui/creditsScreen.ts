@@ -28,6 +28,7 @@ export class CreditsScreen {
             "TECHNICAL DIVISION:",
             "Game Engine - Excalibur.js Development Team",
             "Level Design - Tiled Map Editor Development Team",
+            "Graphics Design - Chatgpt 4o with DALL-E3",
             "Audio Design - https://sfxr.me/, Chris McCormick",
             "Physics Simulation - Custom Implementation",
             "",
@@ -45,7 +46,7 @@ export class CreditsScreen {
         ]
 
         lines.forEach((line, index) => {
-            const textActor = new Actor({ pos: new Vector(0, -200 + index * 20), anchor: Vector.Half })
+            const textActor = new Actor({ pos: new Vector(0, -200 + index * 19), anchor: Vector.Half })
             const color = line.startsWith('PROPULSION - STELLAR') ? new Color(100, 200, 255) :
                          line.startsWith('COMMAND STAFF:') || line.startsWith('TECHNICAL DIVISION:') || line.startsWith('LEGACY OPERATIONS:') || line.startsWith('SPECIAL ACKNOWLEDGMENTS:') ? new Color(100, 255, 100) :
                          line.startsWith('©') ? new Color(255, 200, 100) :
