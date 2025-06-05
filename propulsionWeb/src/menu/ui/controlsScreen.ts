@@ -41,7 +41,7 @@ export class ControlsScreen {
         ]
 
         lines.forEach((line, index) => {
-            const textActor = new Actor({ pos: new Vector(0, -200 + index * 25), anchor: Vector.Half })
+            const textActor = new Actor({ pos: new Vector(0, -220 + index * 20), anchor: Vector.Half })
             const color = line.startsWith('CONTROL PROTOCOLS') ? new Color(100, 200, 255) :
                          line.startsWith('MOVEMENT CONTROLS:') || line.startsWith('MISSION CONTROLS:') || line.startsWith('TACTICAL INFORMATION:') ? new Color(100, 255, 100) :
                          line === '' ? Color.Transparent :
@@ -52,14 +52,14 @@ export class ControlsScreen {
                 color: color,
                 font: new Font({ 
                     family: 'monospace', 
-                    size: line.startsWith('CONTROL PROTOCOLS') || line.includes('CONTROLS:') || line.startsWith('TACTICAL INFORMATION:') ? 18 : 16, 
+                    size: line.startsWith('CONTROL PROTOCOLS') || line.includes('CONTROLS:') || line.startsWith('TACTICAL INFORMATION:') ? 16 : 14, 
                     unit: FontUnit.Px 
                 })
             }))
             this.scene.add(textActor)
         })
 
-        const backActor = new Actor({ pos: new Vector(0, 350), anchor: Vector.Half })
+        const backActor = new Actor({ pos: new Vector(0, 260), anchor: Vector.Half })
         backActor.graphics.use(new Text({
             text: "Press ESC or ENTER to return to main menu",
             color: new Color(255, 255, 100),

@@ -9,7 +9,6 @@ export class HighScoreScreen {
         this.scene = new Scene()
         this.scene.backgroundColor = new Color(5, 5, 15)
         this.scene.camera.pos = new Vector(0, 0)
-        
         this.createHighScoreDisplay()
     }
 
@@ -33,7 +32,7 @@ export class HighScoreScreen {
         const highScores = this.scoreManager.getHighScores()
         
         const headerY = -180
-        const positionHeader = new Actor({ pos: new Vector(-150, headerY), anchor: Vector.Half })
+        const positionHeader = new Actor({ pos: new Vector(-180, headerY), anchor: Vector.Half })
         positionHeader.graphics.use(new Text({
             text: 'RANK',
             color: new Color(100, 255, 100),
@@ -41,7 +40,7 @@ export class HighScoreScreen {
         }))
         this.scene.add(positionHeader)
 
-        const scoreHeader = new Actor({ pos: new Vector(50, headerY), anchor: Vector.Half })
+        const scoreHeader = new Actor({ pos: new Vector(20, headerY), anchor: Vector.Half })
         scoreHeader.graphics.use(new Text({
             text: 'SCORE',
             color: new Color(100, 255, 100),
@@ -49,7 +48,7 @@ export class HighScoreScreen {
         }))
         this.scene.add(scoreHeader)
 
-        const commanderHeader = new Actor({ pos: new Vector(200, headerY), anchor: Vector.Half })
+        const commanderHeader = new Actor({ pos: new Vector(170, headerY), anchor: Vector.Half })
         commanderHeader.graphics.use(new Text({
             text: 'COMMANDER',
             color: new Color(100, 255, 100),
@@ -57,7 +56,7 @@ export class HighScoreScreen {
         }))
         this.scene.add(commanderHeader)
 
-        const separator = new Actor({ pos: new Vector(40, -160), anchor: Vector.Half })
+        const separator = new Actor({ pos: new Vector(10, -160), anchor: Vector.Half })
         separator.graphics.use(new Text({
             text: '─'.repeat(50),
             color: new Color(100, 255, 100),
@@ -67,7 +66,7 @@ export class HighScoreScreen {
 
         highScores.forEach((entry, index) => {
             const yPos = -130 + (index * 30)
-            const positionActor = new Actor({ pos: new Vector(-150, yPos), anchor: Vector.Half })
+            const positionActor = new Actor({ pos: new Vector(-180, yPos), anchor: Vector.Half })
             positionActor.graphics.use(new Text({
                 text: `${entry.position}.`,
                 color: new Color(255, 255, 255),
@@ -75,7 +74,7 @@ export class HighScoreScreen {
             }))
             this.scene.add(positionActor)
 
-            const scoreActor = new Actor({ pos: new Vector(50, yPos), anchor: Vector.Half })
+            const scoreActor = new Actor({ pos: new Vector(20, yPos), anchor: Vector.Half })
             scoreActor.graphics.use(new Text({
                 text: entry.score.toLocaleString(),
                 color: new Color(255, 255, 100),
@@ -83,7 +82,7 @@ export class HighScoreScreen {
             }))
             this.scene.add(scoreActor)
 
-            const commanderActor = new Actor({ pos: new Vector(200, yPos), anchor: Vector.Half })
+            const commanderActor = new Actor({ pos: new Vector(170, yPos), anchor: Vector.Half })
             const commanderNames = [
                 'ADMIRAL CHEN',
                 'CPT. RODRIGUEZ', 

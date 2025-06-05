@@ -6,6 +6,7 @@ import { GameOverScreen } from '@src/menu/ui/gameOverScreen'
 
 const EXPLOSION_DELAY = 2000
 const HYPERSPACE_DELAY = 1500
+const INITIAL_SHIP_COUNT = 3
 
 const MISSION_FAILED_SCORE = -1000
 const MISSION_SUCCESS_SCORE = 2000
@@ -20,7 +21,7 @@ export class GameManager {
     private scoreManager: ScoreManager
     private levelManager: LevelManager
     private sceneManager: SceneManager
-    private availableShips: number = 1
+    private availableShips: number = INITIAL_SHIP_COUNT
     private onReturnToMenu?: () => void
 
     constructor(private engine: Engine, scoreManager: ScoreManager, onReturnToMenu?: () => void) {
@@ -87,7 +88,7 @@ export class GameManager {
             finalScore, 
             () => {
                 GameOverScreen.hideCurrentInstance()
-                this.availableShips = 3
+                this.availableShips = INITIAL_SHIP_COUNT
                 this.levelManager.resetToFirstLevel()
                 this.scoreManager.resetScore()
                 this.restartSceneManager()

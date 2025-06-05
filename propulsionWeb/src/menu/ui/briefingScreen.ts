@@ -8,8 +8,6 @@ export class BriefingScreen {
         this.scene = new Scene()
         this.scene.backgroundColor = new Color(5, 5, 15)
         this.scene.camera.pos = new Vector(0, 0)
-        
-        // Create title
         const title = new Actor({ pos: new Vector(0, -280), anchor: Vector.Half })
         title.graphics.use(new Text({
             text: 'CLASSIFIED BRIEFING',
@@ -17,8 +15,6 @@ export class BriefingScreen {
             font: new Font({ family: 'monospace', size: 32, unit: FontUnit.Px })
         }))
         this.scene.add(title)
-
-        // Create story content
         const lines = [
             "STARDATE 2387.6 - SECTOR ZETA-PRIME",
             "",
@@ -43,7 +39,7 @@ export class BriefingScreen {
         ]
 
         lines.forEach((line, index) => {
-            const textActor = new Actor({ pos: new Vector(0, -200 + index * 25), anchor: Vector.Half })
+            const textActor = new Actor({ pos: new Vector(0, -220 + index * 20), anchor: Vector.Half })
             const color = line.startsWith('WARNING:') ? new Color(255, 200, 100) :
                          line.startsWith('STARDATE') ? new Color(100, 200, 255) :
                          line === '' ? Color.Transparent :
@@ -54,15 +50,13 @@ export class BriefingScreen {
                 color: color,
                 font: new Font({ 
                     family: 'monospace', 
-                    size: line.startsWith('STARDATE') || line.startsWith('WARNING:') ? 18 : 16, 
+                    size: line.startsWith('STARDATE') || line.startsWith('WARNING:') ? 16 : 14, 
                     unit: FontUnit.Px 
                 })
             }))
             this.scene.add(textActor)
         })
-
-        // Create return instruction
-        const backActor = new Actor({ pos: new Vector(0, 350), anchor: Vector.Half })
+        const backActor = new Actor({ pos: new Vector(0, 260), anchor: Vector.Half })
         backActor.graphics.use(new Text({
             text: "Press ESC or ENTER to return to main menu",
             color: new Color(255, 255, 100),
@@ -83,10 +77,6 @@ export class BriefingScreen {
         this.engine.add(this.sceneName, this.scene)
         this.engine.goToScene(this.sceneName)
         this.setupInput()
-    }
-
-    public hide(): void {
-        // Scene cleanup handled by engine
     }
 
     public dispose(): void {
