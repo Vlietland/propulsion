@@ -18,7 +18,7 @@ export class ScoreManager {
         else this.highScores = [8000, 7000, 6000, 5000, 4000, 3000, 2000, 1000, 1000]
         while (this.highScores.length < 8) this.highScores.push(1000)
         this.highScores = this.highScores.slice(0, 8)
-        this.highScores.sort((a, b) => b - a) // Sort descending
+        this.highScores.sort((a, b) => b - a)
     }
 
     private saveHighScores(): void {

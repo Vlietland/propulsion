@@ -70,31 +70,19 @@ export class GameOverScreen {
     }
 
     static show(score: number, onRestart: () => void, onMainMenu?: () => void, engine?: Engine) {
-        if (!engine) {
-            console.error('Engine instance is required for GameOverScreen')
-            return
-        }
-
-        if (GameOverScreen.instance) {
-            GameOverScreen.instance.dispose()
-        }
-
+        if (!engine) return
+        if (GameOverScreen.instance) GameOverScreen.instance.dispose()
         GameOverScreen.instance = new GameOverScreen(engine, score, {
-            onRestart,
-            onMainMenu
+            onRestart, onMainMenu
         })
         GameOverScreen.instance.show()
     }
 
     static hideCurrentInstance(): void {
-        if (GameOverScreen.instance) {
-            GameOverScreen.instance.hide()
-        }
+        if (GameOverScreen.instance) GameOverScreen.instance.hide()
     }
 
     static disposeCurrentInstance(): void {
-        if (GameOverScreen.instance) {
-            GameOverScreen.instance.dispose()
-        }
+        if (GameOverScreen.instance) GameOverScreen.instance.dispose()
     }
 }
