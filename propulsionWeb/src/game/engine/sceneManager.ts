@@ -5,6 +5,7 @@ import { LevelManager } from '@src/game/engine/levelManager'
 import { ScoreManager } from '@src/scoreManager'
 import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/menu/gameManager'
+import { PauseScreen } from '@src/menu/ui/pauseScreen'
 
 const START_ZOOM = 0.2
 const CAMERA_ZOOM = 0.6
@@ -69,14 +70,19 @@ export class SceneManager {
             camera.zoom = START_ZOOM + (CAMERA_ZOOM - 0.3) * progress
             if (progress < 1) requestAnimationFrame(animate)
         }
-
         animate()
     }
 
     private setupPauseHandling(): void {
         this.removePauseHandling()
         this.pauseKeyListener = (evt: KeyEvent) => {
-            if (evt.key === Keys.Escape && !this.isPaused) this.pauseGame()
+            if (evt.key === Keys.Escape) {
+                if (!this.isPaused) {
+                    this.pauseGame()
+                } else {
+                    this.resumeGame()
+                }
+            }
         }
         this.engine.input.keyboard.on('press', this.pauseKeyListener)
     }
@@ -102,7 +108,6 @@ export class SceneManager {
         if (!this.isPaused) return
         this.isPaused = false
         PauseScreen.hideCurrentInstance()
-        if (this.currentSceneName) this.engine.goToScene(this.currentSceneName)
     }
 
     private returnToMainMenu(): void {
@@ -111,14 +116,16 @@ export class SceneManager {
         if (this.onReturnToMenu) this.onReturnToMenu()
     }
 
-    async showGameOverScene(): Promise<void> {
+    public async showGameOverScene(): Promise<void> {
         const gameOverSceneName = `gameOver-${Date.now()}`
         const gameOverScene = new Scene()
         this.engine.add(gameOverSceneName, gameOverScene)
         this.engine.goToScene(gameOverSceneName)
     }
 
-    dispose(): void {
+    public dispose(): void {
+        this.removePauseHandling()
+        PauseScreen.disposeCurrentInstance()
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
