@@ -5,8 +5,8 @@
     },
     "activeFile": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json",
     "expandedProjectPaths": [
-        ".",
-        "propulsionWeb"
+        "propulsionWeb",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -28,19 +28,27 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.0988,
-            "selectedLayer": 0,
+            "scale": 0.3907,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 3400.8097165991903,
-                "y": 1725.7085020242916
+                "x": 2751.4717174302536,
+                "y": 1856.923470693627
             }
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level2.json": {
-            "scale": 0.4667,
+            "scale": 0.2625,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 2989.0722091279195,
-                "y": 2111.634883222627
+                "x": 910.4761904761905,
+                "y": 1453.3333333333333
+            }
+        },
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level3.json": {
+            "scale": 0.3346,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 3263.5983263598323,
+                "y": 2239.988045427376
             }
         },
         ":/automap-tiles.tsx": {
@@ -71,6 +79,8 @@
     "project": "excalibur.tiled-project",
     "recentFiles": [
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level3.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level2.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level2.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/images/tiles.tsx",
