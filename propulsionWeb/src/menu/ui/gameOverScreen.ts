@@ -23,11 +23,8 @@ export class GameOverScreen {
         this.scene.backgroundColor = new Color(5, 5, 15)
         this.scene.camera.pos = new Vector(0, 0)
         this.createGameOverElements()
-        if (this.isHighScore) {
-            this.startNameEntry()
-        } else {
-            this.createButtons()
-        }
+        if (this.isHighScore) this.startNameEntry()
+        else this.createButtons()
     }
 
     private createGameOverElements(): void {
@@ -99,18 +96,33 @@ export class GameOverScreen {
         this.keyboardListener = (evt: KeyEvent) => {
             if (!this.nameEntryMode) return
 
-            if (evt.key === Keys.Enter) {
-                this.submitName()
-            } else if (evt.key === Keys.Escape) {
-                this.skipNameEntry()
-            } else if (evt.key === Keys.Backspace) {
+            if (evt.key === Keys.Enter) this.submitName()
+            else if (evt.key === Keys.Escape) this.skipNameEntry()
+            else if (evt.key === Keys.Backspace) {
                 if (this.currentName.length > 0) {
                     this.currentName = this.currentName.slice(0, -1)
                     this.updateNameDisplay()
                 }
-            } else if (evt.key.length === 1 && this.currentName.length < 12) {
-                const char = evt.key.toUpperCase()
-                if (/[A-Z0-9\s\.\-]/.test(char)) {
+            } else if (this.currentName.length < 12) {
+                let char = ''
+                
+                if (evt.key.startsWith('Key') && evt.key.length === 4) {
+                    char = evt.key.charAt(3).toUpperCase()
+                }
+                else if (evt.key.startsWith('Digit') && evt.key.length === 6) {
+                    char = evt.key.charAt(5)
+                }
+                else if (evt.key === Keys.Space) {
+                    char = ' '
+                }
+                else if (evt.key === Keys.Period) {
+                    char = '.'
+                }
+                else if (evt.key === Keys.Minus) {
+                    char = '-'
+                }
+                
+                if (char && /[A-Z0-9\s\.\-]/.test(char)) {
                     this.currentName += char
                     this.updateNameDisplay()
                 }
@@ -128,9 +140,7 @@ export class GameOverScreen {
     }
 
     private skipNameEntry(): void {
-        if (this.options.onNameSubmit) {
-            this.options.onNameSubmit('ANONYMOUS')
-        }
+        if (this.options.onNameSubmit) this.options.onNameSubmit('ANONYMOUS')
         this.finishNameEntry()
     }
 
@@ -153,7 +163,6 @@ export class GameOverScreen {
             { text: 'RESTART MISSION', action: this.options.onRestart },
             ...(this.options.onMainMenu ? [{ text: 'MAIN MENU', action: this.options.onMainMenu }] : [])
         ]
-
         configs.forEach((config, index) => {
             const button = new MenuButton(config.text, new Vector(0, 50 + index * 70), config.action)
             this.buttons.push(button)
@@ -166,6 +175,12 @@ export class GameOverScreen {
         this.buttons.forEach(button => button.show())
         this.engine.add(this.sceneName, this.scene)
         this.engine.goToScene(this.sceneName)
+        
+        if (this.nameEntryMode && !this.keyboardListener) {
+            setTimeout(() => {
+                this.setupNameEntryInput()
+            }, 100)
+        }
     }
 
     public hide(): void {

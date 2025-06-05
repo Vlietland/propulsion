@@ -19,24 +19,15 @@ export class ScoreManager {
             try {
                 const parsed = JSON.parse(savedScores)
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    if (typeof parsed[0] === 'number') {
-                        this.setDefaultHighScores()
-                    } else {
-                        this.highScores = parsed
-                    }
-                } else {
-                    this.setDefaultHighScores()
-                }
-            } catch (e) {
-                this.setDefaultHighScores()
-            }
-        } else {
-            this.setDefaultHighScores()
-        }
+                    if (typeof parsed[0] === 'number') this.setDefaultHighScores()
+                    else this.highScores = parsed
+                } else this.setDefaultHighScores()
+            } catch (e) { this.setDefaultHighScores() }
+        } else this.setDefaultHighScores()
         
-        while (this.highScores.length < 8) {
+        while (this.highScores.length < 8)
             this.highScores.push({ score: 1000, name: 'ANONYMOUS' })
-        }
+        
         this.highScores = this.highScores.slice(0, 8)
         this.highScores.sort((a, b) => b.score - a.score)
     }
@@ -50,7 +41,7 @@ export class ScoreManager {
             { score: 4000, name: 'LT. ANDERSON' },
             { score: 3000, name: 'ENS. JOHNSON' },
             { score: 2000, name: 'ENS. MARTINEZ' },
-            { score: 1000, name: 'CADET SMITH' }
+            { score:    0, name: 'CADET SMITH' }
         ]
         this.saveHighScores()
     }
