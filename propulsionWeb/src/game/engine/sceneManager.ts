@@ -7,8 +7,8 @@ import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/menu/gameManager'
 import { PauseScreen } from '@src/menu/ui/pauseScreen'
 
-const START_ZOOM = 0.2
-const CAMERA_ZOOM = 0.6
+const START_ZOOM = 0.15
+const CAMERA_ZOOM = 0.7
 
 export interface GameCallbacks {
     onGameResult: (result: GameResult) => void
@@ -97,7 +97,6 @@ export class SceneManager {
     private pauseGame(): void {
         if (this.isPaused) return
         this.isPaused = true
-        // Stop the engine to pause all game logic while keeping input listeners active
         this.engine.stop()
         PauseScreen.show(
             () => this.resumeGame(),
@@ -110,7 +109,6 @@ export class SceneManager {
         if (!this.isPaused) return
         this.isPaused = false
         PauseScreen.hideCurrentInstance()
-        // Restart the engine to resume all game logic
         this.engine.start()
     }
 

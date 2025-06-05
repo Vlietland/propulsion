@@ -18,51 +18,21 @@ export class PauseScreen {
         
         this.overlayElement = document.createElement('div')
         this.overlayElement.className = 'pause-overlay'
-        this.overlayElement.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            font-family: monospace;
-            color: white;
-        `
 
         // Title
         const title = document.createElement('h1')
         title.textContent = 'MISSION PAUSED'
-        title.style.cssText = `
-            color: #ffff64;
-            font-size: 32px;
-            margin-bottom: 10px;
-            text-align: center;
-        `
+        title.className = 'pause-title'
 
         // Subtitle
         const subtitle = document.createElement('p')
         subtitle.textContent = 'Choose your next action, Commander'
-        subtitle.style.cssText = `
-            color: #c8c8c8;
-            font-size: 16px;
-            margin-bottom: 40px;
-            text-align: center;
-        `
+        subtitle.className = 'pause-subtitle'
 
         // Instructions
         const instructions = document.createElement('p')
         instructions.textContent = 'Press ESC to resume mission'
-        instructions.style.cssText = `
-            color: #ffff64;
-            font-size: 14px;
-            margin-top: 40px;
-            text-align: center;
-        `
+        instructions.className = 'pause-instructions'
 
         this.overlayElement.appendChild(title)
         this.overlayElement.appendChild(subtitle)
