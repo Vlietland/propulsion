@@ -41,25 +41,25 @@ export class GameManager {
         switch (result) {
             case GameResult.ShipLost:
                 this.availableShips -= 1
-                setTimeout(() => {
+                setTimeout(async () => {
                     if (this.availableShips > 0) {
-                        this.restartSceneManager()
+                        await this.restartSceneManager()
                     } else {
-                        this.handleGameOver()
+                        await this.handleGameOver()
                     }
                 }, EXPLOSION_DELAY)
                 break
             case GameResult.ShipBallHyperspace:
                 this.levelManager.nextLevel()
                 this.scoreManager.addScore(MISSION_SUCCESS_SCORE)
-                setTimeout(() => {
-                    this.restartSceneManager()
+                setTimeout(async () => {
+                    await this.restartSceneManager()
                 }, HYPERSPACE_DELAY)
                 break
             case GameResult.ShipHyperspace:
                 this.scoreManager.addScore(MISSION_FAILED_SCORE)
-                setTimeout(() => {
-                    this.restartSceneManager()
+                setTimeout(async () => {
+                    await this.restartSceneManager()
                 }, HYPERSPACE_DELAY)
                 break
         }
@@ -70,7 +70,6 @@ export class GameManager {
             this.sceneManager.dispose()
         }
         this.sceneManager = null as any
-
         this.sceneManager = new SceneManager(this.engine, this.scoreManager, this.levelManager)
         await this.sceneManager.registerScene(this.availableShips, {
             onGameResult: (result: GameResult) => this.handleGameResult(result)
@@ -79,7 +78,6 @@ export class GameManager {
 
     private async handleGameOver(): Promise<void> {
         await this.sceneManager.showGameOverScene()
-        
         const finalScore = this.scoreManager.getScore()
         const isHighScore = this.scoreManager.highScoreApplicable(finalScore)
         

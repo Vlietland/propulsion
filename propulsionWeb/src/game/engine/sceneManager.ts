@@ -5,7 +5,6 @@ import { LevelManager } from '@src/game/engine/levelManager'
 import { ScoreManager } from '@src/scoreManager'
 import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/menu/gameManager'
-import { PauseScreen } from '@src/menu/ui/pauseScreen'
 
 const START_ZOOM = 0.2
 const CAMERA_ZOOM = 0.6
@@ -120,8 +119,6 @@ export class SceneManager {
     }
 
     dispose(): void {
-        this.removePauseHandling()
-        PauseScreen.disposeCurrentInstance()
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
