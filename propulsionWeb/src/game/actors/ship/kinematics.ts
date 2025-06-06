@@ -38,7 +38,6 @@ export class Kinematics {
             cycleTime
         )
         this.objectVelocity = velocity
-
         const angularAcceleration = this.physics.angularAcceleration(
             forceVector,
             this.shipActor.getMass(),
@@ -60,7 +59,6 @@ export class Kinematics {
         this.objectAngularVelocity = angularVelocity
         return { displacement, shipDelta, ballDelta }
     }
-
     setObjectAngle(objectAngle: number) { this.objectAngle = objectAngle }
     setTowLength(towLength: number) { this.towLength = towLength }
     resetObjectVelocity() { this.objectVelocity = Vector.Zero }

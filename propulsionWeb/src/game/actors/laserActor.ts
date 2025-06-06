@@ -51,14 +51,9 @@ export class LaserActor extends BaseActor {
     public getGroupID(): number | undefined { return this.groupID}
     
     public enableAfterDelay(delay: number = this.disableDelay): void {
-        if (this.enableTimer) {
-            clearTimeout(this.enableTimer)
-        }
-        
+        if (this.enableTimer) clearTimeout(this.enableTimer)
         this.enableTimer = window.setTimeout(() => {
-            if (this.scene) {
-                this.enable(this.object)
-            }
+            if (this.scene) this.enable(this.object)
         }, delay)
     }
     
@@ -79,17 +74,18 @@ export class LaserActor extends BaseActor {
         const tileHeight = object.height        
         let beamCount = 0
         
-        const startPos = new Vector(object.x, object.y)
-        let currentBeamPos = startPos.add(this.directionVector.scale(tileWidth))
-        
-        while (!this.isPositionBlocked(currentBeamPos) && beamCount < this.MAX_BEAMS) {
+        const laserPos = new Vector(object.x, object.y)
+        let currentBeamPos = laserPos.add(this.directionVector.scale(tileWidth))
+
+        while (beamCount < this.MAX_BEAMS) {
+            const correctedPos = this.correctPosition(currentBeamPos, this.rotation, LASER_BEAM)
             const beamObject: TiledObject = {
                 id: 0,
                 name: 'laserbeam',
                 type: '',
                 visible: true,
-                x: currentBeamPos.x,
-                y: currentBeamPos.y,
+                x: correctedPos.x,
+                y: correctedPos.y,
                 width: LASER_BEAM.width,
                 height: LASER_BEAM.height,
                 rotation: this.rotation,
@@ -111,27 +107,11 @@ export class LaserActor extends BaseActor {
         return directionVector.normalize();
     }
 
-    private isPositionBlocked(position: Vector): boolean {
-        if (!this.scene) return true
-        
-        if (position.x < 0 || position.y < 0 || position.x > 10000 || position.y > 10000) {
-            return true
-        }
-        
-        const actors = this.scene.actors
-        for (const actor of actors) {
-            if (actor === this || actor instanceof LaserBeamActor) continue
-            
-            if (actor instanceof BaseActor) {
-                if (actor.body.collisionType === CollisionType.Fixed || 
-                    actor.body.collisionType === CollisionType.Active) {
-                    if (actor.contains(position.x, position.y)) {
-                        return true
-                    }
-                }
-            }
-        }
-        
-        return false
+    private correctPosition(position: Vector, rotation: number, image: ImageSource): Vector {
+        const correction: Vector = Vector.Zero;
+        if (rotation === Math.PI / 2) correction.y = image.height
+        else if (rotation === 3 * Math.PI / 2) correction.x = -image.width
+        else if (rotation === Math.PI) { correction.x = -image.width; correction.y = image.height }
+        return position.add(correction);
     }
 }

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json",
+    "activeFile": "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level0.json",
     "expandedProjectPaths": [
         "propulsionWeb",
         "."
@@ -24,15 +24,23 @@
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/@src/public/images/tiles.tsx": {
             "scaleInDock": 1
         },
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level0.json": {
+            "scale": 0.15259374999999997,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3198.0339954945734,
+                "y": 1661.273807085808
+            }
+        },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.3907,
+            "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 2751.4717174302536,
-                "y": 1856.923470693627
+                "x": 3375.757575757576,
+                "y": 2495.4545454545455
             }
         },
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level2.json": {
@@ -74,11 +82,13 @@
     "map.tileHeight": 128,
     "map.tileWidth": 128,
     "openFiles": [
-        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json"
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level0.json"
     ],
     "project": "excalibur.tiled-project",
     "recentFiles": [
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json",
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level0.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level3.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level2.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/public/levels/level1.json",

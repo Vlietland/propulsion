@@ -16,6 +16,7 @@ export class BaseActor extends Actor {
         let correction = Vector.Zero
         if (object.rotation == -90) correction.x = -image.width
         if (object.rotation == 90) correction.y = image.height
+        if (object.rotation == 180) { correction.x = -image.width; correction.y = image.height }
         super({
             pos: new Vector(object.x+image.width/2, object.y-image.height/2).add(correction),
             width: image.width,

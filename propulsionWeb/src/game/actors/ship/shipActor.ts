@@ -18,10 +18,10 @@ const SHIP_THRUST = new ImageSource('/docs/images/tiles/shipThrust.png')
 await SHIP.load()
 await SHIP_THRUST.load()
 
-const ROTATION_SPEED = 0.8
+const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000
-const FUEL_FULL = 3300
-const FUEL_CONSUMPTION = 5
+const FUEL_FULL = 4500
+const FUEL_CONSUMPTION = 4
 const GUN_COOLDOWN = 100
 const GUN_POSITION_OFFSET = 50
 
