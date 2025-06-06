@@ -1,5 +1,5 @@
 import { Scene, Vector, Color, Actor, Engine, Text, Font, FontUnit } from 'excalibur'
-import { MenuButton } from '@src/menu/menuButton'
+import { MenuButton } from '@src/menu/ui/menuButton'
 import { NameEntry } from './nameEntry'
 
 export interface GameOverScreenOptions {
