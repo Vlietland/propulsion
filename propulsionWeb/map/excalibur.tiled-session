@@ -59,6 +59,14 @@
                 "y": 2239.988045427376
             }
         },
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/template.json": {
+            "scale": 0.15259374999999997,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 3774.7286504198246,
+                "y": 1451.5666598402624
+            }
+        },
         ":/automap-tiles.tsx": {
             "scaleInDock": 1
         },
@@ -87,6 +95,7 @@
     ],
     "project": "excalibur.tiled-project",
     "recentFiles": [
+        "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/template.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level1.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level0.json",
         "/home/jan/Documents/home/2.Projects/propulsion/propulsionWeb/docs/levels/level3.json",
