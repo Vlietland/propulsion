@@ -1,141 +1,93 @@
-# Propulsion
+# Propulsion Web Game
 
-A modern web-based remake of a classic space physics game, featuring gravity-based gameplay, tractor beam mechanics, and challenging cargo collection missions.
+This project is a modern web-based remake of the classic space physics game Thrust, originally created in 1986 for the BBC Micro. The game features gravity-based gameplay, tractor beam mechanics, and challenging cargo collection missions through underground cave systems.
 
-## Overview
+The original Thrust was a groundbreaking game that introduced realistic physics simulation and momentum-based spacecraft control. This remake preserves the core gameplay mechanics while bringing the experience to modern web browsers with enhanced graphics, sound, and cross-platform compatibility.
 
-Propulsion is a 2D space game where players navigate through gravitational caves using experimental tractor beam technology to collect valuable cargo pods before they're lost to hyperspace rifts. The game combines precise physics simulation with strategic gameplay elements.
+The development journey spans nearly four decades - from the original 1986 BBC Micro assembly code, through my 1997 C++ DOS implementation, to this contemporary TypeScript web version. Each iteration has maintained the essential physics and gameplay that made Thrust compelling while adapting to new technological capabilities.
 
-## Features
+## Usage
 
-- **Physics-Based Gameplay**: Realistic gravity simulation and momentum-based movement
-- **Tractor Beam Mechanics**: Advanced beam technology for cargo manipulation
-- **Multiple Levels**: Progressive difficulty with unique gravitational challenges
-- **Retro-style Sci-Fi Atmosphere**: Immersive space setting with retro graphics and sound
-- **Web-Based**: Runs in any modern web browser
-- **Legacy Heritage**: Built upon classic game concepts with modern implementation
+The game is hosted on GitHub Pages and can be accessed [here](https://vlietland.github.io/propulsion/) It can be played freely in any modern web browser.
 
-## Project Structure
-
-- `propulsionWeb/` - Modern TypeScript/JavaScript web implementation
-- `legacyCode/` - My old partical remake in C++ and assembler game source code and assets, made in 1997
-- `docs/` - Project documentation and design documents
-
-## Technologies Used
-
-- **TypeScript** - Type-safe JavaScript development
-- **Excalibur.js** - 2D game engine
-- **Vite** - Modern build tool and dev server
-- **SCSS** - Enhanced CSS styling
-- **Tiled** - Level map creation
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (version 16 or higher)
-- npm or yarn package manager
-
-### Installation
-
-1. Clone the repository
-2. Navigate to the `propulsionWeb` directory
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-5. Open your browser to `http://localhost:5173`
-
-### Building for Production
-
-```bash
-npm run build
-```
-
-## Game Controls
-
-- **Z and X** - Rotate your ship
-- **Shift** - Thrust your ship
-- **Spacebar** - Activate tractor beam
+### Game Controls
+- **Z and X** - Rotate your ship left/right
+- **Shift** - Activate thrust engines  
+- **Spacebar** - Engage tractor beam
 - **ESC** - Pause game / Return to menu
+
+### Gameplay Objectives
+Navigate your ship through gravitational cave systems to:
+- Collect valuable cargo pods using your tractor beam
+- Avoid crashing into cave walls or enemy defenses
+- Manage fuel consumption strategically
+- Escape through the cave entrance before time runs out
+
+The physics simulation includes realistic momentum, gravity effects, and tractor beam mechanics that require skill and precision to master.
+
+## Documentation
+
+For details on the architecture of the modern Propulsion web application, see the [propulsion documentation](./propulsionWeb/docs/propulsion).
+
+For more information about the original Thrust game and its historical significance, see the [thrust documentation](./propulsionWeb/docs/thrust).
+
+For technical analysis of the 1997 C++ implementation, see the [legacy code documentation](./propulsionWeb/docs/legacyCode).
+
+## Screenshots
+
+Modern Propulsion (2024):
+<img src="./propulsionWeb/docs/images/propulsion-gameplay.png" alt="Modern Propulsion gameplay">
+<img src="./propulsionWeb/docs/images/propulsion-menu.png" alt="Modern Propulsion menu">
+
+Original Thrust (1986):
+<img src="./propulsionWeb/docs/images/thrust-original.png" alt="Original Thrust on BBC Micro">
+
+Legacy C++ Version (1997):
+<img src="./legacyCode/Documents/Screenshots/gameplay.png" alt="1997 DOS version">
 
 ## Development
 
-This project follows modern web development practices with TypeScript for type safety and modular architecture. The game engine is built on Excalibur.js, providing robust 2D game development capabilities.
+### Technologies Used
+- **TypeScript** - Type-safe JavaScript development
+- **Excalibur.js** - 2D game engine with physics
+- **Vite** - Modern build tool and dev server
+- **Web Audio API** - Spatial sound effects
+- **Canvas/WebGL** - Hardware-accelerated graphics
 
-### Code Structure
+### Getting Started
 
-- `src/game/` - Core game physics, logic, actors and game UI
-- `src/menu/` - Menu system and UI
-- `src/styles/` - SCSS stylesheets
-- `docs/` - Documentation
-- `docs/public` - Static assets (images, sounds, levels)
+Prerequisites:
+- Node.js (version 16 or higher)
+- npm or yarn package manager
 
-## Contributing
+Installation:
+```bash
+git clone https://github.com/yourusername/propulsion.git
+cd propulsion/propulsionWeb
+npm install
+npm run dev
+```
 
-Contributions are welcome! Please read the license terms below and ensure your contributions comply with the GPL v3 requirements.
+Open your browser to `http://localhost:5173`
 
-## Legacy
+### Building for Production
+```bash
+npm run build
+./publish.sh
+```
 
-This project is inspired by and builds upon classic space physic game Thrust, modernizing the concept for contemporary web browsers while maintaining the core gameplay that made the original compelling.
+## Project Evolution
 
----
+| Year | Platform | Technology | Key Features |
+|------|----------|------------|--------------|
+| 1986 | BBC Micro | 6502 Assembly | Original physics, tractor beam |
+| 1997 | DOS/Windows | C++ | Object-oriented design, enhanced graphics |
+| 2024 | Web | TypeScript | Cross-platform, modern tooling |
+
+This project demonstrates how classic game concepts can be preserved and enhanced across different technological eras while maintaining their essential gameplay characteristics.
 
 ## License
 
-**GNU GENERAL PUBLIC LICENSE Version 3**
+This project is licensed under the GNU General Public License Version 3. See the [LICENSE](./LICENSE) file for details.
 
 Copyright (C) 2025 Propulsion Game Project
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-### GPL v3 License Terms
-
-This project is licensed under the **GNU General Public License version 3 (GPL v3)**, which is a strong copyleft license. This means:
-
-#### Your Rights:
-- **Use** - You can use this software for any purpose
-- **Study** - You can study how the program works and access the source code
-- **Share** - You can redistribute copies of the software
-- **Modify** - You can modify the software and distribute your modifications
-
-#### Your Obligations:
-- **Share Source** - If you distribute this software (modified or unmodified), you must provide the source code
-- **Same License** - Any derivative works must also be licensed under GPL v3
-- **Attribution** - You must preserve copyright notices and license information
-- **No Additional Restrictions** - You cannot impose additional restrictions beyond those in the GPL
-
-#### Important Notes:
-- This license applies to the **entire work** - if you incorporate GPL v3 code into your project, your entire project must be GPL v3 compatible
-- **Commercial use is allowed**, but the source code must still be provided under GPL v3 terms
-- **Patents** - Contributors grant patent rights for their contributions
-- **No Warranty** - The software is provided "as is" without warranty
-
-#### For Businesses and Proprietary Projects:
-If you need to use this code in a proprietary project without GPL obligations, you must either:
-1. Not use this GPL v3 licensed code at all, or
-2. Contact the copyright holders for alternative licensing arrangements
-
-#### Third-Party Components:
-Some dependencies may have different licenses. Check individual component licenses in `package.json` and their respective documentation.
-
-For the complete license text, see: https://www.gnu.org/licenses/gpl-3.0.html
-
----
-
-**Contact**: For licensing questions or alternative licensing arrangements, please open an issue in the project repository.
