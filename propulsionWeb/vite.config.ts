@@ -10,7 +10,7 @@ const suppressAssetWarnings = () => {
       console.warn = (...args) => {
         const message = args.join(' ')
         if (message.includes('Files in the public directory are served at the root path') ||
-            message.includes('Instead of /docs/')) {
+            message.includes('Instead of /publish/')) {
           return
         }
         originalWarn(...args)
@@ -27,11 +27,11 @@ export default defineConfig({
       '@src': '/src'
     }
   },
-  publicDir: 'docs',
+  publicDir: 'publish',
   build: {
     rollupOptions: {
       onwarn(warning, warn) {
-        if (warning.code === 'ASSET_NOT_FOUND' && warning.message.includes('/docs/')) {
+        if (warning.code === 'ASSET_NOT_FOUND' && warning.message.includes('/publish/')) {
           return
         }
         if (warning.message.includes('Files in the public directory are served at the root path')) {

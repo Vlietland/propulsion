@@ -13,8 +13,8 @@ import { TowLineView } from '@src/game/ui/towLineView'
 import { GameResult } from '@src/menu/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
 
-const SHIP = new ImageSource('/docs/images/tiles/ship.png')
-const SHIP_THRUST = new ImageSource('/docs/images/tiles/shipThrust.png')
+const SHIP = new ImageSource('/publish/images/tiles/ship.png')
+const SHIP_THRUST = new ImageSource('/publish/images/tiles/shipThrust.png')
 await SHIP.load()
 await SHIP_THRUST.load()
 

@@ -4,7 +4,7 @@ import { TiledObject, TiledProperty } from '@excalibur-tiled/index'
 import { Explosion } from '@src/game/ui/explosion'
 import { SoundManager } from '@src/game/engine/soundManager'
 
-export const BULLET = new ImageSource('/docs/images/tiles/bullet.png')
+export const BULLET = new ImageSource('/publish/images/tiles/bullet.png')
 BULLET.load()
 
 export class BulletActor extends BaseActor {
