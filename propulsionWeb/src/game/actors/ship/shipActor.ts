@@ -23,7 +23,7 @@ const THRUST_FORCE = 5000
 const FUEL_FULL = 4500
 const FUEL_CONSUMPTION = 4
 const GUN_COOLDOWN = 100
-const GUN_POSITION_OFFSET = 50
+const GUN_POSITION_OFFSET = 64
 
 export class ShipActor extends BaseActor {
     private physics?: Physics
