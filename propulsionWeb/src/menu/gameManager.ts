@@ -52,6 +52,7 @@ export class GameManager {
             case GameResult.ShipBallHyperspace:
                 this.levelManager.nextLevel()
                 this.scoreManager.addScore(MISSION_SUCCESS_SCORE)
+                this.availableShips += 1
                 setTimeout(async () => {
                     await this.restartSceneManager()
                 }, HYPERSPACE_DELAY)

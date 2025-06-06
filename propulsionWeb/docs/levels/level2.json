@@ -165,12 +165,22 @@
         {
          "name":"enemyLevel",
          "type":"string",
-         "value":"0"
+         "value":"2"
         }, 
         {
          "name":"gravity",
          "type":"string",
          "value":"10"
+        }, 
+        {
+         "name":"hyperspaceBorderX",
+         "type":"string",
+         "value":"6"
+        }, 
+        {
+         "name":"hyperspaceBorderY",
+         "type":"string",
+         "value":"1"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
