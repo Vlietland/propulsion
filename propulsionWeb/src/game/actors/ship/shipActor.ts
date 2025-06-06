@@ -12,9 +12,10 @@ import { HyperspaceView } from '@src/game/ui/hyperspaceView'
 import { TowLineView } from '@src/game/ui/towLineView'
 import { GameResult } from '@src/menu/gameManager'
 import { SoundManager } from '@src/game/engine/soundManager'
+import { getImagePath } from '@src/utils/assetPaths'
 
-const SHIP = new ImageSource('/publish/images/tiles/ship.png')
-const SHIP_THRUST = new ImageSource('/publish/images/tiles/shipThrust.png')
+const SHIP = new ImageSource(getImagePath('tiles/ship.png'))
+const SHIP_THRUST = new ImageSource(getImagePath('tiles/shipThrust.png'))
 await SHIP.load()
 await SHIP_THRUST.load()
 

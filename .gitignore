@@ -23,5 +23,5 @@ yarn-error.log*
 # Miscellaneous
 .DS_Store
 Thumbs.db
-public/images/tiles/org/
-public/images/tiles/orgBullet
+propulsionWeb/public/images/tiles/org/
+propulsionWeb/public/images/tiles/orgBullet

@@ -1,5 +1,6 @@
 //use https://sfxr.me/ for sound effects (do not remove this line !!!)
 import { Sound, Loader } from 'excalibur'
+import { getSoundPath } from '@src/utils/assetPaths'
 
 export class SoundManager {
     private static instance: SoundManager | null = null
@@ -8,15 +9,15 @@ export class SoundManager {
     private tractorBeamPlaying = false
     
     public static readonly SOUND_PATHS = {
-        TRACTOR_BEAM: '/publish/sounds/tractorBeam.wav',
-        SHIP_EXPLOSION: '/publish/sounds/shipExplosion.wav',
-        ACTOR_EXPLOSION: '/publish/sounds/actorExplosion.wav',
-        BULLET_HIT: '/publish/sounds/bulletHit.wav',
-        TURRET_GUN: '/publish/sounds/turretGun.wav',
-        SHIP_GUN: '/publish/sounds/shipGun.wav',
-        THRUST: '/publish/sounds/thrust.wav',
-        ALARM: '/publish/sounds/alarm.wav',
-        HYPERSPACE: '/publish/sounds/hyperspace.wav'
+        TRACTOR_BEAM: getSoundPath('tractorBeam.wav'),
+        SHIP_EXPLOSION: getSoundPath('shipExplosion.wav'),
+        ACTOR_EXPLOSION: getSoundPath('actorExplosion.wav'),
+        BULLET_HIT: getSoundPath('bulletHit.wav'),
+        TURRET_GUN: getSoundPath('turretGun.wav'),
+        SHIP_GUN: getSoundPath('shipGun.wav'),
+        THRUST: getSoundPath('thrust.wav'),
+        ALARM: getSoundPath('alarm.wav'),
+        HYPERSPACE: getSoundPath('hyperspace.wav')
     }
     
     constructor(loader?: Loader) {

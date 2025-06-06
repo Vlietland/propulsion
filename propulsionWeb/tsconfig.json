@@ -16,8 +16,8 @@
     }
   },
   "include": [
-    "src",
-    "external/excalibur-tiled/src"
+    "src/**/*",
+    "external/excalibur-tiled/src/**/*"
   ],
-  "exclude": ["node_modules", "dist", "public"]
+  "exclude": ["node_modules", "dist", "publish"]
 }

@@ -8,8 +8,9 @@ import { Hyperspace } from '@src/game/physics/hyperspace'
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor'
 import { SoundManager } from '@src/game/engine/soundManager'
+import { getImagePath } from '@src/utils/assetPaths';
 
-export const BALL = new ImageSource('/publish/images/tiles/ball.png')
+export const BALL = new ImageSource(getImagePath('tiles/ball.png'))
 await BALL.load()
 
 export class BallActor extends BaseActor {

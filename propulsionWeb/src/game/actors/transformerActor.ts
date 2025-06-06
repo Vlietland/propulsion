@@ -4,8 +4,9 @@ import { BaseActor } from '@src/game/actors/baseActor'
 import { LaserActor } from '@src/game/actors/laserActor'
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor'
+import { getImagePath } from '@src/utils/assetPaths';
 
-export const TRANSFORMER = new ImageSource('/publish/images/tiles/transformer.png')
+export const TRANSFORMER = new ImageSource(getImagePath('tiles/transformer.png'))
 await TRANSFORMER.load()
 
 export class TransformerActor extends BaseActor {

@@ -5,9 +5,10 @@ import { ScoreManager } from '@src/scoreManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from '@src/game/actors/turretActor';
 import { SoundManager } from '@src/game/engine/soundManager'
+import { getImagePath } from '@src/utils/assetPaths';
 
-export const FUEL_TANK_FULL = new ImageSource('/publish/images/tiles/fuelTankFull.png')
-export const FUEL_TANK_EMPTY = new ImageSource('/publish/images/tiles/fuelTankEmpty.png')
+export const FUEL_TANK_FULL = new ImageSource(getImagePath('tiles/fuelTankFull.png'))
+export const FUEL_TANK_EMPTY = new ImageSource(getImagePath('tiles/fuelTankEmpty.png'))
 await FUEL_TANK_FULL.load()
 await FUEL_TANK_EMPTY.load()
 const FUEL_SCORE = 5;

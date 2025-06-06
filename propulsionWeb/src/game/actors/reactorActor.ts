@@ -5,8 +5,9 @@ import { ScoreManager } from '@src/scoreManager';
 import { SoundManager } from '@src/game/engine/soundManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from './turretActor';
+import { getImagePath } from '@src/utils/assetPaths';
 
-export const REACTOR = new ImageSource('/publish/images/tiles/reactor.png');
+export const REACTOR = new ImageSource(getImagePath('tiles/reactor.png'));
 await REACTOR.load();
 
 const ARMOR = 1000;

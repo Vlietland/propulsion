@@ -4,8 +4,9 @@ import { BaseActor } from '@src/game/actors/baseActor';
 import { BulletActor } from './bulletActor';
 import { ScoreManager } from '@src/scoreManager';
 import { SoundManager } from '@src/game/engine/soundManager'
+import { getImagePath } from '@src/utils/assetPaths';
 
-export const TURRET = new ImageSource('/publish/images/tiles/turret.png');
+export const TURRET = new ImageSource(getImagePath('tiles/turret.png'));
 await TURRET.load();
 
 const TURRET_FIRE_INTERVAL = 5000;
