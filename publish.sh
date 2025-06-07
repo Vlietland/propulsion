@@ -5,9 +5,9 @@ set -e
 echo "Building project..."
 npm run build
 
-echo "Copying Logo.png to dist/..."
-mkdir dist/analyserWeb
-cp analyserWeb/Logo.png dist/analyserWeb/Logo.png
+echo "Copying game assets to dist/propulsionWeb/..."
+mkdir -p dist/propulsionWeb
+cp -r propulsionWeb/publish dist/propulsionWeb/publish
 
 echo "Removing old docs folder..."
 rm -rf docs
