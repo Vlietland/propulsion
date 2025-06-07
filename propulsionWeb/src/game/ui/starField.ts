@@ -1,4 +1,4 @@
-import { Actor, Color, Scene, Timer, Vector, Engine } from 'excalibur'
+import { Actor, Color, Scene, Timer, Vector } from 'excalibur'
 
 interface Star {
     actor: Actor
@@ -10,31 +10,26 @@ interface Star {
 export class StarField {
     private stars: Star[] = []
     private scene?: Scene
-    private starCount: number
     private minBlinkSpeed = 500
     private maxBlinkSpeed = 3000
 
-    constructor(starCount: number) {
-        this.starCount = starCount
-    }
-
-    public addToGameScene(scene: Scene, engine: Engine, map?: any): void {
+    constructor(
+        scene: Scene,
+        starCount: number,
+        startVector: Vector,
+        endVector: Vector
+    ) {
         this.scene = scene
-        if (!map) return
-        const worldWidth = map.map.width * map.map.tilewidth
-        const airTiles = map?.map?.properties?.find((p: any) => p.name === 'airHeight')?.value
-        const worldHeight = airTiles * map.map.tileheight
-        this.generateStars(worldWidth, worldHeight)
-    }
-
-    public generateStars(worldWidth: number, worldHeight: number): void {
         if (!this.scene) return
         
-        for (let i = 0; i < this.starCount; i++) {
+        const width = endVector.x - startVector.x
+        const height = endVector.y - startVector.y
+        
+        for (let i = 0; i < starCount; i++) {
             const star = new Actor({
                 pos: new Vector(
-                    Math.random() * worldWidth,
-                    Math.random() * worldHeight
+                    startVector.x + Math.random() * width,
+                    startVector.y + Math.random() * height
                 ),
                 width: Math.random() > 0.8 ? 4 : 2,
                 height: Math.random() > 0.8 ? 4 : 2,
@@ -80,10 +75,5 @@ export class StarField {
         })
         this.stars = []
         this.scene = undefined
-    }
-
-    public updateScreenSize(engine: Engine): void {
-        this.dispose()
-        if (this.scene) this.addToGameScene(this.scene, engine)
     }
 }

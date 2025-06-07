@@ -1,4 +1,4 @@
-import { Scene, Engine, Keys, KeyEvent } from 'excalibur'
+import { Scene, Engine, Keys, KeyEvent, Vector } from 'excalibur'
 import { ShipController } from '@src/game/controller/shipController'
 import { HUD } from '@src/game/ui/hud'
 import { LevelManager } from '@src/game/engine/levelManager'
@@ -39,10 +39,14 @@ export class SceneManager {
         this.onReturnToMenu = callbacks.onReturnToMenu
         this.currentSceneName = `level-${Date.now()}`
         const scene = new Scene()
+        const map = await this.levelManager.getMap(scene)
+        const worldWidth = map.map.width * map.map.tilewidth
+        const airTiles = map?.map?.properties?.find((p: any) => p.name === 'airHeight')?.value
+        const worldHeight = airTiles * map.map.tileheight
+        new StarField(scene, 80, new Vector(0, 0), new Vector(worldWidth, worldHeight))
         scene.camera.zoom = 0.1
         this.engine.add(this.currentSceneName, scene)
-        this.engine.goToScene(this.currentSceneName)
-        
+        this.engine.goToScene(this.currentSceneName)        
         
         this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(availableShips)
@@ -50,10 +54,6 @@ export class SceneManager {
         scene.add(this.hud)
         this.world = new World(scene, this.scoreManager, this.levelManager)
         await this.world.initialize()
-        
-        const map = await this.levelManager.getMap(scene)
-        this.starField = new StarField(80)
-        this.starField.addToGameScene(scene, this.engine, map)
         const shipActor = this.world.getShipActor()
         const physics = this.world.getPhysics()
         

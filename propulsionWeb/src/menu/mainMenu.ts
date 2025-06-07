@@ -1,6 +1,7 @@
 import { Scene, Vector, Color, Actor, Engine, ImageSource, Sprite } from 'excalibur'
 import { MenuButton } from '@src/menu/ui/menuButton'
 import { getImagePath } from '@src/utils/assetPaths'
+import { StarField } from '@src/game/ui/starField'
 
 const TITLE_IMAGE = new ImageSource(getImagePath('title.png'))
 
@@ -16,13 +17,21 @@ export class MainMenu {
     private scene: Scene
     private buttons: MenuButton[] = []
     private sceneName = 'main-menu'
+    private starField?: StarField
 
     constructor(private engine: Engine, private options: MainMenuOptions) {
         this.scene = new Scene()
         this.scene.backgroundColor = new Color(5, 5, 20)
         this.scene.camera.pos = new Vector(0, 0)
+        this.createStarField()
         this.createTitleImage()
         this.createButtons()
+    }
+
+    private createStarField(): void {
+        const screenWidth = this.engine.screen.resolution.width
+        const screenHeight = this.engine.screen.resolution.height
+        new StarField(this.scene, 80, new Vector(-screenWidth, -screenHeight), new Vector(0, screenHeight))
     }
 
     private createTitleImage(): void {
@@ -70,6 +79,7 @@ export class MainMenu {
 
     public dispose(): void {
         this.buttons.forEach(button => button.dispose())
+        this.starField?.dispose()
         this.scene.clear()
         this.engine.remove(this.sceneName)
     }
