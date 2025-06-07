@@ -52,6 +52,12 @@ export class MainMenu {
     }
 
     private createButtons(): void {
+        const screenWidth = this.engine.screen.resolution.width
+        const screenHeight = this.engine.screen.resolution.height
+        const leftHalfCenter = -screenWidth / 4
+        const startY = -135
+        const buttonSpacing = 70
+        
         const configs = [
             { text: 'START MISSION', action: this.options.onStartGame },
             { text: 'BRIEFING', action: this.options.onShowBriefing || (() => {}) },
@@ -60,7 +66,8 @@ export class MainMenu {
             { text: 'CREDITS', action: this.options.onShowCredits || (() => {}) }
         ]
         configs.forEach((config, index) => {
-            const button = new MenuButton(config.text, new Vector(-280, -135 + index * 70), config.action)
+            const position = new Vector(leftHalfCenter, startY + index * buttonSpacing)
+            const button = new MenuButton(config.text, position, config.action, screenWidth, screenHeight)
             this.buttons.push(button)
             this.scene.add(button.actor)
             this.scene.add(button)

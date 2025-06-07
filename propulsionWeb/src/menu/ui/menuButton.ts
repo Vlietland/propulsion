@@ -5,24 +5,25 @@ export class MenuButton extends ScreenElement {
     private htmlElement!: HTMLElement
     public buttonText: string
 
-    constructor(text: string, position: Vector, private action: () => void) {
+    constructor(text: string, position: Vector, private action: () => void, screenWidth?: number, screenHeight?: number) {
         super()
         this.buttonText = text
         this.actor = new Actor({ pos: position, anchor: Vector.Half })
-        this.createHtmlButton(position)
+        this.createHtmlButton(position, screenWidth, screenHeight)
         this.setupEventListeners()
     }
     
-    private createHtmlButton(position: Vector): void {
+    private createHtmlButton(position: Vector, screenWidth?: number, screenHeight?: number): void {
         const container = document.getElementById('game-container') || document.body
-        
         this.htmlElement = document.createElement('div')
         this.htmlElement.className = 'sci-fi-button'
         this.htmlElement.textContent = this.buttonText
         
         this.htmlElement.style.position = 'absolute'
-        this.htmlElement.style.left = `${position.x + window.innerWidth / 2 - 150}px`
-        this.htmlElement.style.top = `${position.y + window.innerHeight / 2 - 25}px`
+        const width = screenWidth || window.innerWidth
+        const height = screenHeight || window.innerHeight
+        this.htmlElement.style.left = `${position.x + width / 2 - 150}px`
+        this.htmlElement.style.top = `${position.y + height / 2 - 25}px`
         this.htmlElement.style.zIndex = '1500'
         
         container.appendChild(this.htmlElement)
