@@ -4,7 +4,7 @@ import { BaseActor } from '@src/game/actors/baseActor'
 import { getImagePath } from '@src/utils/assetPaths';
 
 export const LASER_BEAM = new ImageSource(getImagePath('tiles/laserbeam.png'))
-await LASER_BEAM.load()
+LASER_BEAM.load()
 
 export class LaserBeamActor extends BaseActor {
     constructor(object: TiledObject) {

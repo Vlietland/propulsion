@@ -7,7 +7,7 @@ import { TurretActor } from '@src/game/actors/turretActor'
 import { getImagePath } from '@src/utils/assetPaths';
 
 export const TRANSFORMER = new ImageSource(getImagePath('tiles/transformer.png'))
-await TRANSFORMER.load()
+TRANSFORMER.load()
 
 export class TransformerActor extends BaseActor {
     private groupID: number | undefined = undefined

@@ -7,7 +7,7 @@ import { SoundManager } from '@src/game/engine/soundManager'
 import { getImagePath } from '@src/utils/assetPaths';
 
 export const TURRET = new ImageSource(getImagePath('tiles/turret.png'));
-await TURRET.load();
+TURRET.load();
 
 const TURRET_FIRE_INTERVAL = 5000;
 const TURRET_BULLET_OFFSET = 80;

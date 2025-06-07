@@ -4,7 +4,7 @@ import { BaseActor } from '@src/game/actors/baseActor';
 import { getImagePath } from '@src/utils/assetPaths';
 
 export const BALL_STORE = new ImageSource(getImagePath('tiles/ballStore.png'));
-await BALL_STORE.load();
+BALL_STORE.load();
 
 export class BallStoreActor extends BaseActor {
     constructor(object: TiledObject) {

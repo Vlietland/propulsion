@@ -10,7 +10,7 @@ import { SoundManager } from '@src/game/engine/soundManager'
 import { getImagePath } from '@src/utils/assetPaths';
 
 export const BALL = new ImageSource(getImagePath('tiles/ball.png'))
-await BALL.load()
+BALL.load()
 
 export class BallActor extends BaseActor {
     private mass = 100;

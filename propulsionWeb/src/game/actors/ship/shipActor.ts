@@ -16,8 +16,8 @@ import { getImagePath } from '@src/utils/assetPaths'
 
 const SHIP = new ImageSource(getImagePath('tiles/ship.png'))
 const SHIP_THRUST = new ImageSource(getImagePath('tiles/shipThrust.png'))
-await SHIP.load()
-await SHIP_THRUST.load()
+SHIP.load()
+SHIP_THRUST.load()
 
 const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000

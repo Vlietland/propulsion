@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tileset version="1.10" tiledversion="1.11.2" name="tiles" tilewidth="128" tileheight="128" tilecount="12" columns="0">
+ <grid orientation="orthogonal" width="1" height="1"/>
+ <tile id="0">
+  <image source="tiles/ball.png" width="128" height="128"/>
+ </tile>
+ <tile id="1">
+  <image source="tiles/ground.png" width="128" height="128"/>
+ </tile>
+ <tile id="2">
+  <image source="tiles/groundTop.png" width="128" height="128"/>
+ </tile>
+ <tile id="3">
+  <image source="tiles/reactor.png" width="128" height="128"/>
+ </tile>
+ <tile id="4">
+  <image source="tiles/ship.png" width="128" height="128"/>
+ </tile>
+ <tile id="5">
+  <image source="tiles/laserbeam.png" width="128" height="128"/>
+ </tile>
+ <tile id="6">
+  <image source="tiles/turret.png" width="128" height="128"/>
+ </tile>
+ <tile id="7">
+  <image source="tiles/laser.png" width="128" height="128"/>
+ </tile>
+ <tile id="8">
+  <image source="tiles/fuelTankFull.png" width="128" height="128"/>
+ </tile>
+ <tile id="9">
+  <image source="tiles/transformer.png" width="128" height="128"/>
+ </tile>
+ <tile id="10">
+  <image source="tiles/ballStore.png" width="128" height="128"/>
+ </tile>
+ <tile id="11">
+  <image source="tiles/hyperspace.png" width="128" height="128"/>
+ </tile>
+</tileset>

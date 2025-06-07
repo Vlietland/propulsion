@@ -42,15 +42,12 @@ For technical analysis of the 1997 C++ implementation, see the [legacy code docu
 
 Modern Propulsion (2025):
 <img src="./propulsionWeb/docs/images/propulsion-menu.png" alt="Modern Propulsion menu">
-<img src="./propulsionWeb/docs/images/propulsion-gameplay6.png" alt="Modern Propulsion briefing">
+<img src="./propulsionWeb/docs/images/propulsion-briefing.png" alt="Modern Propulsion briefing">
 <img src="./propulsionWeb/docs/images/propulsion-gameplay1.png" alt="Modern Propulsion gameplay">
-<img src="./propulsionWeb/docs/images/propulsion-gameplay2.png" alt="Modern Propulsion gameplay">
-<img src="./propulsionWeb/docs/images/propulsion-gameplay3.png" alt="Modern Propulsion gameplay">
 <img src="./propulsionWeb/docs/images/propulsion-gameplay4.png" alt="Modern Propulsion gameplay">
-<img src="./propulsionWeb/docs/images/propulsion-gameplay5.png" alt="Modern Propulsion gameplay">
 
 Legacy C++ Version (1997):
-<img src="./propulsionWeb/docs/images/propulsion1997-gameplay1.png" alt="1997 DOS version">
+<img src="./propulsionWeb/docs/images/propulsion1997-gameplay3.png" alt="1997 DOS version">
 
 Original Thrust (1986):
 <img src="./propulsionWeb/docs/images/thrust-original.png" alt="Original Thrust on BBC Micro">

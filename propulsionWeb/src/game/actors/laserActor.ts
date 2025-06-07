@@ -5,7 +5,7 @@ import { BaseActor } from '@src/game/actors/baseActor';
 import { getImagePath } from '@src/utils/assetPaths';
 
 export const LASER = new ImageSource(getImagePath('tiles/laser.png'));
-await LASER.load();
+LASER.load();
 
 export class LaserActor extends BaseActor {
     private laserBeams: LaserBeamActor[] = [];
