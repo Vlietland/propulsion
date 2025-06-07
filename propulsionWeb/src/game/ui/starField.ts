@@ -1,5 +1,8 @@
 import { Actor, Color, Scene, Timer, Vector } from 'excalibur'
 
+const STAR_MIN_SIZE = 2
+const STAR_MAX_SIZE = 3
+
 interface Star {
     actor: Actor
     blinkTimer: Timer
@@ -31,8 +34,8 @@ export class StarField {
                     startVector.x + Math.random() * width,
                     startVector.y + Math.random() * height
                 ),
-                width: Math.random() > 0.8 ? 4 : 2,
-                height: Math.random() > 0.8 ? 4 : 2,
+                width: Math.random() > 0.8 ? STAR_MAX_SIZE : STAR_MIN_SIZE,
+                height: Math.random() > 0.8 ? STAR_MAX_SIZE : STAR_MIN_SIZE,
                 color: this.getStarColor(),
                 z: -1
             })

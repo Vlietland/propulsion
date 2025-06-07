@@ -1,15 +1,18 @@
 import { Scene, Vector, Color, Actor, Text, Font, FontUnit, Engine, Keys, KeyEvent } from 'excalibur'
 import { ScoreManager } from '@src/scoreManager'
+import { StarField } from '@src/game/ui/starField'
 
 export class HighScoreScreen {
     private scene: Scene
     private sceneName = 'high-score-screen'
     private keyboardListener?: (evt: KeyEvent) => void
+    private starField?: StarField
 
     constructor(private engine: Engine, private scoreManager: ScoreManager, private onBack: () => void) {
         this.scene = new Scene()
         this.scene.backgroundColor = new Color(5, 5, 15)
         this.scene.camera.pos = new Vector(0, 0)
+        this.createStarField()
         this.createHighScoreDisplay()
     }
 
@@ -100,6 +103,17 @@ export class HighScoreScreen {
         this.scene.add(backActor)
     }
 
+    private createStarField(): void {
+        const screenWidth = this.engine.screen.resolution.width
+        const screenHeight = this.engine.screen.resolution.height
+        this.starField = new StarField(
+            this.scene, 
+            80, 
+            new Vector(-screenWidth/2, -screenHeight/2), 
+            new Vector(screenWidth/2, screenHeight/2)
+        )
+    }
+
     private setupInput(): void {
         this.keyboardListener = (evt: KeyEvent) => {
             if (evt.key === Keys.Escape) {
@@ -120,6 +134,7 @@ export class HighScoreScreen {
             this.engine.input.keyboard.off('press', this.keyboardListener)
             this.keyboardListener = undefined
         }
+        this.starField?.dispose()
         this.scene.clear()
         this.engine.remove(this.sceneName)
     }
