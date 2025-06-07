@@ -6,7 +6,6 @@ export class Hyperspace {
     private tileWidth: number
     private tileHeight: number
     private hyperspaceBorderX: number
-    private hyperspaceBorderY: number
 
     constructor(map: any) {
         if (!map || !map.map) {
@@ -16,12 +15,11 @@ export class Hyperspace {
         this.tileWidth = map.map.tilewidth
         this.tileHeight = map.map.tileheight
         this.hyperspaceBorderX = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderX')?.value     
-        this.hyperspaceBorderY = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderY')?.value
     }
 
     public checkHyperspaceReached(shipActor: ShipActor): boolean {
         const MARGIN = this.tileHeight / 2
-        const reachedHyperspaceY = shipActor.pos.y <= this.tileHeight * this.hyperspaceBorderY + MARGIN
+        const reachedHyperspaceY = shipActor.pos.y <= MARGIN
         const atMapEdge = this.isAtHorizontalEdge(shipActor.pos)
         if (reachedHyperspaceY || atMapEdge) {
             return true

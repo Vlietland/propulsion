@@ -6,6 +6,7 @@ import { ScoreManager } from '@src/scoreManager'
 import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/menu/gameManager'
 import { PauseScreen } from '@src/menu/ui/pauseScreen'
+import { StarField } from '@src/game/ui/starField'
 
 const START_ZOOM = 0.15
 const CAMERA_ZOOM = 0.7
@@ -18,6 +19,7 @@ export interface GameCallbacks {
 export class SceneManager {
     private world?: World
     private hud?: HUD
+    private starField?: StarField
     private currentSceneName?: string
     private isPaused: boolean = false
     private pauseKeyListener?: (evt: KeyEvent) => void
@@ -40,12 +42,18 @@ export class SceneManager {
         scene.camera.zoom = 0.1
         this.engine.add(this.currentSceneName, scene)
         this.engine.goToScene(this.currentSceneName)
+        
+        
         this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(availableShips)
         this.hud.updateLevel(this.levelManager.getCurrentLevel())
         scene.add(this.hud)
         this.world = new World(scene, this.scoreManager, this.levelManager)
         await this.world.initialize()
+        
+        const map = await this.levelManager.getMap(scene)
+        this.starField = new StarField(80)
+        this.starField.addToScene(scene, this.engine, map)
         const shipActor = this.world.getShipActor()
         const physics = this.world.getPhysics()
         
@@ -128,6 +136,10 @@ export class SceneManager {
     public dispose(): void {
         this.removePauseHandling()
         PauseScreen.disposeCurrentInstance()
+        if (this.starField) {
+            this.starField.dispose()
+            this.starField = undefined
+        }
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined

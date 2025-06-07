@@ -178,9 +178,9 @@
          "value":"6"
         }, 
         {
-         "name":"hyperspaceBorderY",
+         "name":"airHeight",
          "type":"string",
-         "value":"1"
+         "value":"12"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
