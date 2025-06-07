@@ -1,0 +1,27 @@
+In hindsight the following software creation process was used:
+
+1. Asked Claude to analyse the source code as I wasn't aware of the setup anymore
+2. Created a preliminary mapstructure budding with chatgpt
+3. Discussed with chatgpt possible open source game engines, selected Excalibur as it supports Tiled and has an open source mapeditor
+4. Discussed with chatgpt a possible physics framework to simulate the combined ship-ball body framework
+5. Created a ship image and a ball (=chrystal) pod image with chatgpt
+5. Performed some tests with Physics but decided to create custom made physics with lineair and angular acceltation, velocity and motion, unfortunatly mostly by hand because all used engines had trouble understand the complexity involved.
+6. Created a first map with mapeditor-tiled and used Claude to create the mapgenerator
+7. Created the images for the other actors with chatgpt
+8. Added an actorfactory to dynamically load the actor based on the objects on the maps.
+9. Added collision detection software that dynamically created collision polygons based on the loaded image, with Claude (very helpfull feature)
+10. Added a scenemanager that dynamically loads the whole scene based on map characteristics, including the laser object groups.
+11. Created the HUD to show the ship dashboard and status
+12. Added bullets and tractory beam
+13. Added explosion, hyperspace and other effects
+14. Added menu with buttons and screens
+
+
+Conclusion:
+- Compared to the 1997 endeavour estimated 10x creational speedup
+- Partially with Excalibur, mapeditor and image generation
+- Also huge speedup with code generation and 'four-eye discussions'
+- Generated code needs to be reviewed thoroughly
+- Refactored of loosely formulated prompts resulted in 90% less code
+- Usage of code-LLM's work best with small instructive prompts
+- AI-generated games are only possible with proper knowledge of software architecture & design

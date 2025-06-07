@@ -12,10 +12,11 @@ export const FUEL_TANK_EMPTY = new ImageSource(getImagePath('tiles/fuelTankEmpty
 await FUEL_TANK_FULL.load()
 await FUEL_TANK_EMPTY.load()
 const FUEL_SCORE = 5;
+const DESTRUCTION_SCORE = 150;
+const FUEL_FULL = 2000;
 
 export class FuelTankActor extends BaseActor {
-    private FUEL_FULL = 2000;
-    private fuelLevel = this.FUEL_FULL;
+    private fuelLevel = FUEL_FULL;
     private scoreManager: ScoreManager;
 
     constructor(object: TiledObject, scoreManager: ScoreManager) {
@@ -53,5 +54,6 @@ export class FuelTankActor extends BaseActor {
         }
         SoundManager.playActorExplosion();        
         this.explode()
+        this.scoreManager.addScore(DESTRUCTION_SCORE);        
     }    
 }

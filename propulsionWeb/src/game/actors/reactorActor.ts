@@ -11,7 +11,7 @@ export const REACTOR = new ImageSource(getImagePath('tiles/reactor.png'));
 await REACTOR.load();
 
 const ARMOR = 1000;
-const DESTRUCTION_SCORE = 1000;
+const DESTRUCTION_SCORE = 2000;
 const BULLET_DAMAGE = 50
 const DESTROY_DELAY = 10000;
 

@@ -11,7 +11,7 @@ await TURRET.load();
 
 const TURRET_FIRE_INTERVAL = 5000;
 const TURRET_BULLET_OFFSET = 80;
-const DESTRUCTION_SCORE = 500;
+const DESTRUCTION_SCORE = 750;
 
 export class TurretActor extends BaseActor {
     private fireTimer!: Timer;
