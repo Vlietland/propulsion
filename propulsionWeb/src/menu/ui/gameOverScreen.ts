@@ -77,7 +77,7 @@ export class GameOverScreen {
     public dispose(): void {
         this.buttons.forEach(button => button.dispose())
         this.scene.clear()
-        this.engine.remove(this.sceneName)
+        //this.engine.remove(this.sceneName)
         GameOverScreen.instance = null
     }
 
