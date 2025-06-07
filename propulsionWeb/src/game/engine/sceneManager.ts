@@ -53,7 +53,7 @@ export class SceneManager {
         
         const map = await this.levelManager.getMap(scene)
         this.starField = new StarField(80)
-        this.starField.addToScene(scene, this.engine, map)
+        this.starField.addToGameScene(scene, this.engine, map)
         const shipActor = this.world.getShipActor()
         const physics = this.world.getPhysics()
         

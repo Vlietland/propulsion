@@ -18,7 +18,7 @@ export class StarField {
         this.starCount = starCount
     }
 
-    public addToScene(scene: Scene, engine: Engine, map?: any): void {
+    public addToGameScene(scene: Scene, engine: Engine, map?: any): void {
         this.scene = scene
         if (!map) return
         const worldWidth = map.map.width * map.map.tilewidth
