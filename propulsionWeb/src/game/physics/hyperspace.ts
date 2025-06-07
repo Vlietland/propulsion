@@ -1,29 +1,28 @@
-import { Actor, Vector } from 'excalibur'
+import { Vector } from 'excalibur'
+import { ShipActor } from '@src/game/actors/ship/shipActor'
 
 export class Hyperspace {
     private mapWidth: number
-    private mapHeight: number
     private tileWidth: number
     private tileHeight: number
     private hyperspaceBorderX: number
-    private hyperspaceBorderY: number    
+    private hyperspaceBorderY: number
 
     constructor(map: any) {
         if (!map || !map.map) {
-            throw new Error('Invalid map provided to Hyperspace')
+            throw new Error('Invalid map provided')
         }
         this.mapWidth = map.map.width
-        this.mapHeight = map.map.height
         this.tileWidth = map.map.tilewidth
         this.tileHeight = map.map.tileheight
         this.hyperspaceBorderX = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderX')?.value     
         this.hyperspaceBorderY = map?.map?.properties?.find((p: any) => p.name === 'hyperspaceBorderY')?.value
     }
 
-    public checkHyperspaceReached(actor: Actor): boolean {
+    public checkHyperspaceReached(shipActor: ShipActor): boolean {
         const MARGIN = this.tileHeight / 2
-        const reachedHyperspaceY = actor.pos.y <= this.tileHeight * this.hyperspaceBorderY + MARGIN
-        const atMapEdge = this.isAtHorizontalEdge(actor.pos)
+        const reachedHyperspaceY = shipActor.pos.y <= this.tileHeight * this.hyperspaceBorderY + MARGIN
+        const atMapEdge = this.isAtHorizontalEdge(shipActor.pos)
         if (reachedHyperspaceY || atMapEdge) {
             return true
         }

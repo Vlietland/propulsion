@@ -1,5 +1,5 @@
 import { TiledObject } from '@excalibur-tiled/index'
-import { Camera, Vector, CollisionType, Engine, ImageSource, CollisionStartEvent } from 'excalibur'
+import { Camera, Vector, CollisionType, Engine, ImageSource, CollisionStartEvent, Sound } from 'excalibur'
 import { Kinematics } from '@src/game/actors/ship/kinematics'
 import { ShipController } from '@src/game/controller/shipController'
 import { BallActor } from '@src/game/actors/ballActor'
@@ -63,7 +63,7 @@ export class ShipActor extends BaseActor {
     onPreUpdate(engine: Engine, delta: number) {
         if (!this.shipController || !this.physics || !this.kinematics) return
         const cycleTime = delta / 300
-        let forceVector = new Vector(0, 0)
+        let forceVector = Vector.Zero
 
         if (this.shipController.isThrusting() && this.fuelLevel > 0) {
             forceVector = this.physics.force(this.rotation, THRUST_FORCE)            
@@ -106,6 +106,16 @@ export class ShipActor extends BaseActor {
         }
 
         if (this.shipController.isShooting()) { this.fire(engine) }
+
+        if (this.hyperspace?.checkHyperspaceReached(this)) {  
+            const result = this.isBallConnected()
+                ? GameResult.ShipBallHyperspace 
+                : GameResult.ShipHyperspace
+            if (this.isBallConnected()) this.ballActor?.requestHyperspace()
+            this.requestHyperspace(result)
+            this.kill()
+        }
+
         if (this.camera) this.camera.pos = this.pos        
     }
 
@@ -113,7 +123,6 @@ export class ShipActor extends BaseActor {
         const currentTime = engine.clock.now()
         if (currentTime - this.lastShotTime < GUN_COOLDOWN) return
         this.lastShotTime = currentTime
-
         const direction = Vector.fromAngle(this.rotation)
         const shipFrontOffset = GUN_POSITION_OFFSET
         const bulletStartPosition = this.pos.add(direction.scale(shipFrontOffset))
@@ -143,7 +152,6 @@ export class ShipActor extends BaseActor {
         this.kinematics?.resetObjectVelocity()
         this.ballActor = ballActor
         this.ballActor.setShip(this)      
-        if (this.hyperspace) this.ballActor.setHyperspace(this.hyperspace)        
     }
 
     public setCamera(camera: Camera) {this.camera = camera }
@@ -162,7 +170,8 @@ export class ShipActor extends BaseActor {
         if (this.inHyperspace) return
         this.inHyperspace = true
         this.ballActor = undefined
-        this.towLineView?.hide()      
+        this.towLineView?.hide()
+        SoundManager.stopThrust()
         SoundManager.playHyperspace()
         HyperspaceView.spawn(this.scene, this.pos, this.lastVelocity)        
         if (this.onGameResultCallback) this.onGameResultCallback(result)
@@ -176,18 +185,8 @@ export class ShipActor extends BaseActor {
             if (this.shipController?.isUsingTractorBeam()) return
         }        
         SoundManager.stopThrust()       
-        if (this.hyperspace?.checkHyperspaceReached(this)) {  
-            const result = this.isBallConnected()
-                ? GameResult.ShipBallHyperspace 
-                : GameResult.ShipHyperspace
-            if (this.isBallConnected()) this.ballActor?.requestHyperspace()
-            this.requestHyperspace(result)
-            this.kill()
-        }
-        else {
-            if (this.isBallConnected()) this.ballActor?.explode()
-            this.explode()
-        }
+        if (this.isBallConnected()) this.ballActor?.explode()
+        this.explode()
     }
 
     protected explode(): void {      
@@ -195,5 +194,5 @@ export class ShipActor extends BaseActor {
         this.towLineView?.hide()
         super.explode()
         if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)
-    }   
+    }
 }
