@@ -10,11 +10,11 @@ interface Star {
 export class StarField {
     private stars: Star[] = []
     private scene?: Scene
-    private starCount = 80
+    private starCount: number
     private minBlinkSpeed = 500
     private maxBlinkSpeed = 3000
 
-    constructor(starCount = 80) {
+    constructor(starCount: number) {
         this.starCount = starCount
     }
 
@@ -44,52 +44,33 @@ export class StarField {
                 interval: blinkSpeed,
                 repeats: true
             })
-
             this.scene.add(star)
             this.scene.add(blinkTimer)
             blinkTimer.start()
-
-            this.stars.push({
-                actor: star,
-                blinkTimer,
-                baseOpacity,
-                blinkSpeed
-            })
+            this.stars.push({ actor: star, blinkTimer, baseOpacity, blinkSpeed })
         }
     }
 
     private getStarColor(): Color {
         const colorType = Math.random()
-        if (colorType < 0.7) {
-            return Color.White
-        } else if (colorType < 0.9) {
-            return new Color(255, 255, 220)
-        } else {
-            return new Color(220, 220, 255)
-        }
+        if (colorType < 0.7) return Color.White
+        else if (colorType < 0.9) return new Color(255, 255, 220)
+        else return new Color(220, 220, 255)
     }
 
     private blinkStar(star: Actor, baseOpacity: number): void {
         const currentOpacity = star.graphics.opacity
-        
-        if (currentOpacity <= 0.1) {
-            star.graphics.opacity = baseOpacity
-        } else {
-            star.graphics.opacity = 0.1 + Math.random() * 0.9
-        }
+        if (currentOpacity <= 0.1) star.graphics.opacity = baseOpacity
+        else star.graphics.opacity = 0.1 + Math.random() * 0.9
     }
 
     public dispose(): void {
         this.stars.forEach(star => {
             if (star.blinkTimer) {
                 star.blinkTimer.cancel()
-                if (this.scene) {
-                    this.scene.remove(star.blinkTimer)
-                }
+                if (this.scene) this.scene.remove(star.blinkTimer)
             }
-            if (star.actor && this.scene) {
-                this.scene.remove(star.actor)
-            }
+            if (star.actor && this.scene) this.scene.remove(star.actor)
         })
         this.stars = []
         this.scene = undefined
@@ -97,8 +78,6 @@ export class StarField {
 
     public updateScreenSize(engine: Engine): void {
         this.dispose()
-        if (this.scene) {
-            this.addToScene(this.scene, engine)
-        }
+        if (this.scene) this.addToScene(this.scene, engine)
     }
 }
