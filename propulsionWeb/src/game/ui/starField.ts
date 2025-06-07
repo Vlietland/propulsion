@@ -22,13 +22,19 @@ export class StarField {
         this.scene = scene
         if (!map) return
         const worldWidth = map.map.width * map.map.tilewidth
-        const airTiles = map?.map?.properties?.find((p: any) => p.name === 'airHeight')?.value     
+        const airTiles = map?.map?.properties?.find((p: any) => p.name === 'airHeight')?.value
+        const worldHeight = airTiles * map.map.tileheight
+        this.generateStars(worldWidth, worldHeight)
+    }
+
+    public generateStars(worldWidth: number, worldHeight: number): void {
+        if (!this.scene) return
         
         for (let i = 0; i < this.starCount; i++) {
             const star = new Actor({
                 pos: new Vector(
                     Math.random() * worldWidth,
-                    Math.random() * airTiles * map.map.tileheight
+                    Math.random() * worldHeight
                 ),
                 width: Math.random() > 0.8 ? 4 : 2,
                 height: Math.random() > 0.8 ? 4 : 2,
@@ -78,6 +84,6 @@ export class StarField {
 
     public updateScreenSize(engine: Engine): void {
         this.dispose()
-        if (this.scene) this.addToScene(this.scene, engine)
+        if (this.scene) this.addToGameScene(this.scene, engine)
     }
 }
