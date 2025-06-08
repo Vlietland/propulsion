@@ -2,7 +2,16 @@
 
 ## Project Overview
 
-In 1997, Jan Vlietland embarked on a project to recreate the classic Thrust game as a tile-based system with comprehensive development tools. This was a complete game development ecosystem written in C++ and Assembly language for DOS, featuring a modular architecture with separate applications for tile creation, map editing, and the game engine itself.
+In 1997, I embarked on a project to recreate the classic Thrust game as a tile-based system with comprehensive development tools. This was a complete game development ecosystem written in C++ and Assembly language for DOS, featuring a modular architecture with separate applications for tile creation, map editing, and the game engine itself.
+
+### Game Screenshots
+
+The following screenshots show the actual 1997 C++ implementation running on DOS:
+
+<img src="./images/propulsion1997-gameplay1.png" alt="1997 Propulsion - Level gameplay showing ship and ball physics">
+<img src="./images/propulsion1997-gameplay2.png" alt="1997 Propulsion - Cave navigation with tractor beam mechanics">
+<img src="./images/propulsion1997-gameplay3.png" alt="1997 Propulsion - Advanced level with multiple obstacles">
+
 
 ## Architecture Overview
 
@@ -149,7 +158,7 @@ float rotateversnellingcalc(Vectors positions, Vector Vthrustforce) {
     factor.Y = (positions.ship.Y - positions.ball.Y) / stanglength; // cos
     
     rotateforce = Vthrustforce.X * factor.Y - Vthrustforce.Y * factor.X;
-    versnelling = -rotateforce / (2* mass);
+    versnelling = -rotateforce / (2 * mass);
     
     return(versnelling);
 }
@@ -347,7 +356,7 @@ const unsigned char turretend = turretbegin + 7;
 
 This 1997 codebase demonstrates several advanced concepts:
 
-- **Component-based architecture** before it was mainstream
+- **Component-based architecture** before it became mainstream
 - **Data-driven design** with external asset files
 - **Real-time physics simulation** with constraint solving
 - **Sophisticated build pipeline** with multiple tools
@@ -398,7 +407,7 @@ const float gravity = 9.81;         // Gravitational acceleration
 
 ## Conclusion
 
-This 1997 project represents a nice achievement in game development for its time. The combination of sophisticated physics simulation, comprehensive development tools, and modular architecture created a complete game development ecosystem. The code demonstrates deep understanding of both low-level optimization and high-level software design principles.
+This 1997 project represents a significant achievement in game development for its time. The combination of sophisticated physics simulation, comprehensive development tools, and modular architecture created a complete game development ecosystem. The code demonstrates deep understanding of both low-level optimization and high-level software design principles.
 
 The legacy of this project lives on in the modern Propulsion implementation, which translates these core concepts into contemporary web technologies while preserving the essential gameplay mechanics and technical innovation that made the original vision so compelling.
 

@@ -6,9 +6,9 @@ A modern web-based remake of a classic space physics game, featuring gravity-bas
 
 Propulsion is a 2D space game where players navigate through gravitational caves using experimental tractor beam technology to collect valuable cargo pods before they're lost to hyperspace rifts. The game combines precise physics simulation with strategic gameplay elements.
 
-<img src="./propulsionWeb/docs/images/propulsion-gameplay2.png" alt="Modern Propulsion gameplay">
-<img src="./propulsionWeb/docs/images/propulsion-gameplay3.png" alt="Modern Propulsion gameplay">
-<img src="./propulsionWeb/docs/images/propulsion-gameplay5.png" alt="Modern Propulsion gameplay">
+<img src="./images/propulsion-gameplay2.png" alt="Modern Propulsion gameplay">
+<img src="./images/propulsion-gameplay3.png" alt="Modern Propulsion gameplay">
+<img src="./images/propulsion-gameplay5.png" alt="Modern Propulsion gameplay">
 
 ## Features
 

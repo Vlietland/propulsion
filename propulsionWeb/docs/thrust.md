@@ -6,7 +6,7 @@
 
 ## Game Concept
 
-In Thrust, players pilot a spacecraft through underground caverns on alien planets, using realistic physics to navigate gravitational fields while collecting fuel pods and avoiding collision with cave walls. The game's revolutionary physics engine simulated momentum, inertia, and gravity in ways that were groundbreaking for its time.
+In Thrust, players pilot a spacecraft through underground caverns on alien planets, using realistic physics to navigate gravitational fields while collecting fuel pods and avoiding collision with cave walls. The game's physics engine simulated momentum, inertia, and gravity in ways that were groundbreaking for its time.
 
 ### Core Gameplay Elements
 
@@ -109,6 +109,6 @@ The Propulsion project honors this legacy by bringing the timeless appeal of phy
 
 **"In the vast expanse of gaming history, Thrust was a shooting star that illuminated the path for all physics-based games that followed. Propulsion is our humble tribute to that brilliant legacy."**
 
-*- Jan Vlietland, Project Creator*
+*- Jan Vlietland*
 
 *For more information about the original Thrust game, visit retro gaming archives and the BBC Micro preservation community.*

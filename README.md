@@ -1,4 +1,6 @@
-# [Propulsion Web Game - Play the Game !!!](https://vlietland.github.io/propulsion/)
+# [Propulsion Web Game
+
+If you wanna play the game: https://vlietland.github.io/propulsion/
 
 This project is a modern web-based remake of the classic space physics game Thrust, originally created in 1986 for the BBC Micro. My original remake was inspired by a high school physics teacher's vector based physics and fun with Thrust on an Acorn Elecron. I challenged myself to do a remake in C++ and assembler on Dos machine in 1997, which I partially completed before loosing interest.
 
@@ -9,8 +11,6 @@ Impression Propulsion - Level 3 - beginning of puzzles:
 The original Thrust was a groundbreaking game that introduced realistic physics simulation and momentum-based spacecraft control.
 
 With the advancements in AI development, I decided to spend some time again on the remake and measure productivity gains compared to 1997. The remake took me about four weeks of part-time work. The remake preserves the core gameplay mechanics while bringing the experience to modern web browsers and cross-platform compatibility. I decided to keep the retro-sound, which is a nice walk back to memory lane for some of us.
-
-Here you can read about the realization steps from initial design to completion, while using AI LLMs from start to completion. [Creation Process Documentation](./propulsionWeb/docs/creationProcess)
 
 The game features the same gravity-based gameplay, tractor beam mechanics, and challenging cargo collection missions through underground cave systems. However in contradiction to Thrust, my solution adds dynamic mapediting and tile creation. 
 
@@ -36,7 +36,7 @@ Navigate your ship through gravitational cave systems to:
 The physics simulation includes realistic momentum, gravity effects, and tractor beam mechanics that require skill and precision to master.
 
 ## Documentation
-For details on the architecture of the modern Propulsion web application, see the [design documentation](./propulsionWeb/docs/design/design.html). The description of the propulsion project you can read in the [propulsion documentation](./propulsionWeb/docs/propulsion)
+For details on the architecture of the modern Propulsion web application, see the [design documentation](./propulsionWeb/docs/design/design.html). The description of the propulsion project you can read in the [propulsion documentation](./propulsionWeb/docs/propulsion). The overview of my used software development process you can find [here](./propulsionWeb/docs/creationProcess).
 
 
 ## Development
