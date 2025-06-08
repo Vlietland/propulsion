@@ -11,11 +11,21 @@ export default defineConfig({
       '@src': path.resolve(__dirname, './propulsionWeb/src'),
       '@excalibur-tiled': path.resolve(__dirname, './propulsionWeb/external/excalibur-tiled/src'),
       '@assets': path.resolve(__dirname, './propulsionWeb/publish')
-    }
+    },
+    dedupe: ['excalibur']
   },
   publicDir: 'propulsionWeb/publish',
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
+    rollupOptions: {
+      external: [],
+      output: {
+        // Ensure excalibur is not duplicated
+        manualChunks: {
+          excalibur: ['excalibur']
+        }
+      }
+    }
   },
   server: {
     // Handle favicon requests when running with base path in dev mode

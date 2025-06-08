@@ -7,6 +7,9 @@ const customFileLoader: FileLoader = async (path: string, contentType: 'json' | 
     const basePath = __ASSET_BASE_PATH__ || ''
     const fullPath = path.startsWith(basePath) ? path : basePath + path
     const response = await fetch(fullPath)
+    if (!response.ok) {
+        throw new Error(`Failed to load ${fullPath}: ${response.status} ${response.statusText}`)
+    }
     switch(contentType.toLowerCase()) {
         case 'xml': return await response.text()
         case 'json': return await response.json()
@@ -19,7 +22,7 @@ const createPathMap = () => {
     if (!basePath) return undefined
     
     return [
-        { path: /^tiles\/.+$/, output: `${basePath}/images/[match]` },
+        { path: /^tiles\/(.+)$/, output: `${basePath}/images/[match]` },
         { path: /^(?!https?:\/\/)(.+\.(png|jpg|jpeg|gif|webp))$/i, output: `${basePath}/images/[match]` }
     ]
 }
@@ -31,6 +34,7 @@ export class MapRenderer {
             fileLoader: customFileLoader,
             pathMap: createPathMap()
         })
+        
         await map.load()
         map.addToScene(scene)
         return map

@@ -35,9 +35,10 @@ export class LevelManager {
         let level = 1
         this.totalLevels = 0
         while (level <= 20) {
-            const response = await fetch(`${basePath}/levels/level${level}.json`)
-            if (!response.ok) break
+            const levelUrl = `${basePath}/levels/level${level}.json`
             try {
+                const response = await fetch(levelUrl)
+                if (!response.ok) break
                 const content = await response.text()
                 if (!content.trim().startsWith('{')) break
                 this.totalLevels = level
