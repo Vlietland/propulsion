@@ -49,11 +49,11 @@ if [ "$start_server" = true ]; then
     echo "📦 Building the project..."
     npm run build
     
-    echo "🌐 Checking for existing preview server on port 4173..."
-    existing_pid=$(lsof -t -i:4173 2>/dev/null)
+    echo "🌐 Checking for existing preview server on port 5173..."
+    existing_pid=$(lsof -t -i:5173 2>/dev/null)
     
     if [ -n "$existing_pid" ]; then
-      echo "🛑 Killing existing server on port 4173 (PID $existing_pid)..."
+      echo "🛑 Killing existing server on port 5173 (PID $existing_pid)..."
       kill "$existing_pid" || true
       sleep 2
     fi

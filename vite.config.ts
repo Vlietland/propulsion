@@ -15,6 +15,16 @@ export default defineConfig({
   },
   publicDir: 'propulsionWeb/publish',
   build: {
-    outDir: 'docs'
+    outDir: 'dist'
+  },
+  server: {
+    // Handle favicon requests when running with base path in dev mode
+    proxy: {
+      '^/favicon.ico$': {
+        target: 'http://localhost:5173/propulsion',
+        changeOrigin: true,
+        rewrite: () => '/favicon.ico'
+      }
+    }
   }
 })

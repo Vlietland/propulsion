@@ -14,11 +14,22 @@ const customFileLoader: FileLoader = async (path: string, contentType: 'json' | 
     }
 }
 
+const createPathMap = () => {
+    const basePath = __ASSET_BASE_PATH__ || ''
+    if (!basePath) return undefined
+    
+    return [
+        { path: /^tiles\/.+$/, output: `${basePath}/images/[match]` },
+        { path: /^(?!https?:\/\/)(.+\.(png|jpg|jpeg|gif|webp))$/i, output: `${basePath}/images/[match]` }
+    ]
+}
+
 export class MapRenderer {
     public async loadAndRenderMap(scene: Scene, mapFile: string): Promise<any> {
         const map = new TiledResource(getLevelPath(mapFile), {
             layerConfig: { 'tiles': { isSolid: true }},
-            fileLoader: customFileLoader
+            fileLoader: customFileLoader,
+            pathMap: createPathMap()
         })
         await map.load()
         map.addToScene(scene)
