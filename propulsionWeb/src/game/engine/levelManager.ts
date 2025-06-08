@@ -1,8 +1,6 @@
 import { Scene } from 'excalibur'
 import { MapRenderer } from '@src/game/engine/mapRenderer'
 
-const LEVEL_DATA_PATH = '/levels/'
-
 export class LevelManager {
     private mapRenderer: MapRenderer
     private currentLevel: number = 1
@@ -33,10 +31,11 @@ export class LevelManager {
         if (this.levelCheckPromise) await this.levelCheckPromise }
 
     private async checkTotalLevels(): Promise<void> {
+        const basePath = __ASSET_BASE_PATH__ || ''
         let level = 1
         this.totalLevels = 0
         while (level <= 20) {
-            const response = await fetch(`${LEVEL_DATA_PATH}level${level}.json`)
+            const response = await fetch(`${basePath}/levels/level${level}.json`)
             if (!response.ok) break
             try {
                 const content = await response.text()
