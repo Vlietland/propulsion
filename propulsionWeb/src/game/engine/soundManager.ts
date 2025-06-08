@@ -7,6 +7,7 @@ export class SoundManager {
     private sounds: Map<string, Sound> = new Map()
     private thrustPlaying = false
     private tractorBeamPlaying = false
+    private static userInteracted = false
     
     public static readonly SOUND_PATHS = {
         TRACTOR_BEAM: getSoundPath('tractorBeam.wav'),
@@ -36,11 +37,29 @@ export class SoundManager {
             if (!loader) {
                 await SoundManager.instance.loadAllSounds()
             }
+            SoundManager.setupUserInteractionListeners()
         }
         return SoundManager.instance
     }
+
+    private static setupUserInteractionListeners(): void {
+        const enableAudio = () => {
+            if (!SoundManager.userInteracted) {
+                SoundManager.userInteracted = true
+                // Remove listeners after first interaction
+                document.removeEventListener('click', enableAudio)
+                document.removeEventListener('keydown', enableAudio)
+                document.removeEventListener('touchstart', enableAudio)
+            }
+        }
+        
+        document.addEventListener('click', enableAudio, { once: true })
+        document.addEventListener('keydown', enableAudio, { once: true })
+        document.addEventListener('touchstart', enableAudio, { once: true })
+    }
             
     public static playTractorBeam(): void {
+        if (!SoundManager.userInteracted) return
         const instance = this.getInstance()
         if (instance.tractorBeamPlaying) return
         const sound = instance.sounds.get('TRACTOR_BEAM')
@@ -69,6 +88,8 @@ export class SoundManager {
     public static playHyperspace(): void { this.play('HYPERSPACE', 0.5) }
     
     public static playThrust(): void {
+        if (!SoundManager.userInteracted) return
+        
         const instance = this.getInstance()
         if (instance.thrustPlaying) return
         const sound = instance.sounds.get('THRUST')
@@ -102,6 +123,9 @@ export class SoundManager {
     }
 
     private static play(soundKey: string, volume: number = 1): void {
+        // Only play sounds after user interaction to avoid AudioContext warnings
+        if (!SoundManager.userInteracted) return
+        
         const instance = this.getInstance()
         const sound = instance.sounds.get(soundKey)
         if (sound) {
