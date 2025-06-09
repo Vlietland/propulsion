@@ -4,8 +4,8 @@ export class ChimneySmoke {
     static spawn(scene: Scene | null, pos: Vector, direction: number = -Math.PI / 2) {
         const spread = Math.PI * 0.3
         const minSpeed = 10
-        const maxSpeed = 40
-        const particleCount = 3
+        const maxSpeed = 50
+        const particleCount = 5
 
         for (let i = 0; i < particleCount; i++) {
             const angle = direction + (Math.random() - 0.5) * spread

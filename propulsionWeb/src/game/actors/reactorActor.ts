@@ -6,6 +6,7 @@ import { SoundManager } from '@src/game/engine/soundManager';
 import { BulletActor } from '@src/game/actors/bulletActor';
 import { TurretActor } from './turretActor';
 import { getImagePath } from '@src/utils/assetPaths';
+import { ChimneySmoke } from '@src/game/ui/chimneySmoke';
 
 export const REACTOR = new ImageSource(getImagePath('tiles/reactor.png'));
 REACTOR.load();
@@ -22,6 +23,7 @@ export class ReactorActor extends BaseActor {
     private onExplodeCallback?: () => void;
     private timerObservers: Array<(timeRemaining: number) => void> = [];
     private secondsRemaining: number = 0;
+    private smokeTimer?: NodeJS.Timeout;
 
     constructor(object: TiledObject, scoreManager: ScoreManager) {
         super(object, REACTOR, CollisionType.Fixed);
@@ -31,6 +33,7 @@ export class ReactorActor extends BaseActor {
     onInitialize(engine: Engine): void {
         super.onInitialize(engine);
         this.on('postcollision', (evt) => this.handleCollision(evt as CollisionStartEvent));
+        this.startSmoke();
     }
 
     setOnExplode(callback: () => void): void {
@@ -49,13 +52,26 @@ export class ReactorActor extends BaseActor {
         }
     }
 
+    private startSmoke(): void {
+        const smokePos = this.pos.add(new Vector(34, -this.height / 2))
+        this.smokeTimer = ChimneySmoke.spawnContinuous(this.scene, smokePos, -Math.PI / 2, 400)
+    }
+
+    private stopSmoke(): void {
+        if (this.smokeTimer) {
+            ChimneySmoke.stopContinuous(this.smokeTimer)
+            this.smokeTimer = undefined
+        }
+    }
+
     private startDestructionTimer(): void {
+        this.stopSmoke();
         this.secondsRemaining = DESTROY_DELAY / 1000; // Convert to seconds
         this.destructionTimer = new Timer({
             fcn: () => {
                 SoundManager.playAlarm();
-                this.notifyTimerObservers(this.secondsRemaining);
                 this.secondsRemaining--;
+                this.notifyTimerObservers(this.secondsRemaining);
                 if (this.secondsRemaining <= 0) this.explode()
             },
             interval: 1000,
