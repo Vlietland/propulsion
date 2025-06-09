@@ -18,9 +18,10 @@ const DESTROY_DELAY = 10000;
 export class ReactorActor extends BaseActor {
     private scoreManager: ScoreManager;
     private armor: number = ARMOR;
-    private destroyTimer?: Timer;
-    private alarmTimer?: Timer;
+    private destructionTimer?: Timer;
     private onExplodeCallback?: () => void;
+    private timerObservers: Array<(timeRemaining: number) => void> = [];
+    private secondsRemaining: number = 0;
 
     constructor(object: TiledObject, scoreManager: ScoreManager) {
         super(object, REACTOR, CollisionType.Fixed);
@@ -43,35 +44,33 @@ export class ReactorActor extends BaseActor {
             if (bullet.getFirer() instanceof TurretActor) return;
         }
         this.armor -= BULLET_DAMAGE;
-        if (this.armor <= 0 && !this.destroyTimer) {
+        if (this.armor <= 0 && !this.destructionTimer) {
             this.startDestructionTimer();
         }
     }
 
     private startDestructionTimer(): void {
-        this.destroyTimer = new Timer({
-            fcn: () => this.explode(),
-            interval: DESTROY_DELAY,
-            repeats: false
-        });
-        this.scene?.engine.add(this.destroyTimer);
-        this.destroyTimer.start();
-
-        this.alarmTimer = new Timer({
-            fcn: () => SoundManager.playAlarm(),
+        this.secondsRemaining = DESTROY_DELAY / 1000; // Convert to seconds
+        this.destructionTimer = new Timer({
+            fcn: () => {
+                SoundManager.playAlarm();
+                this.notifyTimerObservers(this.secondsRemaining * 1000);
+                this.secondsRemaining--;
+                if (this.secondsRemaining <= 0) this.explode()
+            },
             interval: 1000,
             repeats: true
         });
-        this.scene?.engine.add(this.alarmTimer);
-        this.alarmTimer.start();
+        this.scene?.engine.add(this.destructionTimer);
+        this.destructionTimer.start();
     }
 
     protected explode(): void {
         this.scoreManager.addScore(DESTRUCTION_SCORE);
         
-        if (this.alarmTimer) {
-            this.alarmTimer.stop();
-            this.scene?.engine.remove(this.alarmTimer);
+        if (this.destructionTimer) {
+            this.destructionTimer.stop();
+            this.scene?.engine.remove(this.destructionTimer);
         }
         
         super.explode()
@@ -81,6 +80,21 @@ export class ReactorActor extends BaseActor {
     }
 
     isDestructionTimerSet(): boolean {
-        return !!this.destroyTimer;
+        return !!this.destructionTimer;
+    }
+
+    addTimerObserver(observer: (timeRemaining: number) => void): void {
+        this.timerObservers.push(observer);
+    }
+
+    removeTimerObserver(observer: (timeRemaining: number) => void): void {
+        const index = this.timerObservers.indexOf(observer);
+        if (index > -1) {
+            this.timerObservers.splice(index, 1);
+        }
+    }
+
+    private notifyTimerObservers(timeRemaining: number): void {
+        this.timerObservers.forEach(observer => observer(timeRemaining));
     }
 }
