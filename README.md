@@ -35,12 +35,15 @@ Navigate your ship through gravitational cave systems to:
 
 The physics simulation includes realistic momentum, gravity effects, and tractor beam mechanics that require skill and precision to master.
 
-## Documentation
-For details on the architecture of the modern Propulsion web application, see the [design documentation](./propulsionWeb/docs/design/design.md). The description of the propulsion project you can read in the [propulsion documentation](./propulsionWeb/docs/propulsion.md). My summarization of all development phases and how I used AI you can read [here](./propulsionWeb/docs/creationProcess.md).
-
 
 ## Development
-This project follows modern web development practices with TypeScript for type safety and modular architecture. The game engine is built on Excalibur.js, providing robust 2D game development capabilities.
+This project adheres to modern web development practices, utilizing TypeScript for type safety and a modular architecture. The game engine is built on Excalibur.js, a robust framework for 2D game development. For a detailed summary of all development phases and insights into how AI was utilized during the software development, refer to the [creation process documentation](./propulsionWeb/docs/creationProcess.md).
+
+
+## Documentation
+The overview of the modern Propulsion web application you can read in the [propulsion documentation](./propulsionWeb/docs/propulsion.md).
+For details on the architecture of the project, see the [design documentation](./propulsionWeb/docs/design/design.md). 
+
 
 ## History
 For more information about the original Thrust game and its historical significance, see the [thrust documentation](./propulsionWeb/docs/thrust.md).
