@@ -38,6 +38,7 @@ export class ShipActor extends BaseActor {
     private mass = 100
     private lastShotTime: number = 0   
     private hyperspace?: Hyperspace
+    private velocity: Vector = Vector.Zero
     private inHyperspace = false    
     private onGameResultCallback?: (result: GameResult) => void
     private isExploded: boolean = false;
@@ -81,13 +82,13 @@ export class ShipActor extends BaseActor {
         if (!this.isBallConnected()) {
             const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
             this.pos = this.pos.add(displacement)
-            this.vel = displacement.scale(1 / cycleTime)
+            this.velocity = displacement.scale(1 / cycleTime)
             if (this.towLineView?.isVisible()) this.towLineView?.hide()
         } else { //connected
             const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
             this.pos = this.pos.add(displacement).add(shipDelta);
             this.ballActor?.addPos(displacement.clone().add(ballDelta));
-            this.vel = displacement.scale(1 / cycleTime)
+            this.velocity = displacement.scale(1 / cycleTime)
             if (this.ballActor && this.towLineView) {
                 if (this.towLineView.isVisible()) {
                     this.towLineView.update(this.pos, this.ballActor.getPos())
@@ -173,7 +174,7 @@ export class ShipActor extends BaseActor {
         this.towLineView?.hide()
         SoundManager.stopThrust()
         SoundManager.playHyperspace()
-        HyperspaceView.spawn(this.scene, this.pos, this.vel)        
+        HyperspaceView.spawn(this.scene, this.pos, this.velocity)        
         if (this.onGameResultCallback) this.onGameResultCallback(result)
     }
 
