@@ -54,7 +54,7 @@ export class ReactorActor extends BaseActor {
         this.destructionTimer = new Timer({
             fcn: () => {
                 SoundManager.playAlarm();
-                this.notifyTimerObservers(this.secondsRemaining * 1000);
+                this.notifyTimerObservers(this.secondsRemaining);
                 this.secondsRemaining--;
                 if (this.secondsRemaining <= 0) this.explode()
             },

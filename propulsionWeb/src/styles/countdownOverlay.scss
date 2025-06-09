@@ -1,0 +1,72 @@
+/* Reactor Countdown Overlay Styles */
+.reactor-countdown-overlay {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: auto;
+    background: rgba(255, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    z-index: 9999;
+    animation: pulse 1s infinite;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.reactor-countdown-overlay.hidden {
+    display: none;
+}
+
+.reactor-warning-text {
+    font-family: 'Courier New', monospace;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000;
+    margin-right: 20px;
+    animation: flicker 0.5s infinite;
+}
+
+.reactor-countdown-number {
+    font-family: 'Courier New', monospace;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 30px #ff0000;
+    border: 3px solid #ff0000;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+}
+
+/* Dynamic countdown states */
+.reactor-countdown-number.critical {
+    color: #ff0000;
+    font-size: 3rem;
+}
+
+.reactor-countdown-number.warning {
+    color: #ff8800;
+    font-size: 2.8rem;
+}
+
+.reactor-countdown-number.normal {
+    color: #ffffff;
+    font-size: 2.5rem;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { background: rgba(255, 0, 0, 0.1); }
+    50% { background: rgba(255, 0, 0, 0.3); }
+    100% { background: rgba(255, 0, 0, 0.1); }
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}

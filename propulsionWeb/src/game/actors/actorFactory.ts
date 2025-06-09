@@ -13,6 +13,7 @@ import { World } from '@src/game/engine/world'
 
 export class ActorFactory {
     private shipActor: ShipActor | null = null
+    private reactorActor: ReactorActor | null = null
     private hyperspace?: Hyperspace
     private scoreManager: ScoreManager
     private transformers: TransformerActor[] = []
@@ -89,6 +90,7 @@ export class ActorFactory {
             case 'reactor':
                 const reactorActor = new ReactorActor(object, this.scoreManager);
                 reactorActor.setOnExplode(() => this.world.explodeAllActors());
+                this.reactorActor = reactorActor;
                 actor = reactorActor;
                 break;
             case 'fueltank':
@@ -122,5 +124,9 @@ export class ActorFactory {
 
     getShipActor(): ShipActor | null {
         return this.shipActor
+    }
+
+    getReactorActor(): ReactorActor | null {
+        return this.reactorActor
     }
 }

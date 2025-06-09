@@ -1,4 +1,4 @@
-import { System, SystemType, World, Scene, ScreenElement, Engine } from 'excalibur'
+import { World, Scene, ScreenElement, Engine } from 'excalibur'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
 import { ScoreManager } from '@src/scoreManager'
 

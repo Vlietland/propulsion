@@ -1,6 +1,7 @@
 import { Scene, Actor } from 'excalibur'
 import { ActorFactory } from '@src/game/actors/actorFactory'
 import { ShipActor } from '@src/game/actors/ship/shipActor'
+import { ReactorActor } from '@src/game/actors/reactorActor'
 import { Physics } from '@src/game/physics/physics'
 import { Hyperspace } from '@src/game/physics/hyperspace'
 import { ScoreManager } from '@src/scoreManager'
@@ -51,6 +52,7 @@ export class World {
 
     public getShipActor(): ShipActor | undefined { return this.shipActor }
     public getPhysics(): Physics | undefined { return this.physics }
+    public getReactorActor(): ReactorActor | undefined { return this.actorFactory?.getReactorActor() || undefined  }
 
     public dispose(): void {
         this.actorFactory = undefined

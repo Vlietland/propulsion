@@ -7,6 +7,7 @@ import { World } from '@src/game/engine/world'
 import { GameResult } from '@src/menu/gameManager'
 import { PauseScreen } from '@src/menu/ui/pauseScreen'
 import { StarField } from '@src/game/ui/starField'
+import { CountdownOverlay } from '@src/game/ui/countdownOverlay'
 
 const START_ZOOM = 0.15
 const CAMERA_ZOOM = 0.7
@@ -20,6 +21,7 @@ export class SceneManager {
     private world?: World
     private hud?: HUD
     private starField?: StarField
+    private countdownOverlay?: CountdownOverlay
     private currentSceneName?: string
     private isPaused: boolean = false
     private pauseKeyListener?: (evt: KeyEvent) => void
@@ -52,8 +54,12 @@ export class SceneManager {
         this.hud.updateLives(availableShips)
         this.hud.updateLevel(this.levelManager.getCurrentLevel())
         scene.add(this.hud)
+                
         this.world = new World(scene, this.scoreManager, this.levelManager)
         await this.world.initialize()
+        this.countdownOverlay = new CountdownOverlay(this.world.getReactorActor())
+        scene.add(this.countdownOverlay)
+
         const shipActor = this.world.getShipActor()
         const physics = this.world.getPhysics()
         
@@ -147,6 +153,10 @@ export class SceneManager {
         if (this.world) {
             this.world.dispose()
             this.world = undefined
+        }
+        if (this.countdownOverlay) {
+            this.countdownOverlay.dispose()
+            this.countdownOverlay = undefined
         }
     }
 }
