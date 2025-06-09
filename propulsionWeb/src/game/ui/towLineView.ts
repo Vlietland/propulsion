@@ -3,11 +3,12 @@ import { Scene, Vector, Color, Actor, Line, GraphicsGroup, Polygon } from 'excal
 export class TowLineView {
     private towLine: Actor | null = null
     private scene: Scene | null = null
+    private isDestroyed: boolean = false
 
     constructor(scene: Scene | null) { this.scene = scene }
 
     public show(shipPos: Vector, ballPos: Vector): void {
-        if (!this.scene) return
+        if (!this.scene || this.isDestroyed) return
         this.hide()
         this.towLine = new Actor({
             pos: shipPos.clone(),
@@ -19,16 +20,22 @@ export class TowLineView {
     }
 
     public update(shipPos: Vector, ballPos: Vector): void {
-        if (!this.towLine || !this.scene) return
+        if (!this.towLine || !this.scene || this.isDestroyed) return
         this.towLine.pos = shipPos.clone()
         this.towLine.graphics.use(this.createLine(shipPos, ballPos))
     }
 
     public hide(): void {
-        if (this.towLine && this.scene) {
-            this.towLine.kill()
-            this.towLine = null
-        }
+        if (this.isDestroyed || !this.towLine) return
+        if (this.scene) this.scene.remove(this.towLine)
+        this.towLine.kill()
+        this.towLine = null
+    }
+
+    public destroy(): void {
+        this.hide()
+        this.isDestroyed = true
+        this.scene = null
     }
 
     public isVisible(): boolean { return this.towLine !== null }

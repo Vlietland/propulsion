@@ -41,6 +41,7 @@ export class ShipActor extends BaseActor {
     private inHyperspace = false    
     private onGameResultCallback?: (result: GameResult) => void
     private lastVelocity: Vector = new Vector(0, 0);
+    private isExploded: boolean = false;
 
     constructor(object: TiledObject) {
         if (!object || object.x === undefined || object.y === undefined) return
@@ -61,7 +62,7 @@ export class ShipActor extends BaseActor {
     }
 
     onPreUpdate(engine: Engine, delta: number) {
-        if (!this.shipController || !this.physics || !this.kinematics) return
+        if (!this.shipController || !this.physics || !this.kinematics || this.isExploded) return
         const cycleTime = delta / 300
         let forceVector = Vector.Zero
 
@@ -82,7 +83,7 @@ export class ShipActor extends BaseActor {
             const displacement = this.kinematics.updateShipKinematics(forceVector, cycleTime)
             this.pos = this.pos.add(displacement)
             this.lastVelocity = displacement.scale(1 / cycleTime)
-            this.towLineView?.hide()
+            if (this.towLineView?.isVisible()) this.towLineView?.hide()
         } else { //connected
             const {displacement, shipDelta, ballDelta} = this.kinematics.updateObjectKinematics(this.pos, forceVector, cycleTime) 
             this.pos = this.pos.add(displacement).add(shipDelta);
@@ -190,8 +191,12 @@ export class ShipActor extends BaseActor {
     }
 
     protected explode(): void {      
+        this.isExploded = true  // Prevent further onPreUpdate calls from recreating towLine
         SoundManager.playShipExplosion()
-        this.towLineView?.hide()
+        // Only hide if towLine is currently visible to prevent redundant calls
+        if (this.towLineView?.isVisible()) {
+            this.towLineView.hide()
+        }
         super.explode()
         if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)
     }
