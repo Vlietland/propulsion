@@ -25,6 +25,7 @@ export class SceneManager {
     private currentSceneName?: string
     private isPaused: boolean = false
     private pauseKeyListener?: (evt: KeyEvent) => void
+    private domKeyListener?: (evt: KeyboardEvent) => void
     private onReturnToMenu?: () => void
 
     constructor(
@@ -89,8 +90,9 @@ export class SceneManager {
 
     private setupPauseHandling(): void {
         this.removePauseHandling()
-        this.pauseKeyListener = (evt: KeyEvent) => {
-            if (evt.key === Keys.Escape) {
+        this.domKeyListener = (evt: KeyboardEvent) => {
+            if (evt.code === 'Escape') {
+                evt.preventDefault()
                 if (!this.isPaused) {
                     this.pauseGame()
                 } else {
@@ -98,7 +100,7 @@ export class SceneManager {
                 }
             }
         }
-        this.engine.input.keyboard.on('press', this.pauseKeyListener)
+        document.addEventListener('keydown', this.domKeyListener)
     }
 
     private removePauseHandling(): void {
@@ -106,12 +108,29 @@ export class SceneManager {
             this.engine.input.keyboard.off('press', this.pauseKeyListener)
             this.pauseKeyListener = undefined
         }
+        if (this.domKeyListener) {
+            document.removeEventListener('keydown', this.domKeyListener)
+            this.domKeyListener = undefined
+        }
     }
 
     private pauseGame(): void {
         if (this.isPaused) return
         this.isPaused = true
-        this.engine.stop()
+        
+        // Pause the scene without stopping the engine
+        const currentScene = this.engine.currentScene
+        if (currentScene) {
+            // Store references to all actors and their update methods
+            currentScene.actors.forEach(actor => {
+                // Temporarily disable actor updates by storing and replacing the update method
+                if (actor.update && !(actor as any)._originalUpdate) {
+                    (actor as any)._originalUpdate = actor.update
+                    actor.update = () => {} // No-op function
+                }
+            })
+        }
+        
         PauseScreen.show(
             () => this.resumeGame(),
             this.onReturnToMenu ? () => this.returnToMainMenu() : undefined,
@@ -122,8 +141,20 @@ export class SceneManager {
     private resumeGame(): void {
         if (!this.isPaused) return
         this.isPaused = false
+        
         PauseScreen.hideCurrentInstance()
-        this.engine.start()
+        
+        // Resume the scene by restoring actor update methods
+        const currentScene = this.engine.currentScene
+        if (currentScene) {
+            currentScene.actors.forEach(actor => {
+                // Restore original update methods
+                if ((actor as any)._originalUpdate) {
+                    actor.update = (actor as any)._originalUpdate
+                    delete (actor as any)._originalUpdate
+                }
+            })
+        }
     }
 
     private returnToMainMenu(): void {
