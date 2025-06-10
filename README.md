@@ -24,6 +24,7 @@ The game is hosted on GitHub Pages and can be accessed [here](https://vlietland.
 - **Z and X** - Rotate your ship left/right
 - **Shift** - Activate thrust engines  
 - **Spacebar** - Engage tractor beam
+- **Enter** - Engage shooting
 - **ESC** - Pause game / Return to menu
 
 ### Gameplay Objectives
