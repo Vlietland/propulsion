@@ -30,6 +30,7 @@ export class ControlsScreen {
             "SHIFT - Activate main thrusters",
             "",
             "MISSION CONTROLS:",
+            "ENTER - Activate Photon Bullet Cannon",
             "SPACEBAR - Activate experimental tractor beam",
             "ESC - Emergency abort / Pause mission",
             "",
