@@ -1,9 +1,11 @@
 import { Scene } from 'excalibur'
 import { MapRenderer } from '@src/game/engine/mapRenderer'
 
+const FIRST_LEVEL = 1
+
 export class LevelManager {
     private mapRenderer: MapRenderer
-    private currentLevel: number = 1
+    private currentLevel: number = FIRST_LEVEL
     private totalLevels: number = 1
     private levelCheckPromise: Promise<void> | null = null
     
@@ -20,7 +22,7 @@ export class LevelManager {
         return false
     }
     
-    public resetToFirstLevel(): void {  this.currentLevel = 1 }
+    public resetToFirstLevel(): void {  this.currentLevel = FIRST_LEVEL }
     public getCurrentLevel(): number { return this.currentLevel }
 
     public async getMap(scene: Scene): Promise<any> {
@@ -32,7 +34,7 @@ export class LevelManager {
 
     private async checkTotalLevels(): Promise<void> {
         const basePath = __ASSET_BASE_PATH__ || ''
-        let level = 1
+        let level = FIRST_LEVEL
         this.totalLevels = 0
         while (level <= 20) {
             const levelUrl = `${basePath}/levels/level${level}.json`

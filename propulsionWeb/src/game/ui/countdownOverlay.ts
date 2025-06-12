@@ -7,6 +7,7 @@ export class CountdownOverlay extends ScreenElement {
     private warningElement?: HTMLElement
     private isVisible: boolean = false
     private reactorActor?: ReactorActor
+    private timerObserver?: (timeRemaining: number) => void
 
     constructor(reactorActor?: ReactorActor) {
         super()
@@ -14,9 +15,8 @@ export class CountdownOverlay extends ScreenElement {
         this.createOverlayElements()
         this.overlayElement!.classList.add('hidden')
         if (this.reactorActor) {
-            this.reactorActor.addTimerObserver((timeRemaining: number) => {
-                this.updateCountdown(timeRemaining)
-            })
+            this.timerObserver = (timeRemaining: number) => { this.updateCountdown(timeRemaining) }
+            this.reactorActor.addTimerObserver(this.timerObserver)
         }
     }
 
@@ -56,12 +56,13 @@ export class CountdownOverlay extends ScreenElement {
         this.isVisible = true
     }
 
-    public  dispose(): void {
-        if (this.overlayElement?.parentNode) {
-            this.overlayElement.parentNode.removeChild(this.overlayElement)
-        }
+    public dispose(): void {
+        if (this.reactorActor && this.timerObserver) this.reactorActor.removeTimerObserver(this.timerObserver)
+        if (this.overlayElement?.parentNode) this.overlayElement.parentNode.removeChild(this.overlayElement)
         this.overlayElement = undefined
         this.countdownElement = undefined
         this.warningElement = undefined
+        this.timerObserver = undefined
+        this.reactorActor = undefined
     }
 }

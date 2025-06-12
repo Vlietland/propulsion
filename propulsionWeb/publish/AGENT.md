@@ -1,221 +1,175 @@
-These instructions are intended for the AI to generate Propulsion level maps in two phases:
+# Propulsion Level Generation Guide
+
+This guide provides systematic instructions for AI-assisted generation of Propulsion game levels in two phases: cave system creation and object placement.
+
+## Technical Specifications
+
+### Tile System
+- **Tile size**: 128x128 pixels
+- **Level dimensions**: Minimum 32 x 50 tiles (width x height)
+- **Tile values**:
+  - `0`: Open space (navigable areas)
+  - `2`: Underground cave walls
+  - `3`: Surface level with cave entrances
+
+### Boundary Requirements
+- **Minimum 6-tile border**: All cave areas must have at least 6 layers of solid tiles on left, right, and bottom edges
+- **Surface boundary**: At least 1 row of surface tiles (value 3) above cave entrances
+
+---
 
 # PHASE 1: CAVE SYSTEM CREATION
 
-## Core Technical Requirements for Cave Design
+## Design Principles
 
-1. A tile is 128x128 pixels
-2. Level must be at least 32 x 50 tiles (width x height)
-3. Cave system must be surrounded left, right and at the bottom with at least 6 layers of tiles
-4. Use tile value 2 for underground cave walls
-5. Use tile value 3 for surface level with cave entrances
-6. Use tile value 0 for open spaces (navigable areas)
-7. **CRITICAL**: ALL zero (open space) areas must be fully interconnected for gameplay
-8. Design interconnected cave system rather than single large cave
+### Core Requirements
+1. **Interconnected Network**: ALL open spaces (value 0) must be fully connected for gameplay
+2. **Multiple Chambers**: Create 3-5 distinct cave chambers of varying sizes
+3. **Strategic Layout**: Design interconnected cave system rather than single large cave
 
-## Cave System Design Principles
+### Level Architecture
 
-### Surface Level Design:
-- Row 7 (index 7): Use tile value 3 for surface ground level
-- Create small entrance openings (1-3 tiles wide) in surface level
-- Keep most of surface level as solid ground (tile value 3)
+#### Surface Level (Row 7)
+- Use tile value 3 for surface ground level
+- Create small entrance openings (1-3 tiles wide)
+- Keep most of surface level as solid ground
 
-### Underground Cave Network:
-- **Multiple Chambers**: Create 3-5 distinct cave chambers of varying sizes
-- **Connecting Passages**: Link chambers with wider tunnels for ship navigation:
-  - **Horizontal tunnels**: 3-4 tiles wide (for primary ship and pod movement)
-  - **Vertical passages**: 2-3 tiles wide (for tactical maneuvering)
-  - **Tunnel intersections**: 4+ tiles wide (for turning space)
-- **Progressive Depth**: Deeper chambers can be larger, surface chambers smaller
-- **Strategic Chokepoints**: Use narrower sections within wider tunnels for challenges
+#### Cave Chamber Types
+- **Entry Chamber** (rows 8-11): Small chamber near surface entrance (3x3 to 5x5 tiles)
+- **Intermediate Chambers** (rows 12-17): Medium chambers (4x6 to 6x8 tiles) 
+- **Deep Chambers** (rows 18+): Larger chambers toward bottom (6x10 to 8x12 tiles)
 
-### Cave Chamber Specifications:
-- **Entry Chamber**: Small chamber near surface entrance (3x3 to 5x5 tiles)
-- **Intermediate Chambers**: Medium chambers (4x6 to 6x8 tiles) 
-- **Deep Chambers**: Larger chambers toward bottom (6x10 to 8x12 tiles)
-- **Connection Tunnels**: 
-  - **Main horizontal corridors**: 3-4 tiles wide for ship and pod navigation
-  - **Vertical shafts**: 2-3 tiles wide for descent/ascent
-  - **Access passages**: 2-3 tiles wide connecting chambers to main corridors
+#### Tunnel Specifications
+- **Horizontal tunnels**: 3-4 tiles wide (for primary ship and pod movement)
+- **Vertical passages**: 2-3 tiles wide (for tactical maneuvering)
+- **Tunnel intersections**: 4+ tiles wide (for turning space)
+- **Inter-chamber walls**: 1-2 tile thickness for structural integrity
 
-### Wall Boundary Requirements:
-- **Minimum 6-tile border**: All cave areas must have at least 6 layers of solid tiles (value 2) on:
-  - Left edge of map
-  - Right edge of map  
-  - Bottom edge of map
-- **Surface boundary**: At least 1 row of surface tiles (value 3) above cave entrances
-- **Inter-chamber walls**: 1-2 tile thickness between chambers for structural integrity
+## Connectivity Validation (CRITICAL)
 
-## **CONNECTIVITY VALIDATION (CRITICAL)**
+**Before proceeding to Phase 2**, verify complete connectivity:
 
-### Mandatory Connectivity Check:
-Before proceeding to Phase 2, verify that every zero-value tile is reachable from every other zero-value tile. This ensures:
-- Ship can navigate from sky → surface → all cave areas
-- Cargo pods can be collected from any chamber
-- Escape routes exist from deepest areas
-- No isolated chambers or dead-end areas exist
-
-### Common Connectivity Issues to Avoid:
-1. **Isolated Entry Chambers**: Entry chamber not connected to main cave system
-2. **Disconnected Deep Areas**: Bottom chambers with no connection to upper levels
-3. **Separated Chamber Groups**: Multiple cave groups with no linking passages
-4. **Blocked Vertical Access**: Vertical passages that don't connect different levels
-5. **Isolated Surface Areas**: Parts of the sky area cut off from cave entrance
-
-### Connectivity Testing Method:
+### Validation Method
 1. Identify all distinct groups of connected zero-value tiles
 2. Verify there is only ONE connected group (all zeros interconnected)
 3. Test navigation paths: sky → surface → entry → intermediate → deep areas
 4. Ensure return paths exist for escape scenarios
 
-## Phase 1 Validation Checklist:
-
-1. **Boundary Compliance**:
-   - Verify 6+ tile layers on left, right, and bottom edges
-   - Check surface level has proper tile value 3
-   - Confirm cave entrance openings are limited and strategic
-
-2. **Cave System Connectivity** (**MANDATORY VALIDATION**):
-   - **PRIMARY CHECK**: Verify ALL zero areas are interconnected
-   - Ensure all chambers are reachable from entrance
-   - Verify tunnel widths allow ship navigation (3-4 tiles wide for horizontal, 2-3 for vertical)
-   - Test that cave system forms coherent network with proper turning space
-   - Confirm no isolated chambers or dead-end areas exist
-
-3. **Navigation Challenges**:
-   - Confirm wider tunnels allow proper ship and pod movement
-   - Verify chambers provide tactical spaces for encounters
-   - Ensure progressive difficulty from entrance to deepest areas
-   - Test tunnel intersections provide adequate turning space
+### Common Issues to Avoid
+- Isolated entry chambers not connected to main cave system
+- Disconnected deep areas with no connection to upper levels
+- Separated chamber groups with no linking passages
+- Blocked vertical access between levels
 
 ---
 
 # PHASE 2: OBJECT PLACEMENT
 
-## Core Technical Requirements for Objects
+## Technical Requirements
 
-1. An object is 128x128 pixels
-2. Coordinates must always be multiples of 128
-3. Objects must be positioned next to tiles (built on/adjacent to ground tiles)
-4. Object rotation follows rule: underside must be attached to ground tile
-5. Ship must be positioned 3 tiles above ground level
-6. Objects placed roughly evenly for sequential challenges
-7. Ball and ballstore positioned at same coordinates at farthest accessible point
+### Object Specifications
+- **Object size**: 128x128 pixels
+- **Coordinate rule**: All coordinates must be multiples of 128
+- **Ground requirement**: Objects must have a ground tile (value 2 or 3) underneath
+- **Ship positioning**: 3 tiles above ground level (y = 384 pixels from surface)
 
-## Critical Validation Rules
+### Mandatory Validation Protocol
 
-## Critical Validation Rules for Object Placement
+**BEFORE placing ANY object:**
+1. Calculate array position: Column = x ÷ 128, Row = y ÷ 128
+2. Extract tile value from data array at calculated index
+3. Verify tile value is 2 or 3 (NEVER 0)
+4. Document validation: "Object at (x,y) = row R, column C = tile value V"
 
-### Object Positioning Validation
-- **ALWAYS verify object coordinates against tile map data**
-- Objects must be placed in open spaces (tile value 0) adjacent to walls (tile value 2 or 3)
-- **NEVER place objects inside wall tiles**
-- Calculate tile position: row = y ÷ 128, column = x ÷ 128 (0-indexed)
-- Check tile array data to ensure tile[row][column] = 0 (open space)
-- Verify adjacent tiles contain walls for structural support
+## Game Design & Object Strategy
 
-### Level Design Based on Game Objectives
+### Mission Objectives
+1. Navigate gravitational caves
+2. Neutralize enemy defenses (turrets)
+3. Collect cargo pods (fuel tanks) using tractor beam
+4. **Collect the ball** (primary objective)
+5. **Destroy primary reactors** (triggers 10-second escape countdown)
+6. **Escape before chain reaction** (10-second window)
 
-#### Mission Objectives (from briefing):
-- Navigate treacherous gravitational caves
-- Neutralize enemy defenses (turrets)
-- Collect cargo pods (fuel tanks) using tractor beam
-- Destroy primary reactors
-- Escape before catastrophic chain reaction
+### Strategic Object Placement
 
-#### Object Placement Strategy:
-
-**Ship Starting Position:**
-- Place 3 tiles above ground level (y = 384 pixels from surface)
-- Position for clear initial navigation path into cave system
+#### Ship Starting Position
+- Position 3 tiles above ground level
+- Clear initial navigation path into cave system
 - Away from immediate threats
-- Above cave entrance area
 
-**Fuel Tanks (Cargo Pods):**
+#### Fuel Tanks (Cargo Pods)
 - Distribute across different cave chambers
 - Position adjacent to walls but in open spaces
 - Create sequential collection challenges
-- Require tractor beam to collect (spacebar control)
 
-**Turrets (Enemy Defenses):**
+#### Turrets (Enemy Defenses)
 - Guard key passage chokepoints and chamber entrances
 - Rotate to face different directions (0°, 90°, 180°, 270°)
-- Force player to use tactical maneuvering
-- Require photon cannon to destroy (enter key)
+- Force tactical maneuvering
 
-**Reactors (Primary Targets):**
-- Place in deepest, most defended chambers
-- Create challenging approach routes through cave system
-- Ensure escape routes exist after destruction
-- Position as end-game objectives
+#### Reactors (Primary Targets)
+- **CRITICAL**: Must allow 10-second escape to exit
+- **Location**: Place in upper/intermediate chambers, NOT deepest areas
+- **Timing**: Destruction happens AFTER ball collection
 
-**Ball and Ball Store:**
+#### Ball and Ball Store
 - Position at farthest accessible point from ship start
 - Same coordinates for both objects
-- Typically in deepest chamber of cave system
-- Represents final objective/escape mechanism
+- Can be in deepest chambers (collection before reactor destruction)
 
-**Lasers and Transformers:**
-- Use to create additional tactical challenges
+#### Lasers and Transformers
+- Create additional tactical challenges
 - Position in passages to control access
-- Group lasers with transformers for coordinated defense
+- Group for coordinated defense
 
-#### Physics and Navigation Considerations:
-- Momentum-based ship physics require careful thrust management
-- Gravitational effects influence movement in caves
-- Fuel consumption limits available maneuvering
-- Tractor beam power consumption affects strategy
+## Validation Checklists
 
-## Phase 2 Validation Checklist:
+### Phase 1 Validation
+1. **Boundary Compliance**: Verify 6+ tile layers on edges
+2. **Connectivity**: Ensure ALL zero areas are interconnected
+3. **Navigation**: Confirm tunnel widths allow ship movement
 
-1. **Before placing any object:**
-   - Calculate exact tile coordinates
-   - Verify tile map data at those coordinates
-   - Ensure tile value is 0 (open space)
-   - Check adjacent tiles for structural support
+### Phase 2 Validation
+1. **Ground Validation**: Every object has ground tile (2 or 3) underneath
+2. **Timing Test**: Reactor-to-exit route completable within 10 seconds
+3. **Game Flow**: Fuel → Ball → Reactor → Escape sequence works
 
-2. **Level flow validation:**
-   - Ensure progressive difficulty from ship through cave system
-   - Verify all fuel tanks are accessible via open passages
-   - Confirm turret coverage creates meaningful challenges
-   - Test that escape routes exist after reactor destruction
+## Development Process
 
-3. **Technical compliance:**
-   - All coordinates are multiples of 128
-   - All objects properly rotated and positioned
-   - Ship placement follows elevation rules (3 tiles above ground)
-   - Ball/ballstore at same coordinates in farthest location
+### Phase 1: Cave System Creation
+1. Design interconnected chambers and passages
+2. Validate boundary requirements and connectivity
+3. **CRITICAL**: Ensure all zero areas are interconnected
+4. No isolated areas allowed before proceeding
 
-## Development Process:
+### Phase 2: Object Placement
+1. Position objects according to strategic placement rules
+2. Validate all coordinates against tile map data
+3. Ensure gameplay flow and challenge progression
 
-**Phase 1**: Focus entirely on creating the cave system tile map
-- Design interconnected chambers and passages
-- Validate boundary requirements and connectivity
-- **CRITICAL**: Perform connectivity validation to ensure all zero areas are interconnected
-- Agree on cave layout before proceeding (no isolated areas allowed)
+## Best Practices & Common Issues
 
-**Phase 2**: Place all objects within the approved cave system  
-- Position objects according to strategic placement rules
-- Validate all coordinates against tile map data
-- Ensure gameplay flow and challenge progression
+### Critical Success Factors
+- **Connectivity is non-negotiable**: Every open space must be reachable
+- **10-second escape rule**: Reactor placement must allow feasible escape
+- **Validation methodology**: Always extract actual tile values from data array
+- **Ground requirement**: Never place objects on tile value 0
 
-## Key Lessons Learned:
+### Common Errors to Avoid
+- Creating chambers without proper connecting passages
+- Placing reactors too far from exit for 10-second escape
+- Trusting coordinate calculations without tile value verification  
+- Placing objects on cave entrance openings (tile value 0)
 
-### Phase 1 Critical Success Factors:
-1. **Connectivity is Non-Negotiable**: Every open space must be reachable from every other open space
-2. **Common Failure Pattern**: Creating multiple cave chambers without proper connecting passages
-3. **Validation Method**: Manually trace navigation paths from sky → surface → all cave areas
-4. **Fix Strategy**: Add connecting passages between isolated areas, typically 2-3 tiles wide
-
-### Proven Cave System Architecture:
-- **Sky Area** (rows 0-6): Open space for ship starting position and maneuvering
+### Proven Architecture Template
+- **Sky Area** (rows 0-6): Ship starting and maneuvering space
 - **Surface Entrance** (row 7): Strategic openings in surface level
 - **Entry Chamber** (rows 8-11): Small chamber connected to surface
-- **Connecting Passages** (rows 12-13): Link entry chamber to main corridor system
-- **Main Horizontal Corridor** (rows 14-17): Wide 4-tile corridor spanning most level width
-- **Vertical Passages** (rows 18-21): Connect horizontal levels with 2-3 tile wide shafts
+- **Main Corridor** (rows 12-17): Wide 4-tile corridor for navigation
+- **Vertical Passages** (rows 18-21): Connect levels with 2-3 tile shafts
 - **Deep Chambers** (rows 22+): Large chambers for end-game objectives
 
-## Reference:
-- Examine level 1-3 to understand established patterns and object placement strategies
-- Level 4 example demonstrates proper cave connectivity implementation
+## Reference
+- Examine levels 1-3 for established patterns and placement strategies
+- Level 4 demonstrates proper cave connectivity implementation
