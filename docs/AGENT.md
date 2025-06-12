@@ -9,8 +9,7 @@ This guide provides systematic instructions for AI-assisted generation of Propul
 - **Level dimensions**: Minimum 32 x 50 tiles (width x height)
 - **Tile values**:
   - `0`: Open space (navigable areas)
-  - `2`: Underground cave walls
-  - `3`: Surface level with cave entrances
+  - `<>0`: Underground cave walls
 
 ### Boundary Requirements
 - **Minimum 6-tile border**: All cave areas must have at least 6 layers of solid tiles on left, right, and bottom edges

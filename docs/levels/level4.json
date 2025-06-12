@@ -207,13 +207,13 @@
                         }],
                  "rotation":90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2688,
                  "y":2048
                 }, 
                 {
-                 "gid":2147483656,
+                 "gid":1073741832,
                  "height":128,
                  "id":14,
                  "name":"laser",
@@ -223,12 +223,12 @@
                          "type":"string",
                          "value":"0"
                         }],
-                 "rotation":-90,
+                 "rotation":90,
                  "type":"",
                  "visible":false,
                  "width":128,
-                 "x":3968,
-                 "y":1920
+                 "x":3840,
+                 "y":1792
                 }, 
                 {
                  "gid":1073741832,
@@ -243,7 +243,7 @@
                         }],
                  "rotation":90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2688,
                  "y":2944
@@ -548,7 +548,7 @@
         {
          "name":"gravity",
          "type":"string",
-         "value":"14"
+         "value":"10"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
