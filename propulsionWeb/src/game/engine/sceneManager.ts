@@ -117,20 +117,15 @@ export class SceneManager {
     private pauseGame(): void {
         if (this.isPaused) return
         this.isPaused = true
-        
-        // Pause the scene without stopping the engine
         const currentScene = this.engine.currentScene
         if (currentScene) {
-            // Store references to all actors and their update methods
             currentScene.actors.forEach(actor => {
-                // Temporarily disable actor updates by storing and replacing the update method
                 if (actor.update && !(actor as any)._originalUpdate) {
                     (actor as any)._originalUpdate = actor.update
-                    actor.update = () => {} // No-op function
+                    actor.update = () => {}
                 }
             })
         }
-        
         PauseScreen.show(
             () => this.resumeGame(),
             this.onReturnToMenu ? () => this.returnToMainMenu() : undefined,
@@ -141,14 +136,10 @@ export class SceneManager {
     private resumeGame(): void {
         if (!this.isPaused) return
         this.isPaused = false
-        
         PauseScreen.hideCurrentInstance()
-        
-        // Resume the scene by restoring actor update methods
         const currentScene = this.engine.currentScene
         if (currentScene) {
             currentScene.actors.forEach(actor => {
-                // Restore original update methods
                 if ((actor as any)._originalUpdate) {
                     actor.update = (actor as any)._originalUpdate
                     delete (actor as any)._originalUpdate
