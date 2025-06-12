@@ -5,6 +5,8 @@ import { BaseActor } from '@src/game/actors/baseActor';
 import { getImagePath } from '@src/utils/assetPaths';
 
 export const LASER = new ImageSource(getImagePath('tiles/laser.png'));
+const FLIPPED_VERTICALLY_FLAG = 0x40000000;
+
 LASER.load();
 
 export class LaserActor extends BaseActor {
@@ -15,6 +17,7 @@ export class LaserActor extends BaseActor {
     private groupID: number | undefined = undefined
     private enableTimer: number = 0
     private disableDelay: number = 5000
+    private flipVertical: boolean = false
 
     constructor(object: TiledObject) {
         super(object, LASER, CollisionType.Fixed)
@@ -24,7 +27,8 @@ export class LaserActor extends BaseActor {
         if (object && object.properties) {
             if (object.properties instanceof Map) {
                 this.groupID = Number(object.properties.get('group'))
-                this.disableDelay = Number(object.properties.get('delay')) * 1000 || 5000               
+                this.disableDelay = Number(object.properties.get('delay')) * 1000 || 5000    
+                this.flipVertical = !!(object.gid & FLIPPED_VERTICALLY_FLAG);
             }
         }
 
@@ -104,12 +108,12 @@ export class LaserActor extends BaseActor {
 
     private calcDirectionVector(rotation: number): Vector {
         let directionVector = new Vector(Math.cos(rotation), Math.sin(rotation));
-        if (this.flip) directionVector = new Vector(directionVector.x, -directionVector.y);
+        if (this.flipVertical) directionVector = new Vector(directionVector.x, -directionVector.y);
         return directionVector.normalize();
     }
 
     private correctPosition(position: Vector, rotation: number, image: ImageSource): Vector {
-        const correction: Vector = Vector.Zero;
+        const correction: Vector = Vector.Zero
         if (rotation === Math.PI / 2) correction.y = image.height
         else if (rotation === 3 * Math.PI / 2) correction.x = -image.width
         else if (rotation === Math.PI) { correction.x = -image.width; correction.y = image.height }

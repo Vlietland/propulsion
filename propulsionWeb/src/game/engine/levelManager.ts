@@ -1,8 +1,6 @@
 import { Scene } from 'excalibur'
 import { MapRenderer } from '@src/game/engine/mapRenderer'
 
-// For debugging - log what value is coming from Vite's define
-console.log('ENV BASE LEVEL:', (window as any).__BASE_LEVEL__)
 const FIRST_LEVEL = parseInt((window as any).__BASE_LEVEL__ || '1')
 
 export class LevelManager {
