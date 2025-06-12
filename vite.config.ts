@@ -1,10 +1,13 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import path from 'path'
+
+const env = loadEnv('development', process.cwd(), 'VITE_')
 
 export default defineConfig({
   base: '/propulsion/',
   define: {
-    __ASSET_BASE_PATH__: JSON.stringify(process.env.VITE_ASSET_BASE_PATH || '/propulsion')
+    __ASSET_BASE_PATH__: JSON.stringify(env.VITE_ASSET_BASE_PATH || '/propulsion'),
+    __BASE_LEVEL__: JSON.stringify(env.VITE_BASE_LEVEL || '1')
   },
   resolve: {
     alias: {

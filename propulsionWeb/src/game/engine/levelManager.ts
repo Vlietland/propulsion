@@ -1,7 +1,9 @@
 import { Scene } from 'excalibur'
 import { MapRenderer } from '@src/game/engine/mapRenderer'
 
-const FIRST_LEVEL = 1
+// For debugging - log what value is coming from Vite's define
+console.log('ENV BASE LEVEL:', (window as any).__BASE_LEVEL__)
+const FIRST_LEVEL = parseInt((window as any).__BASE_LEVEL__ || '1')
 
 export class LevelManager {
     private mapRenderer: MapRenderer
@@ -33,7 +35,7 @@ export class LevelManager {
         if (this.levelCheckPromise) await this.levelCheckPromise }
 
     private async checkTotalLevels(): Promise<void> {
-        const basePath = __ASSET_BASE_PATH__ || ''
+        const basePath = (window as any).__ASSET_BASE_PATH__ || '/propulsion'
         let level = FIRST_LEVEL
         this.totalLevels = 0
         while (level <= 20) {
