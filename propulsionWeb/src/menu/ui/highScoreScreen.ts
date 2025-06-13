@@ -1,127 +1,46 @@
-import { Scene, Vector, Color, Actor, Text, Font, FontUnit, Engine, Keys, KeyEvent } from 'excalibur'
+import { Scene, Actor, Vector, Color, Text, Font, FontUnit, Keys, KeyEvent, Engine } from 'excalibur'
 import { ScoreManager } from '@src/scoreManager'
-import { StarField } from '@src/game/ui/starField'
+
+export interface HighScoreScreenOptions {
+    onComplete: () => void
+}
 
 export class HighScoreScreen {
     private scene: Scene
     private sceneName = 'high-score-screen'
+    private currentName = ''
     private keyboardListener?: (evt: KeyEvent) => void
-    private starField?: StarField
+    private actors: Actor[] = []
+    private nameDisplayActor!: Actor
 
-    constructor(private engine: Engine, private scoreManager: ScoreManager, private onBack: () => void) {
+    constructor(private engine: Engine, private scoreManager: ScoreManager, private options: HighScoreScreenOptions) {
         this.scene = new Scene()
         this.scene.backgroundColor = new Color(5, 5, 15)
         this.scene.camera.pos = new Vector(0, 0)
-        this.createStarField()
-        this.engine.add(this.sceneName, this.scene)        
-        this.createHighScoreDisplay()
+        this.createElements()
+        this.engine.add(this.sceneName, this.scene)
     }
 
-    private createHighScoreDisplay(): void {
-        const title = new Actor({ pos: new Vector(0, -280), anchor: Vector.Half })
-        title.graphics.use(new Text({
-            text: 'HALL OF FAME',
-            color: new Color(255, 100, 100),
-            font: new Font({ family: 'monospace', size: 32, unit: FontUnit.Px })
-        }))
-        this.scene.add(title)
-
-        const subtitle = new Actor({ pos: new Vector(0, -240), anchor: Vector.Half })
-        subtitle.graphics.use(new Text({
-            text: 'HALL OF FAME - TOP COMMANDERS',
-            color: new Color(255, 255, 100),
-            font: new Font({ family: 'monospace', size: 18, unit: FontUnit.Px })
-        }))
-        this.scene.add(subtitle)
-
-        const highScores = this.scoreManager.getHighScores()
-        const headerY = -180
-        const positionHeader = new Actor({ pos: new Vector(-180, headerY), anchor: Vector.Half })
-        positionHeader.graphics.use(new Text({
-            text: 'RANK',
-            color: new Color(100, 255, 100),
-            font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
-        }))
-        this.scene.add(positionHeader)
-
-        const scoreHeader = new Actor({ pos: new Vector(20, headerY), anchor: Vector.Half })
-        scoreHeader.graphics.use(new Text({
-            text: 'SCORE',
-            color: new Color(100, 255, 100),
-            font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
-        }))
-        this.scene.add(scoreHeader)
-
-        const commanderHeader = new Actor({ pos: new Vector(170, headerY), anchor: Vector.Half })
-        commanderHeader.graphics.use(new Text({
-            text: 'COMMANDER',
-            color: new Color(100, 255, 100),
-            font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
-        }))
-        this.scene.add(commanderHeader)
-
-        const separator = new Actor({ pos: new Vector(10, -160), anchor: Vector.Half })
-        separator.graphics.use(new Text({
-            text: '─'.repeat(50),
-            color: new Color(100, 255, 100),
-            font: new Font({ family: 'monospace', size: 14, unit: FontUnit.Px })
-        }))
-        this.scene.add(separator)
-
-        highScores.forEach((entry, index) => {
-            const yPos = -130 + (index * 30)
-            const positionActor = new Actor({ pos: new Vector(-180, yPos), anchor: Vector.Half })
-            positionActor.graphics.use(new Text({
-                text: `${entry.position}.`,
-                color: new Color(255, 255, 255),
-                font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
-            }))
-            this.scene.add(positionActor)
-
-            const scoreActor = new Actor({ pos: new Vector(20, yPos), anchor: Vector.Half })
-            scoreActor.graphics.use(new Text({
-                text: entry.score.toLocaleString(),
-                color: new Color(255, 255, 100),
-                font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
-            }))
-            this.scene.add(scoreActor)
-
-            const commanderActor = new Actor({ pos: new Vector(170, yPos), anchor: Vector.Half })
-            commanderActor.graphics.use(new Text({
-                text: entry.name || 'UNKNOWN',
-                color: new Color(150, 200, 255),
-                font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
-            }))
-            this.scene.add(commanderActor)
-        })
-
-        const backActor = new Actor({ pos: new Vector(0, 220), anchor: Vector.Half })
-        backActor.graphics.use(new Text({
-            text: "Press ESC to return to main menu",
-            color: new Color(255, 255, 100),
-            font: new Font({ family: 'monospace', size: 16, unit: FontUnit.Px })
-        }))
-        this.scene.add(backActor)
+    private createElements(): void {
+        const currentScore = this.scoreManager.getScore()
+        
+        this.actors = [
+            this.createTextActor('NEW HIGH SCORE!', new Vector(0, -150), new Color(100, 255, 100), 48),
+            this.createTextActor(`FINAL SCORE: ${currentScore}`, new Vector(0, -100), new Color(255, 255, 100), 24),
+            this.createTextActor('ENTER COMMANDER NAME:', new Vector(0, -30), new Color(255, 255, 100), 20),
+            this.createTextActor('Press ENTER to confirm, ESC to skip', new Vector(0, 50), new Color(200, 200, 200), 14)
+        ]
+        
+        this.nameDisplayActor = this.createTextActor('_', new Vector(0, 10), new Color(255, 255, 255), 24)
+        this.actors.push(this.nameDisplayActor)
+        
+        this.actors.forEach(actor => this.scene.add(actor))
     }
 
-    private createStarField(): void {
-        const screenWidth = this.engine.screen.resolution.width
-        const screenHeight = this.engine.screen.resolution.height
-        this.starField = new StarField(
-            this.scene, 
-            80, 
-            new Vector(-screenWidth/2, -screenHeight/2), 
-            new Vector(screenWidth/2, screenHeight/2)
-        )
-    }
-
-    private setupInput(): void {
-        this.keyboardListener = (evt: KeyEvent) => {
-            if (evt.key === Keys.Escape) {
-                this.onBack()
-            }
-        }
-        this.engine.input.keyboard.on('press', this.keyboardListener)
+    private createTextActor(text: string, pos: Vector, color: Color, size: number): Actor {
+        const actor = new Actor({ pos, anchor: Vector.Half })
+        actor.graphics.use(new Text({ text, color, font: new Font({ family: 'monospace', size, unit: FontUnit.Px }) }))
+        return actor
     }
 
     public show(): void {
@@ -129,12 +48,67 @@ export class HighScoreScreen {
         this.setupInput()
     }
 
-    public dispose(): void {
+    public hide(): void {
+        this.cleanup()
+    }
+
+    private setupInput(): void {
+        this.keyboardListener = (evt: KeyEvent) => {
+            if (evt.key === Keys.Enter) this.submit()
+            else if (evt.key === Keys.Escape) this.skip()
+            else if (evt.key === Keys.Backspace && this.currentName.length > 0) {
+                this.currentName = this.currentName.slice(0, -1)
+                this.updateDisplay()
+            } else if (this.currentName.length < 12) {
+                const char = this.parseKey(evt.key)
+                if (char) {
+                    this.currentName += char
+                    this.updateDisplay()
+                }
+            }
+        }
+        this.engine.input.keyboard.on('press', this.keyboardListener)
+    }
+
+    private parseKey(key: string): string {
+        if (key.startsWith('Key') && key.length === 4) return key.charAt(3).toUpperCase()
+        if (key.startsWith('Digit') && key.length === 6) return key.charAt(5)
+        if (key === Keys.Space) return ' '
+        if (key === Keys.Period) return '.'
+        if (key === Keys.Minus) return '-'
+        return ''
+    }
+
+    private updateDisplay(): void {
+        this.nameDisplayActor.graphics.use(new Text({
+            text: this.currentName + '_',
+            color: new Color(255, 255, 255),
+            font: new Font({ family: 'monospace', size: 24, unit: FontUnit.Px })
+        }))
+    }
+
+    private submit(): void {
+        const finalName = this.currentName.trim() || 'COMMANDER'
+        this.scoreManager.addHighScore(this.scoreManager.getScore(), finalName)
+        this.options.onComplete()
+        this.cleanup()
+    }
+
+    private skip(): void {
+        this.scoreManager.addHighScore(this.scoreManager.getScore(), 'ANONYMOUS')
+        this.options.onComplete()
+        this.cleanup()
+    }
+
+    private cleanup(): void {
         if (this.keyboardListener) {
             this.engine.input.keyboard.off('press', this.keyboardListener)
             this.keyboardListener = undefined
         }
-        this.starField?.dispose()
+    }
+
+    public dispose(): void {
+        this.cleanup()
         this.scene.clear()
         this.engine.remove(this.sceneName)
     }

@@ -5,7 +5,7 @@ import { MainMenu } from '@src/menu/mainMenu'
 import { BriefingScreen } from '@src/menu/ui/briefingScreen'
 import { ControlsScreen } from '@src/menu/ui/controlsScreen'
 import { CreditsScreen } from '@src/menu/ui/creditsScreen'
-import { HighScoreScreen } from '@src/menu/ui/highScoreScreen'
+import { HallOfFameScreen } from '@src/menu/ui/hallOfFameScreen'
 import { ScoreManager } from '@src/scoreManager'
 import { DisplayMode, EngineOptions, Color } from 'excalibur'
 
@@ -24,7 +24,7 @@ export class EngineBootstrap {
     private briefingScreen: BriefingScreen | null = null
     private controlsScreen: ControlsScreen | null = null
     private creditsScreen: CreditsScreen | null = null
-    private highScoreScreen: HighScoreScreen | null = null
+    private hallOfFameScreen: HallOfFameScreen | null = null
     private scoreManager: ScoreManager
 
     constructor() { 
@@ -83,10 +83,10 @@ export class EngineBootstrap {
         if (this.mainMenu) {
             this.mainMenu.hide()
         }
-        if (!this.highScoreScreen) {
-            this.highScoreScreen = new HighScoreScreen(this.engine, this.scoreManager, () => this.returnToMainMenu())
+        if (!this.hallOfFameScreen) {
+            this.hallOfFameScreen = new HallOfFameScreen(this.engine, this.scoreManager, () => this.returnToMainMenu())
         }
-        this.highScoreScreen.show()
+        this.hallOfFameScreen.show()
     }
 
     private showCredits(): void {
@@ -101,6 +101,6 @@ export class EngineBootstrap {
 
     public returnToMainMenu(): void {
         this.showMainMenu()
-        
+
     }
 }

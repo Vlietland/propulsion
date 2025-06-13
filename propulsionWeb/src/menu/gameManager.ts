@@ -3,6 +3,7 @@ import { ScoreManager } from '@src/scoreManager'
 import { LevelManager } from '@src/game/engine/levelManager'
 import { SceneManager } from '@src/game/engine/sceneManager'
 import { GameOverScreen } from '@src/menu/ui/gameOverScreen'
+import { HighScoreScreen } from '@src/menu/ui/highScoreScreen'
 
 const EXPLOSION_DELAY = 2000
 const HYPERSPACE_DELAY = 1500
@@ -24,6 +25,7 @@ export class GameManager {
     private availableShips: number = INITIAL_SHIP_COUNT
     private onReturnToMenu?: () => void
     private gameOverScreen?: GameOverScreen
+    private highScoreScreen?: HighScoreScreen
 
     constructor(private engine: Engine, scoreManager: ScoreManager, onReturnToMenu?: () => void) {
         this.scoreManager = scoreManager
@@ -79,22 +81,38 @@ export class GameManager {
     }
 
     private async handleGameOver(): Promise<void> {
-        if (!this.gameOverScreen) {
-            this.gameOverScreen = new GameOverScreen(this.engine, this.scoreManager, {
-                onRestart: () => {
-                    this.availableShips = INITIAL_SHIP_COUNT
-                    this.levelManager.resetToFirstLevel()
-                    this.scoreManager.resetScore()
-                    this.gameOverScreen?.hide()
-                    this.restartSceneManager()
-                },
-                onMainMenu: this.onReturnToMenu ? () => {
-                    this.gameOverScreen?.hide()                    
-                    this.onReturnToMenu!()
-                } : undefined
-            })
+        const isHighScore = this.scoreManager.highScoreApplicable(this.scoreManager.getScore())
+        if (isHighScore) {
+            if (!this.highScoreScreen) {
+                this.highScoreScreen = new HighScoreScreen(this.engine, this.scoreManager, {
+                    onComplete: () => {
+                        this.availableShips = INITIAL_SHIP_COUNT
+                        this.levelManager.resetToFirstLevel()
+                        this.scoreManager.resetScore()
+                        this.highScoreScreen?.hide()
+                        if (this.onReturnToMenu) this.onReturnToMenu()
+                    }
+                })
+            }
+            this.highScoreScreen.show()
+        } else {
+            if (!this.gameOverScreen) {
+                this.gameOverScreen = new GameOverScreen(this.engine, this.scoreManager, {
+                    onRestart: () => {
+                        this.availableShips = INITIAL_SHIP_COUNT
+                        this.levelManager.resetToFirstLevel()
+                        this.scoreManager.resetScore()
+                        this.gameOverScreen?.hide()
+                        this.restartSceneManager()
+                    },
+                    onMainMenu: this.onReturnToMenu ? () => {
+                        this.gameOverScreen?.hide()                    
+                        this.onReturnToMenu!()
+                    } : undefined
+                })
+            }
+            this.gameOverScreen.show()
         }
-        this.gameOverScreen.show()
         
         if (this.sceneManager && typeof this.sceneManager.dispose === 'function') {
             this.sceneManager.dispose()
@@ -107,5 +125,13 @@ export class GameManager {
             this.sceneManager.dispose()
         }
         this.sceneManager = null as any
+        if (this.gameOverScreen) {
+            this.gameOverScreen.dispose()
+            this.gameOverScreen = undefined
+        }
+        if (this.highScoreScreen) {
+            this.highScoreScreen.dispose()
+            this.highScoreScreen = undefined
+        }
     }
 }

@@ -19,17 +19,14 @@ export class PauseScreen {
         this.overlayElement = document.createElement('div')
         this.overlayElement.className = 'pause-overlay'
 
-        // Title
         const title = document.createElement('h1')
         title.textContent = 'MISSION PAUSED'
         title.className = 'pause-title'
 
-        // Subtitle
         const subtitle = document.createElement('p')
         subtitle.textContent = 'Choose your next action, Commander'
         subtitle.className = 'pause-subtitle'
 
-        // Instructions
         const instructions = document.createElement('p')
         instructions.textContent = 'Press ESC to resume mission'
         instructions.className = 'pause-instructions'
