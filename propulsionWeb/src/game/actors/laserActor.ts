@@ -24,7 +24,7 @@ export class LaserActor extends BaseActor {
         this.object = object
         const rotationRad = object.rotation !== undefined ? (object.rotation * Math.PI / 180) : this.rotation
         this.directionVector = this.calcDirectionVector(rotationRad)
-        if (object && object.properties) {
+        if (object && object.properties && object.gid) {
             if (object.properties instanceof Map) {
                 this.groupID = Number(object.properties.get('group'))
                 this.disableDelay = Number(object.properties.get('delay')) * 1000 || 5000    
