@@ -6,7 +6,7 @@ import { GameOverScreen } from '@src/menu/ui/gameOverScreen'
 
 const EXPLOSION_DELAY = 2000
 const HYPERSPACE_DELAY = 1500
-const INITIAL_SHIP_COUNT = 3
+const INITIAL_SHIP_COUNT = 1
 
 const MISSION_FAILED_SCORE = -1000
 const MISSION_SUCCESS_SCORE = 2000
@@ -23,6 +23,7 @@ export class GameManager {
     private sceneManager: SceneManager
     private availableShips: number = INITIAL_SHIP_COUNT
     private onReturnToMenu?: () => void
+    private gameOverScreen?: GameOverScreen
 
     constructor(private engine: Engine, scoreManager: ScoreManager, onReturnToMenu?: () => void) {
         this.scoreManager = scoreManager
@@ -78,30 +79,27 @@ export class GameManager {
     }
 
     private async handleGameOver(): Promise<void> {
-        await this.sceneManager.showGameOverScene()
-        const finalScore = this.scoreManager.getScore()
-        const isHighScore = this.scoreManager.highScoreApplicable(finalScore)
+        if (!this.gameOverScreen) {
+            this.gameOverScreen = new GameOverScreen(this.engine, this.scoreManager, {
+                onRestart: () => {
+                    this.availableShips = INITIAL_SHIP_COUNT
+                    this.levelManager.resetToFirstLevel()
+                    this.scoreManager.resetScore()
+                    this.gameOverScreen?.hide()
+                    this.restartSceneManager()
+                },
+                onMainMenu: this.onReturnToMenu ? () => {
+                    this.gameOverScreen?.hide()                    
+                    this.onReturnToMenu!()
+                } : undefined
+            })
+        }
+        this.gameOverScreen.show()
         
-        GameOverScreen.show(
-            finalScore, 
-            isHighScore,
-            () => {
-                GameOverScreen.hideCurrentInstance()
-                this.availableShips = INITIAL_SHIP_COUNT
-                this.levelManager.resetToFirstLevel()
-                this.scoreManager.resetScore()
-                this.restartSceneManager()
-            },
-            this.onReturnToMenu ? () => {
-                GameOverScreen.hideCurrentInstance()
-                this.dispose()
-                this.onReturnToMenu!()
-            } : undefined,
-            (name: string) => {
-                this.scoreManager.addHighScore(finalScore, name)
-            },
-            this.engine
-        )
+        if (this.sceneManager && typeof this.sceneManager.dispose === 'function') {
+            this.sceneManager.dispose()
+        }
+        this.sceneManager = null as any
     }
 
     public dispose(): void {

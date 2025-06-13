@@ -39,6 +39,7 @@ export class SceneManager {
             this.hud.dispose()
             this.hud = undefined
         }
+        const oldSceneName = this.currentSceneName
         this.onReturnToMenu = callbacks.onReturnToMenu
         this.currentSceneName = `level-${Date.now()}`
         const scene = new Scene()
@@ -152,13 +153,6 @@ export class SceneManager {
         PauseScreen.hideCurrentInstance()
         this.dispose()
         if (this.onReturnToMenu) this.onReturnToMenu()
-    }
-
-    public async showGameOverScene(): Promise<void> {
-        const gameOverSceneName = `gameOver-${Date.now()}`
-        const gameOverScene = new Scene()
-        this.engine.add(gameOverSceneName, gameOverScene)
-        this.engine.goToScene(gameOverSceneName)
     }
 
     public dispose(): void {

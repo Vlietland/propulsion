@@ -100,10 +100,7 @@ export class EngineBootstrap {
     }
 
     public returnToMainMenu(): void {
-        if (this.gameManager) {
-            this.gameManager.dispose?.()
-            this.gameManager = null
-        }
         this.showMainMenu()
+        
     }
 }

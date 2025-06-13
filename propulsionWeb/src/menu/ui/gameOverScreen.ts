@@ -1,54 +1,33 @@
 import { Scene, Vector, Color, Actor, Engine, Text, Font, FontUnit } from 'excalibur'
 import { MenuButton } from '@src/menu/ui/menuButton'
-import { NameEntry } from './nameEntry'
+import { ScoreManager } from '@src/scoreManager'
 
 export interface GameOverScreenOptions {
     onRestart: () => void
     onMainMenu?: () => void
-    onNameSubmit?: (name: string) => void
 }
 
 export class GameOverScreen {
     private scene: Scene
     private buttons: MenuButton[] = []
     private sceneName = 'game-over-screen'
-    private static instance: GameOverScreen | null = null
-    private nameEntry?: NameEntry
+    private titleActor: Actor = this.createTextActor('MISSION FAILED', new Vector(0, -150), new Color(255, 100, 100), 48)
+    private scoreActor: Actor =this.createTextActor('FINAL SCORE: 0', new Vector(0, -80), new Color(255, 255, 100), 24)
 
-    constructor(private engine: Engine, private score: number, private isHighScore: boolean, private options: GameOverScreenOptions) {
+    constructor(private engine: Engine, private scoreManager: ScoreManager, private options: GameOverScreenOptions) {
         this.scene = new Scene()
         this.scene.backgroundColor = new Color(5, 5, 15)
         this.scene.camera.pos = new Vector(0, 0)
-        this.createElements()
-        if (isHighScore) this.startNameEntry()
-        else this.createButtons()
-    }
-
-    private createElements(): void {
-        const title = this.createTextActor(
-            this.isHighScore ? 'NEW HIGH SCORE!' : 'MISSION FAILED',
-            new Vector(0, -150),
-            this.isHighScore ? new Color(100, 255, 100) : new Color(255, 100, 100),
-            48
-        )
-        const score = this.createTextActor(`FINAL SCORE: ${this.score}`, new Vector(0, -80), new Color(255, 255, 100), 24)
-        this.scene.add(title)
-        this.scene.add(score)
+        this.createButtons()
+        this.engine.add(this.sceneName, this.scene)
+        this.scene.add(this.titleActor)
+        this.scene.add(this.scoreActor)
     }
 
     private createTextActor(text: string, pos: Vector, color: Color, size: number): Actor {
         const actor = new Actor({ pos, anchor: Vector.Half })
         actor.graphics.use(new Text({ text, color, font: new Font({ family: 'monospace', size, unit: FontUnit.Px }) }))
         return actor
-    }
-
-    private startNameEntry(): void {
-        if (this.options.onNameSubmit) {
-            this.nameEntry = new NameEntry(this.scene, this.engine, (name: string) => {
-                this.options.onNameSubmit!(name)
-                this.createButtons()
-            })
-        }
     }
 
     private createButtons(): void {
@@ -65,8 +44,13 @@ export class GameOverScreen {
     }
 
     public show(): void {
+        const currentScore = this.scoreManager.getScore()
+        this.scoreActor.graphics.use(new Text({
+            text: `FINAL SCORE: ${currentScore}`,
+            color: new Color(255, 255, 100),
+            font: new Font({ family: 'monospace', size: 24, unit: FontUnit.Px })
+        }))
         this.buttons.forEach(button => button.show())
-        this.engine.add(this.sceneName, this.scene)
         this.engine.goToScene(this.sceneName)
     }
 
@@ -77,24 +61,7 @@ export class GameOverScreen {
     public dispose(): void {
         this.buttons.forEach(button => button.dispose())
         this.scene.clear()
-        //this.engine.remove(this.sceneName)
-        GameOverScreen.instance = null
+        this.engine.remove(this.sceneName)
     }
 
-    static show(score: number, isHighScore: boolean, onRestart: () => void, onMainMenu?: () => void, onNameSubmit?: (name: string) => void, engine?: Engine) {
-        if (!engine) return
-        if (GameOverScreen.instance) GameOverScreen.instance.dispose()
-        GameOverScreen.instance = new GameOverScreen(engine, score, isHighScore, {
-            onRestart, onMainMenu, onNameSubmit
-        })
-        GameOverScreen.instance.show()
-    }
-
-    static hideCurrentInstance(): void {
-        if (GameOverScreen.instance) GameOverScreen.instance.hide()
-    }
-
-    static disposeCurrentInstance(): void {
-        if (GameOverScreen.instance) GameOverScreen.instance.dispose()
-    }
 }
