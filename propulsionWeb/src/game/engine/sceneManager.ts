@@ -9,7 +9,7 @@ import { PauseScreen } from '@src/menu/ui/pauseScreen'
 import { StarField } from '@src/game/ui/starField'
 import { CountdownOverlay } from '@src/game/ui/countdownOverlay'
 
-const START_ZOOM = 0.15
+const START_ZOOM = 0.1
 const CAMERA_ZOOM = 0.7
 
 export interface GameCallbacks {
@@ -22,45 +22,49 @@ export class SceneManager {
     private hud?: HUD
     private starField?: StarField
     private countdownOverlay?: CountdownOverlay
-    private currentSceneName?: string
+    private currentSceneName: string = ''
     private isPaused: boolean = false
     private pauseKeyListener?: (evt: KeyEvent) => void
     private domKeyListener?: (evt: KeyboardEvent) => void
     private onReturnToMenu?: () => void
+    private scene?: Scene
+    private engine: Engine
+    private scoreManager: ScoreManager
+    private levelManager: LevelManager
 
-    constructor(
-        private engine: Engine,
-        private scoreManager: ScoreManager,
-        private levelManager: LevelManager
-    ) {}
+
+    constructor(engine: Engine, scoreManager: ScoreManager, levelManager: LevelManager) {
+        this.engine = engine
+        this.scoreManager = scoreManager
+        this.levelManager = levelManager
+    }
 
     public async registerScene(availableShips: number, callbacks: GameCallbacks): Promise<void> {
         if (this.hud) {
             this.hud.dispose()
             this.hud = undefined
         }
-        const oldSceneName = this.currentSceneName
         this.onReturnToMenu = callbacks.onReturnToMenu
-        this.currentSceneName = `level-${Date.now()}`
-        const scene = new Scene()
-        const map = await this.levelManager.getMap(scene)
+        this.currentSceneName = `game-scene`
+        this.scene = new Scene()
+        const map = await this.levelManager.getMap(this.scene)
         const worldWidth = map.map.width * map.map.tilewidth
         const airTiles = map?.map?.properties?.find((p: any) => p.name === 'airHeight')?.value
         const worldHeight = airTiles * map.map.tileheight
-        new StarField(scene, 80, new Vector(0, 0), new Vector(worldWidth, worldHeight))
-        scene.camera.zoom = 0.1
-        this.engine.add(this.currentSceneName, scene)
+        new StarField(this.scene, 80, new Vector(0, 0), new Vector(worldWidth, worldHeight))
+        this.scene.camera.zoom = START_ZOOM
+        this.engine.add(this.currentSceneName, this.scene)
         this.engine.goToScene(this.currentSceneName)        
         
         this.hud = new HUD(this.scoreManager)
         this.hud.updateLives(availableShips)
         this.hud.updateLevel(this.levelManager.getCurrentLevel())
-        scene.add(this.hud)
+        this.scene.add(this.hud)
                 
-        this.world = new World(scene, this.scoreManager, this.levelManager)
+        this.world = new World(this.scene, this.scoreManager, this.levelManager)
         await this.world.initialize()
         this.countdownOverlay = new CountdownOverlay(this.world.getReactorActor())
-        scene.add(this.countdownOverlay)
+        this.scene.add(this.countdownOverlay)
 
         const shipActor = this.world.getShipActor()
         const physics = this.world.getPhysics()
@@ -68,11 +72,11 @@ export class SceneManager {
         if (shipActor && physics) {
             shipActor.setPhysics(physics)
             shipActor.setshipController(new ShipController(this.engine))
-            shipActor.setCamera(scene.camera)
+            shipActor.setCamera(this.scene.camera)
             this.hud.setShip(shipActor)
             shipActor.setOnGameResult((result: GameResult) => callbacks.onGameResult(result))
         }
-        this.animateZoom(scene)
+        this.animateZoom(this.scene)
         this.setupPauseHandling()
     }
 
@@ -173,6 +177,12 @@ export class SceneManager {
         if (this.countdownOverlay) {
             this.countdownOverlay.dispose()
             this.countdownOverlay = undefined
+        }
+        if (this.scene) {
+            this.scene.clear()
+            if (this.currentSceneName) {
+                this.engine.removeScene(this.currentSceneName)
+            }
         }
     }
 }

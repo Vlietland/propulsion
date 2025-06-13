@@ -44,7 +44,7 @@ export class ScoreManager {
             { score: 4000, name: 'LT. ANDERSON' },
             { score: 3000, name: 'ENS. JOHNSON' },
             { score: 2000, name: 'ENS. MARTINEZ' },
-            { score: 100, name: 'CADET SMITH' }
+            { score: 1000, name: 'CADET SMITH' }
         ]
         this.saveHighScores()
     }
