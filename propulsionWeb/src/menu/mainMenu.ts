@@ -26,6 +26,7 @@ export class MainMenu {
         this.createStarField()
         this.createTitleImage()
         this.createButtons()
+        this.engine.add(this.sceneName, this.scene)
     }
 
     private createStarField(): void {
@@ -76,7 +77,6 @@ export class MainMenu {
 
     public show(): void {
         this.buttons.forEach(button => button.show())
-        this.engine.add(this.sceneName, this.scene)
         this.engine.goToScene(this.sceneName)
     }
 

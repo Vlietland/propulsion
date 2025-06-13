@@ -12,6 +12,7 @@ export class BriefingScreen {
         this.scene.backgroundColor = new Color(5, 5, 15)
         this.scene.camera.pos = new Vector(0, 0)
         this.createStarField()
+        this.engine.add(this.sceneName, this.scene)
         const title = new Actor({ pos: new Vector(0, -280), anchor: Vector.Half })
         title.graphics.use(new Text({
             text: 'CLASSIFIED BRIEFING',
@@ -90,7 +91,6 @@ export class BriefingScreen {
     }
 
     public show(): void {
-        this.engine.add(this.sceneName, this.scene)
         this.engine.goToScene(this.sceneName)
         this.setupInput()
     }

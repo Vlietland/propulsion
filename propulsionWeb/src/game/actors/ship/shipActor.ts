@@ -157,7 +157,7 @@ export class ShipActor extends BaseActor {
 
     public setCamera(camera: Camera) {this.camera = camera }
     public setshipController(shipController: ShipController) {this.shipController = shipController }
-    public setOnGameResult(callback: (result: GameResult) => void) {this.onGameResultCallback = callback}
+    public setOnGameResult(callback: (result: GameResult) => void) { this.onGameResultCallback = callback}
     public setHyperspace(hyperspace: Hyperspace) { this.hyperspace = hyperspace }
     public getTractorBeam() : TractorBeam | undefined{ return this.tractorBeam }
     public getMass() : number { return this.mass }
@@ -191,10 +191,13 @@ export class ShipActor extends BaseActor {
     }
 
     protected explode(): void {      
-        this.isExploded = true  // Prevent further onPreUpdate calls from recreating towLine
+        if (this.isExploded) return
+        this.isExploded = true
         SoundManager.playShipExplosion()
         if (this.towLineView?.isVisible()) this.towLineView.hide()
         super.explode()
-        if (this.onGameResultCallback) this.onGameResultCallback(GameResult.ShipLost)
+        if (this.onGameResultCallback) {
+            this.onGameResultCallback(GameResult.ShipLost)
+        }
     }
 }
