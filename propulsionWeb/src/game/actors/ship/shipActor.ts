@@ -21,7 +21,8 @@ SHIP_THRUST.load()
 
 const ROTATION_SPEED = 1
 const THRUST_FORCE = 5000
-const FUEL_FULL = 4500
+const FUEL_FULL = 5500
+const FUEL_START = 2000
 const FUEL_CONSUMPTION = 4
 const GUN_COOLDOWN = 100
 const GUN_POSITION_OFFSET = 64
@@ -34,7 +35,7 @@ export class ShipActor extends BaseActor {
     private ballActor?: BallActor
     private tractorBeam?: TractorBeam
     private towLineView?: TowLineView
-    private fuelLevel = FUEL_FULL /2
+    private fuelLevel = FUEL_START
     private mass = 100
     private lastShotTime: number = 0   
     private hyperspace?: Hyperspace
