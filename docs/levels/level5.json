@@ -81,7 +81,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4480,
                  "y":5376
@@ -111,7 +111,7 @@
                  "name":"reactor",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4608,
                  "y":1408
@@ -123,7 +123,7 @@
                  "name":"turret",
                  "rotation":90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1920,
                  "y":2176
@@ -135,7 +135,7 @@
                  "name":"turret",
                  "rotation":90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":3712,
                  "y":2176
@@ -147,7 +147,7 @@
                  "name":"turret",
                  "rotation":180,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4736,
                  "y":2048
@@ -159,7 +159,7 @@
                  "name":"turret",
                  "rotation":180,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1664,
                  "y":2304
@@ -171,7 +171,7 @@
                  "name":"turret",
                  "rotation":-90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":5376,
                  "y":2816
@@ -183,7 +183,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2304,
                  "y":2560
@@ -195,7 +195,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":3840,
                  "y":2944
@@ -207,7 +207,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1280,
                  "y":4096
@@ -219,7 +219,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":5376,
                  "y":3840
@@ -231,7 +231,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4096,
                  "y":4224
@@ -261,7 +261,7 @@
                         }],
                  "rotation":90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":3200,
                  "y":3328
@@ -279,7 +279,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4736,
                  "y":2944
@@ -297,7 +297,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":3456,
                  "y":4096
@@ -315,7 +315,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":3968,
                  "y":2048
@@ -327,7 +327,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1408,
                  "y":2944
@@ -339,7 +339,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1536,
                  "y":2944
@@ -357,7 +357,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2048,
                  "y":1920
@@ -375,7 +375,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2176,
                  "y":2432
@@ -393,7 +393,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":3840,
                  "y":1408
@@ -411,7 +411,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":6144,
                  "y":2304
@@ -423,7 +423,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4992,
                  "y":1408
@@ -435,7 +435,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":5120,
                  "y":1408
@@ -447,21 +447,9 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1408,
-                 "y":5632
-                }, 
-                {
-                 "gid":9,
-                 "height":128,
-                 "id":32,
-                 "name":"fueltank",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":128,
-                 "x":1536,
                  "y":5632
                 }, 
                 {
@@ -471,21 +459,9 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4352,
-                 "y":5248
-                }, 
-                {
-                 "gid":9,
-                 "height":128,
-                 "id":34,
-                 "name":"fueltank",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":128,
-                 "x":4224,
                  "y":5248
                 }, 
                 {
@@ -495,7 +471,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2816,
                  "y":5632
@@ -507,7 +483,7 @@
                  "name":"turret",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2176,
                  "y":4096
@@ -519,7 +495,7 @@
                  "name":"turret",
                  "rotation":-90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":3328,
                  "y":5248
@@ -531,7 +507,7 @@
                  "name":"turret",
                  "rotation":90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":896,
                  "y":5248
@@ -543,7 +519,7 @@
                  "name":"turret",
                  "rotation":-90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4864,
                  "y":4992
@@ -561,7 +537,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1536,
                  "y":4480
@@ -579,7 +555,7 @@
                         }],
                  "rotation":90,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2304,
                  "y":5120
@@ -597,7 +573,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2432,
                  "y":5632
@@ -615,7 +591,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1920,
                  "y":5248
@@ -633,7 +609,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1536,
                  "y":4096
@@ -651,7 +627,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1920,
                  "y":4736
@@ -669,7 +645,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2816,
                  "y":3712
@@ -687,7 +663,7 @@
                         }],
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4864,
                  "y":3072
@@ -699,7 +675,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":5248,
                  "y":3840
@@ -711,7 +687,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":4992,
                  "y":4480
@@ -723,7 +699,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":1664,
                  "y":2944
@@ -735,7 +711,7 @@
                  "name":"fueltank",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":128,
                  "x":2688,
                  "y":1408
